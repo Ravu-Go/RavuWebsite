@@ -124,17 +124,93 @@
     }
 
     .ravu-grid {
+        /* NOTE: color-mix() toward `transparent` in a wide-gamut oklch space
+           is unreliable at low percentages here — it resolves to an
+           out-of-gamut rgb() that the browser clamps, which is part of why
+           the grid kept reading as invisible. Mixing two solid colours
+           keeps the result inside the sRGB gamut.
+
+           Weight is deliberately light: this is a background texture, and
+           it must never compete with the headline sitting on top of it. */
         background-image: linear-gradient(
                 to right,
-                color-mix(in srgb, var(--color-ink-950) 12%, transparent) 1px,
+                color-mix(in srgb, var(--color-ink-200) 85%, white) 1px,
                 transparent 1px
             ),
             linear-gradient(
                 to bottom,
-                color-mix(in srgb, var(--color-ink-950) 12%, transparent) 1px,
+                color-mix(in srgb, var(--color-ink-200) 85%, white) 1px,
                 transparent 1px
             );
         background-size: 64px 64px;
+    }
+
+    /* Cursor-driven grid WAVE. `.ravu-grid-glow` is the SAME grid drawn at a
+       higher strength, revealed through a radial mask whose size and opacity
+       are driven from JS:
+
+         --grid-x / --grid-y  position of the crest, as percentages
+         --grid-r             crest radius, e.g. "240px"
+         --grid-o             overall strength, 0..1
+       JS raises --grid-r while the cursor moves and sinks it toward flat
+       once it stops, so the ripple travels with the pointer and collapses
+       in its wake.
+
+       There is deliberately NO CSS transition on the mask: the frame loop
+       in GridBackdrop already eases every step, and a transition here would
+       fight it and smear the trail. */
+    .ravu-grid-glow {
+        --grid-x: -100%;
+        --grid-y: -100%;
+        --grid-r: 0px;
+        --grid-o: 0;
+        /* These lines are painted OVER the resting grid, so they must be
+           visibly heavier to read as "raised".
+
+           Two things were tried here first and both looked wrong:
+             - color-mix(... 95%, transparent): resolved to an out-of-gamut
+               value with a NEGATIVE sRGB channel (color(srgb -0.22 ...)),
+               which the browser clamps and which rendered as nothing.
+             - the raw --color-ravu-600 token: correct but far too heavy —
+               solid brand navy behind the headline made the hero look like
+               graph paper rather than a subtle texture.
+           mix two solid colours, held light. */
+        background-image: linear-gradient(
+                to right,
+                color-mix(in srgb, var(--color-ravu-400) 55%, white) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                to bottom,
+                color-mix(in srgb, var(--color-ravu-400) 55%, white) 1px,
+                transparent 1px
+            );
+        background-size: 64px 64px;
+        /* Two masks, ANDed by default (mask-composite: intersect): the soft
+           hero fade, intersected with the travelling radial crest. The fade
+           MUST live here rather than as a Tailwind [mask-image:...] utility
+           on the element — that utility has the same specificity but is
+           emitted later, so it silently replaced this radial mask and the
+           effect never appeared. */
+        --grid-fade: linear-gradient(to bottom, #000, transparent 75%);
+        --grid-crest: radial-gradient(
+            circle var(--grid-r) at var(--grid-x) var(--grid-y),
+            #000 0%,
+            transparent 100%
+        );
+        opacity: var(--grid-o);
+        -webkit-mask-image: var(--grid-fade), var(--grid-crest);
+        -webkit-mask-composite: source-in;
+        mask-image: var(--grid-fade), var(--grid-crest);
+        mask-composite: intersect;
+    }
+
+    /* Coarse pointers (touch) never move a cursor, so a wave would only ever
+       sit in one arbitrary spot. Keep the plain grid instead. */
+    @media (hover: none) {
+        .ravu-grid-glow {
+            display: none;
+        }
     }
 
     /* Emerald bleeding in from the left, blue from the right — the same

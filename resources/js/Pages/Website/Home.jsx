@@ -24,12 +24,13 @@ import {
     CardGrid,
     Container,
     Eyebrow,
+    GridBackdrop,
     Reveal,
     SectionTitle,
     StepCard,
     TrustPoint,
 } from "../../Components/ui";
-import riderImage from "../../../imgs/rider.png";
+import riderImage from "../../../imgs/memberPlusPartners.png";
 
 const PARTNER_TYPES = [
     {
@@ -89,15 +90,14 @@ export default function Home() {
             {/* ---------------------------------------------------------- HERO */}
             <section className="relative overflow-hidden border-b border-ink-200">
                 <div className="grid lg:min-h-[36rem] lg:grid-cols-[1.02fr_0.98fr]">
+                    {/* The backdrop must sit INSIDE this column. Placed on the
+                        <section> it spans the full width, but this column is
+                        `relative` with an opaque bg-white, so it paints OVER
+                        any absolutely-positioned sibling backdrop and the
+                        whole effect disappears. Inside the column the layers
+                        are children, so they render above its background. */}
                     <div className="relative flex items-center bg-white">
-                        <div
-                            aria-hidden="true"
-                            className="ravu-mesh pointer-events-none absolute inset-0"
-                        />
-                        <div
-                            aria-hidden="true"
-                            className="ravu-grid pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
-                        />
+                        <GridBackdrop />
                         <div className="relative w-full px-5 py-14 sm:px-8 sm:py-16 lg:px-14 lg:py-20">
                             <div className="ravu-reveal">
                                 <Eyebrow>Mobility, connected</Eyebrow>
@@ -165,7 +165,7 @@ export default function Home() {
                                 RAVU
                             </p>
                             <p className="mt-1 text-sm font-semibold text-white">
-                                Together we drive better.........................!
+                                Together we drive better opportunities.
                             </p>
                         </div>
                     </div>

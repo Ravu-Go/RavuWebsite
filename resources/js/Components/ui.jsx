@@ -154,6 +154,194 @@ export function ButtonRow({ children, className = "" }) {
     );
 }
 
+/* --------------------------------------------------------- GridBackdrop */
+/**
+ * The shared hero background: a soft mesh wash plus the RAVU grid.
+ *
+ * The grid is drawn twice — a quiet always-on layer, plus a brighter copy
+ * that behaves like a WAVE travelling with the cursor:
+ *
+ *   - Moving fast whips the crest up (a bigger, brighter ripple).
+ *   - Slowing down lets the crest sink back toward flat.
+ *   - Stopping settles it flat entirely.
+ *   - Where the cursor has already passed, the ripple collapses, so the
+ *     grid behind the pointer flattens out and only the leading edge is up.
+ *
+ * The crest is a radial mask whose SIZE and OPACITY are the two animated
+ * channels. Everything is written straight to CSS custom properties on the
+ * element and reads are batched into a rAF, so pointer movement never
+ * triggers a React render.
+ *
+ * Renders as a fragment of `absolute inset-0` layers, so it must be placed
+ * inside a `relative` hero. It contributes no wrapper box of its own.
+ *
+ * Degrades cleanly: no pointer (touch), reduced motion, or JS failure all
+ * leave the plain `ravu-grid` layer visible, so the background is never
+ * worse than it was before this effect existed.
+ */
+export function GridBackdrop() {
+    const reduceMotion = useReducedMotion();
+    const glowRef = useRef(null);
+
+    useEffect(() => {
+        const glow = glowRef.current;
+        if (!glow) return;
+
+        // Respect the user's motion preference: leave the static grid.
+        if (reduceMotion) return;
+
+        // Touch / stylus-only devices have no moving cursor to track.
+        if (typeof window.matchMedia === "function") {
+            const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+            if (!fine.matches) return;
+        }
+
+        // --- Wave tuning -------------------------------------------------
+        // Radius is in px; it is written as a CSS length so the mask can
+        // interpolate it without us ever touching layout.
+        const CREST_MIN = 95; // settled / flat ripple
+        const CREST_MAX = 620; // fully whipped-up crest
+        // A slow hand sweep (~520px/s) still reaches a full crest, so a
+        // casual mouse move produces an obvious wave. Stepped down over time:
+        // 2200 -> 700 -> 420 -> 520.
+        const SPEED_FOR_MAX = 520; // px/s that counts as "fast"
+        // Per-frame sink rate once the pointer stops feeding energy.
+        // Kept high for a long visible trail (0.88 -> 0.93 -> 0.955 -> 0.945)
+        // without leaving the crest hanging around after the cursor stops.
+        const DECAY = 0.945;
+        const EPSILON = 0.01; // below this, treat the wave as flat
+        let frame = 0;
+        let lastX = null;
+        let lastY = null;
+        let lastTime = 0;
+        let energy = 0; // 0 = flat, 1 = full crest
+        const setCrest = (value) => {
+            energy = Math.max(0, Math.min(1, value));
+            const radius = CREST_MIN + (CREST_MAX - CREST_MIN) * energy;
+            glow.style.setProperty("--grid-r", `${radius.toFixed(1)}px`);
+            // Opacity must NOT simply track energy 1:1 — that makes the
+            // brightest moment also the smallest radius, so the crest only
+            // ever appears as a faint dot mid-sweep. Hold it near full across
+            // most of the travel, but still reach exactly 0 at rest so no
+            // stationary blob is left parked on the grid.
+            const strength =
+                energy <= EPSILON ? 0 : Math.min(1, 0.3 + energy * 1.1);
+            glow.style.setProperty("--grid-o", strength.toFixed(3));
+            glow.dataset.active = energy > EPSILON ? "true" : "false";
+        };
+
+        const onMove = (event) => {
+            // Measure the glow layer itself. It spans the hero exactly (it is
+            // an absolute inset-0 child of the same positioned parent), so its
+            // rect IS the hero rect — no separate wrapper element needed.
+            const rect = glow.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+
+            const now = event.timeStamp || performance.now();
+
+            // Position is applied immediately (no rAF) — it must stay glued
+            // to the cursor. Cheap: two custom-property writes, no layout.
+            glow.style.setProperty(
+                "--grid-x",
+                `${(((event.clientX - rect.left) / rect.width) * 100).toFixed(2)}%`,
+            );
+            glow.style.setProperty(
+                "--grid-y",
+                `${(((event.clientY - rect.top) / rect.height) * 100).toFixed(2)}%`,
+            );
+
+            // Speed drives the crest height. Distance per unit time, in px/s.
+            if (lastX !== null) {
+                const dt = Math.max(1, now - lastTime);
+                const dist = Math.hypot(event.clientX - lastX, event.clientY - lastY);
+                const speed = (dist / dt) * 1000;
+                const target = Math.min(1, speed / SPEED_FOR_MAX);
+                // Rise instantly on acceleration, so the crest leads the cursor.
+                // Decay is handled in the frame loop, which is what produces
+                // the trailing settle behind the pointer.
+                if (target > energy) setCrest(target);
+            }
+
+            lastX = event.clientX;
+            lastY = event.clientY;
+            lastTime = now;
+        };
+
+        // The decay loop is what makes it a wave rather than a spotlight:
+        // once the pointer stops feeding it energy, the crest sinks to flat.
+        const tick = () => {
+            if (energy > EPSILON) {
+                setCrest(energy * DECAY);
+                frame = window.requestAnimationFrame(tick);
+            } else {
+                setCrest(0);
+                frame = 0;
+            }
+        };
+
+        const wake = () => {
+            if (!frame) frame = window.requestAnimationFrame(tick);
+        };
+
+        const onEnter = (event) => {
+            // Re-entering should not read as a huge jump from the last point.
+            lastX = event.clientX;
+            lastY = event.clientY;
+            lastTime = event.timeStamp || performance.now();
+        };
+
+        const onLeave = () => {
+            lastX = null;
+            lastY = null;
+            // Let the crest sink naturally instead of snapping off.
+            wake();
+        };
+
+        const onMoveAndWake = (event) => {
+            onMove(event);
+            wake();
+        };
+
+        // Listen on the document, not the hero: the wave keeps tracking while
+        // the cursor is over the hero's own children.
+        document.addEventListener("pointermove", onMoveAndWake, { passive: true });
+        document.addEventListener("pointerenter", onEnter, { passive: true });
+        document.addEventListener("pointerleave", onLeave, { passive: true });
+        window.addEventListener("blur", onLeave);
+
+        return () => {
+            if (frame) window.cancelAnimationFrame(frame);
+            document.removeEventListener("pointermove", onMoveAndWake);
+            document.removeEventListener("pointerenter", onEnter);
+            document.removeEventListener("pointerleave", onLeave);
+            window.removeEventListener("blur", onLeave);
+        };
+    }, [reduceMotion]);
+
+    return (
+        <>
+            <div
+                aria-hidden="true"
+                className="ravu-mesh pointer-events-none absolute inset-0"
+            />
+            <div
+                aria-hidden="true"
+                className="ravu-grid pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
+            />
+            <div
+                ref={glowRef}
+                aria-hidden="true"
+                data-active="false"
+                /* No [mask-image:...] utility here on purpose: the fade is
+                   composed inside .ravu-grid-glow, and an arbitrary mask
+                   utility would override the radial crest with equal
+                   specificity. See the note in app.css. */
+                className="ravu-grid-glow pointer-events-none absolute inset-0"
+            />
+        </>
+    );
+}
+
 /* ---------------------------------------------------------------- Layout */
 export function Container({ children, className = "", size = "default" }) {
     const widths = {

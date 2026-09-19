@@ -1,7 +1,15 @@
 import { Link } from "@inertiajs/react";
 import { Minus, Plus, Smartphone } from "lucide-react";
 import { useState } from "react";
-import { Button, ButtonRow, Card, Container, Eyebrow, Reveal } from "./ui";
+import {
+    Button,
+    ButtonRow,
+    Card,
+    Container,
+    Eyebrow,
+    GridBackdrop,
+    Reveal,
+} from "./ui";
 
 /* ==========================================================================
    RAVU SHARED PAGE SECTIONS
@@ -27,14 +35,7 @@ export function Hero({
 
     return (
         <section className="relative overflow-hidden border-b border-ink-200 bg-white">
-            <div
-                aria-hidden="true"
-                className="ravu-mesh pointer-events-none absolute inset-0"
-            />
-            <div
-                aria-hidden="true"
-                className="ravu-grid pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
-            />
+            <GridBackdrop />
 
             <Container className="relative py-14 sm:py-16 lg:py-20">
                 <div

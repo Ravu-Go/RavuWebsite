@@ -7,6 +7,7 @@ import {
     CheckList,
     Container,
     Eyebrow,
+    GridBackdrop,
     Reveal,
     SectionTitle,
     StepCard,
@@ -43,14 +44,7 @@ export default function Membership() {
         <WebsiteLayout>
             {/* ------------------------------------------------------------ HERO */}
             <section className="relative overflow-hidden border-b border-ink-200 bg-white">
-                <div
-                    aria-hidden="true"
-                    className="ravu-mesh pointer-events-none absolute inset-0"
-                />
-                <div
-                    aria-hidden="true"
-                    className="ravu-grid pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
-                />
+                <GridBackdrop />
 
                 <Container className="relative py-14 sm:py-16 lg:py-20">
                     <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
