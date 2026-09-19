@@ -64,56 +64,59 @@ export default function Navigation({
         ? "border-transparent bg-transparent"
         : "border-ink-200/80 bg-white/95 shadow-[0_1px_0_0_rgba(10,13,12,0.04)] backdrop-blur";
 
-    const NavLink = ({ item, mobile = false }) => {
-        const active = isActive(item.href);
+const NavLink = ({ item, mobile = false }) => {
+         const active = isActive(item.href);
+         const MotionLink = motion(Link);
 
-        if (mobile) {
-            return (
-                <Link
-                    href={item.href}
-                    aria-current={active ? "page" : undefined}
-                    onClick={() => setIsOpen(false)}
-                    className={`flex items-center justify-between rounded-lg px-3.5 py-3 text-[15px] font-semibold transition-colors ${
-                        active
-                            ? "bg-ravu-50 text-ravu-800"
-                            : "text-ink-800 hover:bg-ink-50"
-                    }`}
-                >
-                    {item.label}
-                    {active && (
-                        <span
-                            className="h-1.5 w-1.5 rounded-full bg-ravu-600"
-                            aria-hidden="true"
-                        />
-                    )}
-                </Link>
-            );
-        }
+         if (mobile) {
+             return (
+                 <Link
+                     href={item.href}
+                     aria-current={active ? "page" : undefined}
+                     onClick={() => setIsOpen(false)}
+                     className={`flex items-center justify-between rounded-lg px-3.5 py-3 text-[15px] font-semibold transition-colors ${
+                         active
+                             ? "bg-ravu-50 text-ravu-800"
+                             : "text-ink-800 hover:bg-ink-50"
+                     }`}
+                 >
+                     {item.label}
+                     {active && (
+                         <span
+                             className="h-1.5 w-1.5 rounded-full bg-ravu-600"
+                             aria-hidden="true"
+                         />
+                     )}
+                 </Link>
+             );
+         }
 
-        return (
-            <Link
-                href={item.href}
-                aria-current={active ? "page" : undefined}
-                className={`relative py-2 text-[13px] font-semibold transition-colors ${
-                    overMedia
-                        ? "text-white/80 hover:text-white"
-                        : active
-                          ? "text-ink-950"
-                          : "text-ink-600 hover:text-ink-950"
-                }`}
-            >
-                {item.label}
-                {active && (
-                    <span
-                        className={`absolute inset-x-0 -bottom-0.5 h-[2px] rounded-full ${
-                            overMedia ? "bg-ravu-400" : "bg-ravu-600"
-                        }`}
-                        aria-hidden="true"
-                    />
-                )}
-            </Link>
-        );
-    };
+         return (
+             <MotionLink
+                 href={item.href}
+                 aria-current={active ? "page" : undefined}
+                 className={`relative py-2 text-[13px] font-semibold transition-colors ${
+                     overMedia
+                         ? "text-white/80 hover:text-white"
+                         : active
+                           ? "text-ink-950"
+                           : "text-ink-600 hover:text-ink-950"
+                 }`}
+                 whileHover={{ scale: 1.03 }}
+                 whileTap={{ scale: 0.97 }}
+             >
+                 {item.label}
+                 {active && (
+                     <span
+                         className={`absolute inset-x-0 -bottom-0.5 h-[2px] rounded-full ${
+                             overMedia ? "bg-ravu-400" : "bg-ravu-600"
+                         }`}
+                         aria-hidden="true"
+                     />
+                 )}
+             </MotionLink>
+         );
+     };
 
     return (
         <header
@@ -189,58 +192,67 @@ export default function Navigation({
                 </button>
             </nav>
             <AnimatePresence initial={false}>
-                {isOpen && (
-                    <motion.div
-                        id="ravu-mobile-navigation"
-                        initial={
-                            reduceMotion ? false : { opacity: 0, height: 0 }
-                        }
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={
-                            reduceMotion ? { opacity: 0 } : { opacity: 0, height: 0 }
-                        }
-                        transition={{
-                            duration: reduceMotion ? 0 : 0.2,
-                            ease: [0.22, 1, 0.36, 1],
-                        }}
-                        className="overflow-hidden border-t border-ink-200 bg-white lg:hidden"
-                    >
-                        <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto px-5 pb-6 pt-3 sm:px-8">
-                            <div className="space-y-1">
-                                {items.map((item) => (
-                                    <NavLink
-                                        key={item.href}
-                                        item={item}
-                                        mobile
-                                    />
-                                ))}
-                            </div>
-                            <div className="mt-5 grid gap-2.5 border-t border-ink-200 pt-5">
-                                <Link
-                                    href="/partners"
-                                    onClick={() => setIsOpen(false)}
-                                    className="inline-flex min-h-11 items-center justify-center rounded-lg border-ink-200 text-sm font-bold text-ink-900 transition-colors hover:bg-ink-50"
-                                >
-                                    Partner With RAVU
-                                </Link>
-                                <Link
-                                    href="/for-riders"
-                                    onClick={() => setIsOpen(false)}
-                                    className="inline-flex min-h-11 items-center justify-center rounded-lg bg-ravu-600 text-sm font-bold text-white transition-colors hover:bg-ravu-700"
-                                >
-                                    Get the RAVU App
-                                </Link>
-                                <Link
-                                    href="/login"
-                                    onClick={() => setIsOpen(false)}
-                                    className="inline-flex min-h-11 items-center justify-center rounded-lg text-sm font-bold text-ink-600 transition-colors hover:text-ink-950"
-                                >
-                                    Login
-                                </Link>
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
+{isOpen && (
+                     <motion.div
+                         id="ravu-mobile-navigation"
+                         initial={
+                             reduceMotion ? false : { opacity: 0, height: 0 }
+                         }
+                         animate={{ opacity: 1, height: "auto" }}
+                         exit={
+                             reduceMotion ? { opacity: 0 } : { opacity: 0, height: 0 }
+                         }
+                         transition={{
+                             duration: reduceMotion ? 0 : 0.2,
+                             ease: [0.22, 1, 0.36, 1],
+                         }}
+                         className="overflow-hidden border-t border-ink-200 bg-white lg:hidden"
+                     >
+                         <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto px-5 pb-6 pt-3 sm:px-8">
+                             <motion.div
+                                 variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }}
+                                 initial="hidden"
+                                 animate="visible"
+                                 className="space-y-1"
+                             >
+                                 {items.map((item) => (
+                                     <motion.div
+                                         key={item.href}
+                                         variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
+                                     >
+                                         <NavLink
+                                             item={item}
+                                             mobile
+                                         />
+                                     </motion.div>
+                                 ))}
+                             </motion.div>
+                             <div className="mt-5 grid gap-2.5 border-t border-ink-200 pt-5">
+                                 <Link
+                                     href="/partners"
+                                     onClick={() => setIsOpen(false)}
+                                     className="inline-flex min-h-11 items-center justify-center rounded-lg border-ink-200 text-sm font-bold text-ink-900 transition-colors hover:bg-ink-50"
+                                 >
+                                     Partner With RAVU
+                                 </Link>
+                                 <Link
+                                     href="/for-riders"
+                                     onClick={() => setIsOpen(false)}
+                                     className="inline-flex min-h-11 items-center justify-center rounded-lg bg-ravu-600 text-sm font-bold text-white transition-colors hover:bg-ravu-700"
+                                 >
+                                     Get the RAVU App
+                                 </Link>
+                                 <Link
+                                     href="/login"
+                                     onClick={() => setIsOpen(false)}
+                                     className="inline-flex min-h-11 items-center justify-center rounded-lg text-sm font-bold text-ink-600 transition-colors hover:text-ink-950"
+                                 >
+                                     Login
+                                 </Link>
+                             </div>
+                         </div>
+                     </motion.div>
+                 )}
             </AnimatePresence>
         </header>
     );
