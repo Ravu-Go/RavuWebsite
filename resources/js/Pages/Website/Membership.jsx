@@ -60,7 +60,7 @@ export default function Membership() {
                             </h1>
                             <p className="mt-5 max-w-xl text-base leading-7 text-ink-600 sm:text-lg sm:leading-8">
                                 A RAVU membership connects you to a growing
-                                ecosystem of support, benefits and community —
+                                ecosystem of support, benefits and community
                                 built around your mobility journey.
                             </p>
                             <div className="mt-8 gap-3 sm:flex sm:flex-wrap sm:items-center">

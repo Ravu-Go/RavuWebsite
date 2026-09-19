@@ -210,7 +210,7 @@ export function EcosystemSection({ tone = "muted" }) {
                             }`}
                     >
                         The ecosystem works because each part strengthens the
-                        others — people, businesses, services and opportunity,
+                        others people, businesses, services and opportunity,
                         connected around mobility.
                     </p>
                 </Reveal>

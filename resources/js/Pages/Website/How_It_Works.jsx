@@ -113,7 +113,7 @@ export default function HowItWorks() {
                                 </h3>
                                 <p className="mt-3 text-sm leading-6 text-ink-600">
                                     Partners contribute relevant support,
-                                    services and opportunities — making the
+                                    services and opportunities making the
                                     ecosystem genuinely useful to members.
                                 </p>
                             </div>

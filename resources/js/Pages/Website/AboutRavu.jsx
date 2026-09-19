@@ -59,7 +59,7 @@ export default function AboutRavu() {
                         <SectionTitle
                             eyebrow="Our purpose"
                             title="Opportunity and support, closer to the road."
-                            text="RAVU is designed to bring connected services, trusted relationships and practical progress to the mobility economy — starting with the people at its centre."
+                            text="RAVU is designed to bring connected services, trusted relationships and practical progress to the mobility economy starting with the people at its centre."
                         />
                     </Reveal>
 
@@ -94,7 +94,7 @@ export default function AboutRavu() {
                             <SectionTitle
                                 eyebrow="Who RAVU is"
                                 title="A mobility ecosystem, not just an app."
-                                text="RAVU exists to make mobility work better for everyone involved in it — the people who move, the businesses they move between and the services that support them."
+                                text="RAVU exists to make mobility work better for everyone involved in it the people who move, the businesses they move between and the services that support them."
                             />
                         </Reveal>
                         <Reveal delay={0.08}>

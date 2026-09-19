@@ -103,7 +103,7 @@ export default function Support() {
                                         details have not been published yet.
                                         This area is ready to connect to the
                                         official support channel as soon as it
-                                        is confirmed — no phone numbers, email
+                                        is confirmed no phone numbers, email
                                         addresses or messaging links are shown
                                         here until they are real.
                                     </p>

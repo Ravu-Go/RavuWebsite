@@ -63,7 +63,7 @@ export default function ForRiders() {
             <Hero
                 eyebrow="For riders & drivers"
                 title="A stronger ride starts with a stronger ecosystem."
-                text="RAVU begins with the boda boda and motorcycle communities whose work keeps people and places connected — and grows outward from there."
+                text="RAVU begins with the boda boda and motorcycle communities whose work keeps people and places connected and grows outward from there."
                 primary={{ label: "Get the RAVU App", href: "/for-riders#app" }}
                 secondary={{
                     label: "Learn About Membership",
@@ -81,7 +81,7 @@ export default function ForRiders() {
                         <SectionTitle
                             eyebrow="What RAVU means for riders"
                             title="Support for the journey beyond the next trip."
-                            text="RAVU is designed around the everyday realities of mobility work — and the opportunity to build something more from it."
+                            text="RAVU is designed around the everyday realities of mobility work and the opportunity to build something more from it."
                         />
                     </Reveal>
 
@@ -108,11 +108,11 @@ export default function ForRiders() {
                                 mobile app.
                             </h2>
                             <p className="mt-5 text-base leading-7 text-ink-600 sm:text-lg">
-                                This website introduces RAVU — the membership,
+                                This website introduces RAVU the membership,
                                 the ecosystem and the opportunity. The app is
                                 where the operational experience happens:
                                 registration, membership access, services and
-                                the day-to-day tools built around your work.
+                                the day to day tools built around your work.
                             </p>
                             <div className="mt-8">
                                 <Button href="/for-riders#app" size="lg">

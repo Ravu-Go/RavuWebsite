@@ -160,7 +160,7 @@ export default function Home() {
                                 RAVU
                             </p>
                             <p className="mt-1 text-sm font-semibold text-white">
-                                Together we drive better opportunities.
+                                Together we drive better.........................!
                             </p>
                         </div>
                     </div>
