@@ -1,4 +1,9 @@
 *
 !private/
 !public/
+.DS_Store
+Task.md
+
+# Keep another directory
+!another_directory/
 !.gitignore
