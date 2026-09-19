@@ -137,6 +137,23 @@ export function Button({
     );
 }
 
+/* ------------------------------------------------------------ ButtonRow */
+/**
+ * The one wrapper for groups of side-by-side buttons.
+ * Stacks with a comfortable gap on mobile, then becomes a roomy row of
+ * flexed buttons on larger screens. Use this instead of hand-rolling a
+ * flex container so the rhythm stays identical across every page.
+ */
+export function ButtonRow({ children, className = "" }) {
+    return (
+        <div
+            className={`flex flex-col items-stretch gap-3.5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4 ${className}`}
+        >
+            {children}
+        </div>
+    );
+}
+
 /* ---------------------------------------------------------------- Layout */
 export function Container({ children, className = "", size = "default" }) {
     const widths = {

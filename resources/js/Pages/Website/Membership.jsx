@@ -3,6 +3,7 @@ import WebsiteLayout from "../../Components/WebsiteLayout";
 import { CTASection } from "../../Components/sections";
 import {
     Button,
+    ButtonRow,
     CheckList,
     Container,
     Eyebrow,
@@ -48,7 +49,7 @@ export default function Membership() {
                 />
                 <div
                     aria-hidden="true"
-                    className="ravu-grid pointer-events-none absolute inset-0 opacity-70 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
+                    className="ravu-grid pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
                 />
 
                 <Container className="relative py-14 sm:py-16 lg:py-20">
@@ -63,7 +64,7 @@ export default function Membership() {
                                 ecosystem of support, benefits and community
                                 built around your mobility journey.
                             </p>
-                            <div className="mt-8 gap-3 sm:flex sm:flex-wrap sm:items-center">
+                            <ButtonRow className="mt-8">
                                 <Button href="/register" size="lg">
                                     Register Interest
                                 </Button>
@@ -74,7 +75,7 @@ export default function Membership() {
                                 >
                                     See Benefits
                                 </Button>
-                            </div>
+                            </ButtonRow>
                             <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-ink-400">
                                 Join. Save. Earn.
                             </p>

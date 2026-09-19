@@ -1,7 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { Minus, Plus, Smartphone } from "lucide-react";
 import { useState } from "react";
-import { Button, Card, Container, Eyebrow, Reveal } from "./ui";
+import { Button, ButtonRow, Card, Container, Eyebrow, Reveal } from "./ui";
 
 /* ==========================================================================
    RAVU SHARED PAGE SECTIONS
@@ -33,7 +33,7 @@ export function Hero({
             />
             <div
                 aria-hidden="true"
-                className="ravu-grid pointer-events-none absolute inset-0 opacity-70 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
+                className="ravu-grid pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
             />
 
             <Container className="relative py-14 sm:py-16 lg:py-20">
@@ -55,7 +55,7 @@ export function Hero({
                             </p>
                         )}
                         {(primary || secondary) && (
-                            <div className="mt-8 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                            <ButtonRow className="mt-8">
                                 {primary && (
                                     <Button
                                         href={primary.href}
@@ -74,7 +74,7 @@ export function Hero({
                                         {secondary.label}
                                     </Button>
                                 )}
-                            </div>
+                            </ButtonRow>
                         )}
                         {children}
                     </div>
@@ -122,7 +122,7 @@ export function CTASection({ eyebrow, title, text, primary, secondary }) {
                         </p>
                     )}
                     {(primary || secondary) && (
-                        <div className="mt-8 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+                        <ButtonRow className="mt-8">
                             {primary && (
                                 <Button
                                     href={primary.href}
@@ -141,7 +141,7 @@ export function CTASection({ eyebrow, title, text, primary, secondary }) {
                                     {secondary.label}
                                 </Button>
                             )}
-                        </div>
+                        </ButtonRow>
                     )}
                 </Reveal>
             </Container>
@@ -282,7 +282,7 @@ export function AppPromo() {
                             This website is the front door to RAVU. The app is
                             where you use it.
                         </p>
-                        <div className="mt-8 flex-col gap-3 sm:flex-row sm:items-center">
+                        <ButtonRow className="mt-8">
                             <Button href="/for-riders" size="lg">
                                 Get the RAVU App
                             </Button>
@@ -293,7 +293,7 @@ export function AppPromo() {
                             >
                                 Learn About Membership
                             </Button>
-                        </div>
+                        </ButtonRow>
                         <p className="mt-5 text-xs leading-5 text-ink-500">
                             App download links will be published here once the
                             RAVU mobile app is available.

@@ -19,6 +19,7 @@ import {
 } from "../../Components/sections";
 import {
     Button,
+    ButtonRow,
     Card,
     CardGrid,
     Container,
@@ -93,6 +94,10 @@ export default function Home() {
                             aria-hidden="true"
                             className="ravu-mesh pointer-events-none absolute inset-0"
                         />
+                        <div
+                            aria-hidden="true"
+                            className="ravu-grid pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]"
+                        />
                         <div className="relative w-full px-5 py-14 sm:px-8 sm:py-16 lg:px-14 lg:py-20">
                             <div className="ravu-reveal">
                                 <Eyebrow>Mobility, connected</Eyebrow>
@@ -111,7 +116,7 @@ export default function Home() {
                                     businesses, services and technology that
                                     keep communities moving.
                                 </p>
-                                <div className="mt-8 gap-3 sm:flex sm:flex-wrap sm:items-center">
+                                <ButtonRow className="mt-8">
                                     <Button href="/partners" size="lg">
                                         Partner With RAVU
                                     </Button>
@@ -122,7 +127,7 @@ export default function Home() {
                                     >
                                         Get the RAVU App
                                     </Button>
-                                </div>
+                                </ButtonRow>
                                 <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-ink-400">
                                     Join. Save. Earn.
                                 </p>

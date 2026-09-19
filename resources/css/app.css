@@ -126,12 +126,12 @@
     .ravu-grid {
         background-image: linear-gradient(
                 to right,
-                color-mix(in srgb, var(--color-ink-950) 5%, transparent) 1px,
+                color-mix(in srgb, var(--color-ink-950) 12%, transparent) 1px,
                 transparent 1px
             ),
             linear-gradient(
                 to bottom,
-                color-mix(in srgb, var(--color-ink-950) 5%, transparent) 1px,
+                color-mix(in srgb, var(--color-ink-950) 12%, transparent) 1px,
                 transparent 1px
             );
         background-size: 64px 64px;
@@ -220,121 +220,3 @@
     }
 }
 
-
-
-@layer components {
-    /* ---- RAVU pattern language -------------------------------
-       The brand repeats a fine diagonal chevron motif derived
-       from the "R" mark. Applied sparingly as a signature. */
-    .ravu-pattern {
-        background-image: repeating-linear-gradient(
-            135deg,
-            color-mix(in srgb, var(--color-ravu-400) 16%, transparent) 0 1px,
-            transparent 1px 18px
-        );
-    }
-
-    .ravu-pattern-dark {
-        background-image: repeating-linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.055) 0 1px,
-            transparent 1px 18px
-        );
-    }
-
-    .ravu-grid {
-        background-image: linear-gradient(
-                to right,
-                color-mix(in srgb, var(--color-ink-950) 5%, transparent) 1px,
-                transparent 1px
-            ),
-            linear-gradient(
-                to bottom,
-                color-mix(in srgb, var(--color-ink-950) 5%, transparent) 1px,
-                transparent 1px
-            );
-        background-size: 64px 64px;
-    }
-
-    /* Emerald bleeding in from the left, blue from the right — the same
-       emerald-to-blue direction the original site used in its gradients. */
-.ravu-mesh {
-    background-image: radial-gradient(
-            ellipse 62% 62% at 8% 0%,
-            color-mix(in srgb, var(--color-ravu-400) 25%, transparent),
-            transparent 62%
-        ),
-        radial-gradient(
-            ellipse 55% 55% at 100% 10%,
-            color-mix(in srgb, var(--color-spare-400) 20%, transparent),
-            transparent 64%
-        );
-}
-
-    /* ---- Animation language ---------------------------------
-       ONE system for the whole site: 550ms in / 14px rise,
-       staggered at 70ms, RAVU easing. */
-    .ravu-reveal {
-        opacity: 0;
-        transform: translateY(14px);
-        animation: ravu-rise 0.55s var(--ease-ravu) forwards;
-    }
-
-    .ravu-reveal-delay-1 { animation-delay: 70ms; }
-    .ravu-reveal-delay-2 { animation-delay: 140ms; }
-    .ravu-reveal-delay-3 { animation-delay: 210ms; }
-    .ravu-reveal-delay-4 { animation-delay: 280ms; }
-    .ravu-reveal-delay-5 { animation-delay: 350ms; }
-
-    /* Scroll-triggered variant, driven by the Reveal component.
-       The animation runs once when data-visible flips to "true"; its end
-       state is the natural, fully-visible state, so content can never be
-       left hidden even if the observer never fires. */
-    .ravu-scroll-reveal {
-        opacity: 1;
-        transform: none;
-    }
-
-    .ravu-scroll-reveal[data-visible="true"] {
-        animation: ravu-rise 0.55s var(--ease-ravu) both;
-    }
-}
-
-@keyframes ravu-rise {
-    to {
-        opacity: 1;
-        transform: none;
-    }
-}
-
-/* Respect the user's motion preference across the whole system. */
-@media (prefers-reduced-motion: reduce) {
-    html {
-        scroll-behavior: auto;
-    }
-
-    .ravu-reveal,
-    .ravu-scroll-reveal {
-        opacity: 1 !important;
-        transform: none !important;
-        animation: none !important;
-        transition: none !important;
-    }
-
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.001ms !important;
-    }
-}
-
-@media print {
-    .ravu-pattern,
-    .ravu-pattern-dark,
-    .ravu-grid,
-    .ravu-mesh {
-        background-image: none;
-    }
-}
