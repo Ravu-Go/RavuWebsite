@@ -342,6 +342,211 @@ export function GridBackdrop() {
     );
 }
 
+/* -------------------------------------------------------- useCursorWave */
+/**
+ * Shared engine behind the grid wave and the pattern wave.
+ *
+ * Attaches one set of document-level pointer listeners and writes the wave
+ * state to CSS custom properties on `ref.current`:
+ *
+ *   --<prefix>-x / --<prefix>-y   crest position, as percentages
+ *   --<prefix>-r                  crest radius, e.g. "320px"
+ *   --<prefix>-o                  strength, 0..1 (0 = fully flat)
+ *
+ * `prefix` defaults to "grid"; the pattern uses "pattern".
+ *
+ * Speed drives the crest: fast movement whips it up, a rAF loop sinks it
+ * back to flat once input stops. All reads happen after the listener has
+ * already checked for the element, and no state is ever written through
+ * React, so pointer movement cannot trigger a re-render.
+ */
+function useCursorWave(ref, prefix = "grid", tuning = {}) {
+    const reduceMotion = useReducedMotion();
+    const {
+        crestMin = 95,
+        crestMax = 620,
+        speedForMax = 520,
+        // Per-frame sink rate once the pointer stops feeding energy.
+        // 0.945 lingered: measured opacity was still 0.33 a second after the
+        // cursor stopped. 0.90 settles in roughly 350-400ms, which reads as
+        // the wave passing through and flattening behind the cursor.
+        decay = 0.9,
+        epsilon = 0.01,
+    } = tuning;
+
+    useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+
+        // Respect the user's motion preference.
+        if (reduceMotion) return;
+
+        // Touch / stylus-only devices have no moving cursor to track.
+        if (typeof window.matchMedia === "function") {
+            const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+            if (!fine.matches) return;
+        }
+
+        let frame = 0;
+        let lastX = null;
+        let lastY = null;
+        let lastTime = 0;
+        let energy = 0; // 0 = flat, 1 = full crest
+        const setCrest = (value) => {
+            energy = Math.max(0, Math.min(1, value));
+            const radius = crestMin + (crestMax - crestMin) * energy;
+            el.style.setProperty(`--${prefix}-r`, `${radius.toFixed(1)}px`);
+            // Brightness must fall all the way to 0 as energy decays, or a
+            // stationary patch is left parked on the surface and the whole
+            // thing reads as static wallpaper rather than a passing wave.
+            //
+            // An earlier version used `0.3 + energy * 1.1` to keep the crest
+            // punchy. That floor was the bug: measured after the cursor had
+            // stopped, opacity was still 0.33 with a 217px radius a full
+            // second later and never reached zero.
+            //
+            // A gentle curve here instead — sqrt lifts brightness early so the
+            // crest still feels strong on the move, while still bottoming out
+            // at exactly 0.
+            const strength =
+                energy <= epsilon ? 0 : Math.min(1, Math.sqrt(energy) * 1.15);
+            el.style.setProperty(`--${prefix}-o`, strength.toFixed(3));
+            el.dataset.active = energy > epsilon ? "true" : "false";
+        };
+
+        // The decay loop is what makes it a wave rather than a static glow.
+        // Defined BEFORE onMove, which references it: these are `const` arrow
+        // functions, so `tick` is in the temporal dead zone until this line
+        // and referencing it earlier would throw at runtime.
+        const tick = () => {
+            if (energy > epsilon) {
+                setCrest(energy * decay);
+                frame = window.requestAnimationFrame(tick);
+            } else {
+                setCrest(0);
+                frame = 0;
+            }
+        };
+
+        const onMove = (event) => {
+            // Measure the layer itself; positioned to span its parent exactly.
+            const rect = el.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+
+            const now = event.timeStamp || performance.now();
+
+            el.style.setProperty(
+                `--${prefix}-x`,
+                `${(((event.clientX - rect.left) / rect.width) * 100).toFixed(2)}%`,
+            );
+            el.style.setProperty(
+                `--${prefix}-y`,
+                `${(((event.clientY - rect.top) / rect.height) * 100).toFixed(2)}%`,
+            );
+
+            // Speed drives the crest height, in px/s.
+            if (lastX !== null) {
+                const dt = Math.max(1, now - lastTime);
+                const dist = Math.hypot(
+                    event.clientX - lastX,
+                    event.clientY - lastY,
+                );
+                const speed = (dist / dt) * 1000;
+                const target = Math.min(1, speed / speedForMax);
+                // Rise instantly so the crest leads the cursor; the frame loop
+                // above handles the trailing settle behind it.
+                if (target > energy) setCrest(target);
+            }
+
+            lastX = event.clientX;
+            lastY = event.clientY;
+            lastTime = now;
+            if (!frame) frame = window.requestAnimationFrame(tick);
+        };
+
+        const onEnter = (event) => {
+            // Re-entering must not read as a huge jump from the last point.
+            lastX = event.clientX;
+            lastY = event.clientY;
+            lastTime = event.timeStamp || performance.now();
+        };
+
+        const onLeave = () => {
+            lastX = null;
+            lastY = null;
+            // Let the crest sink naturally instead of snapping off.
+            if (!frame) frame = window.requestAnimationFrame(tick);
+        };
+
+        document.addEventListener("pointermove", onMove, { passive: true });
+        document.addEventListener("pointerenter", onEnter, { passive: true });
+        document.addEventListener("pointerleave", onLeave, { passive: true });
+        window.addEventListener("blur", onLeave);
+
+        return () => {
+            if (frame) window.cancelAnimationFrame(frame);
+            document.removeEventListener("pointermove", onMove);
+            document.removeEventListener("pointerenter", onEnter);
+            document.removeEventListener("pointerleave", onLeave);
+            window.removeEventListener("blur", onLeave);
+        };
+    }, [ref, prefix, reduceMotion, crestMin, crestMax, speedForMax, decay, epsilon]);
+}
+
+/* ------------------------------------------------------- PatternBackdrop */
+/**
+ * The diagonal chevron stripe motif, with the same cursor wave as the grid:
+ * the lines flare up where the cursor passes and flatten behind it.
+ *
+ * Renders the resting pattern plus a brighter wave copy, as a fragment of
+ * `absolute inset-0` layers — so it MUST be placed inside a `relative`
+ * parent. Placing it as a sibling before an opaque positioned block lets
+ * that block paint over it and the effect vanishes entirely.
+ *
+ * `tone` picks the surface: "dark" for the ink-950 bands and the footer,
+ * "light" for white/muted sections.
+ */
+export function PatternBackdrop({ tone = "dark", className = "" }) {
+    const waveRef = useRef(null);
+    const isDark = tone === "dark";
+    // Larger than the grid crest because these bands are full viewport height
+    // (measured 1440x828 on the partner section) and the stripes sit 18px
+    // apart versus a 64px grid, so a wider lustre has to travel further to
+    // read as movement.
+    //
+    // 1150 was tried and was far too much: combined with a bright stripe
+    // colour it lit nearly the whole section at once, which stops looking
+    // like a wave and starts looking like striped wallpaper.
+    useCursorWave(waveRef, "pattern", {
+        crestMin: 200,
+        crestMax: 780,
+        speedForMax: 520,
+        decay: 0.9,
+    });
+
+    return (
+        <>
+            <div
+                aria-hidden="true"
+                className={`pointer-events-none absolute inset-0 ${
+                    isDark ? "ravu-pattern-dark" : "ravu-pattern"
+                } ${className}`}
+            />
+            <div
+                ref={waveRef}
+                aria-hidden="true"
+                data-active="false"
+                /* No [mask-*] utility here on purpose — see app.css. */
+                className={`pointer-events-none absolute inset-0 ${
+                    isDark
+                        ? "ravu-pattern-glow-dark"
+                        : "ravu-pattern-glow-light"
+                } ${className}`}
+            />
+        </>
+    );
+}
+
 /* ---------------------------------------------------------------- Layout */
 export function Container({ children, className = "", size = "default" }) {
     const widths = {
@@ -378,14 +583,7 @@ export function Section({
             id={id}
             className={`relative overflow-hidden py-16 sm:py-20 lg:py-24 ${tones[tone]} ${className}`}
         >
-            {pattern && (
-                <div
-                    aria-hidden="true"
-                    className={`pointer-events-none absolute inset-0 ${
-                        isDark ? "ravu-pattern-dark" : "ravu-pattern opacity-40"
-                    }`}
-                />
-            )}
+            {pattern && <PatternBackdrop tone={isDark ? "dark" : "light"} />}
             <div className="relative">{children}</div>
         </section>
     );

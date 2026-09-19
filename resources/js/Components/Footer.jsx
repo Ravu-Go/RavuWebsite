@@ -1,5 +1,6 @@
 import { Link } from "@inertiajs/react";
 import RAVULogo from "./RAVULogo";
+import { PatternBackdrop } from "./ui";
 
 const SITE_LINKS = [
     { label: "Home", href: "/" },
@@ -26,10 +27,10 @@ export default function Footer() {
 
     return (
         <footer className="relative overflow-hidden bg-ink-950 text-ink-400">
-            <div
-                aria-hidden="true"
-                className="ravu-pattern-dark pointer-events-none absolute inset-0"
-            />
+            {/* Diagonal stripe motif with the cursor wave. Must sit inside
+                this `relative` footer so the opaque bg-ink-950 cannot paint
+                over it. */}
+            <PatternBackdrop tone="dark" />
 
             <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10 lg:py-16">
                 <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr] lg:gap-14">

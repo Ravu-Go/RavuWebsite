@@ -25,6 +25,7 @@ import {
     Container,
     Eyebrow,
     GridBackdrop,
+    PatternBackdrop,
     Reveal,
     SectionTitle,
     StepCard,
@@ -210,10 +211,7 @@ export default function Home() {
 
             {/* ---------------------------------------------------- PARTNERS */}
             <section className="relative overflow-hidden bg-ink-950 py-16 text-ink-300 sm:py-20 lg:py-24">
-                <div
-                    aria-hidden="true"
-                    className="ravu-pattern-dark pointer-events-none absolute inset-0"
-                />
+                <PatternBackdrop tone="dark" />
                 <Container className="relative">
                     <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
                         <Reveal>

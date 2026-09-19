@@ -8,6 +8,7 @@ import {
     Container,
     Eyebrow,
     GridBackdrop,
+    PatternBackdrop,
     Reveal,
 } from "./ui";
 
@@ -103,10 +104,7 @@ export function Hero({
 export function CTASection({ eyebrow, title, text, primary, secondary }) {
     return (
         <section className="relative overflow-hidden bg-ink-950 py-16 sm:py-20">
-            <div
-                aria-hidden="true"
-                className="ravu-pattern-dark pointer-events-none absolute inset-0"
-            />
+            <PatternBackdrop tone="dark" />
             <div
                 aria-hidden="true"
                 className="pointer-events-none absolute -right-24 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-ravu-600/20 blur-3xl"
@@ -189,12 +187,7 @@ export function EcosystemSection({ tone = "muted" }) {
             className={`relative overflow-hidden py-16 sm:py-20 lg:py-24 ${isDark ? "bg-ravu-950 text-ravu-100" : "bg-ink-50"
                 }`}
         >
-            {isDark && (
-                <div
-                    aria-hidden="true"
-                    className="ravu-pattern-dark pointer-events-none absolute inset-0"
-                />
-            )}
+            <PatternBackdrop tone={isDark ? "dark" : "light"} />
             <Container className="relative">
                 <Reveal className="max-w-2xl">
                     <Eyebrow tone={isDark ? "light" : "dark"}>
@@ -309,10 +302,7 @@ export function AppPromo() {
                             />
                             <div className="relative rounded-[1.75rem] border-ink-200 bg-white p-2.5 shadow-sm">
                                 <div className="relative overflow-hidden rounded-[1.4rem] bg-ink-950 px-6 py-10 text-center">
-                                    <div
-                                        aria-hidden="true"
-                                        className="ravu-pattern-dark absolute inset-0"
-                                    />
+                                    <PatternBackdrop tone="dark" />
                                     <div className="relative">
                                         <span className="mx-auto grid h-14 w-14 place-items-center rounded-xl bg-ravu-500 text-ink-950">
                                             <Smartphone

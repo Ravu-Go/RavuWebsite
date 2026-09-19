@@ -107,19 +107,131 @@
     /* ---- RAVU pattern language -------------------------------
        The brand repeats a fine diagonal chevron motif derived
        from the "R" mark. Applied sparingly as a signature. */
+    /* NOTE ON GEOMETRY AND ALIGNMENT ---------------------------------------
+       Two separate things had to be fixed here, and only the second one was
+       the real cause of "the lines don't line up":
+
+       1. GEOMETRY. A resting stripe and its cursor-wave copy are stacked in
+          the same box, so they must share angle, stripe width and period.
+          They differed (resting 1px, wave 2px), so the wider wave stripe hung
+          a pixel past the resting one. Both now read --stripe-w / --stripe-gap
+          from one place so they cannot drift apart again.
+
+       2. PHASE. This was the actual misalignment. A repeating-linear-gradient
+          anchors its pattern to each element's OWN box. At 135deg the period
+          along the diagonal is 18px x sqrt(2) = 25.456px — not a whole number
+          — so every pattern element starts its stripe sequence at a different
+          sub-pixel phase depending on its height and position on the page.
+          Result: identical CSS, identical geometry, and yet the lines broke at
+          every boundary between one pattern band and the next.
+
+          Reproduced in isolation with three identical stacked boxes: all three
+          painted stripes at different phases.
+
+          Fix: background-attachment: fixed. Every element then samples the
+          pattern from the same origin (the viewport), so all the diagonal
+          lines form one continuous field across the whole page and line up
+          across section boundaries.
+
+       If a future change makes the stripes jump again, check ATTACHMENT first
+       — geometry alone does not guarantee alignment here. */
+    .ravu-pattern,
+    .ravu-pattern-dark,
+    .ravu-pattern-glow-dark,
+    .ravu-pattern-glow-light {
+        --stripe-w: 1px;
+        --stripe-gap: 18px;
+        /* Shared origin so every band's stripes are in phase with every other. */
+        background-attachment: fixed;
+    }
+
     .ravu-pattern {
         background-image: repeating-linear-gradient(
             135deg,
-            color-mix(in srgb, var(--color-ravu-400) 16%, transparent) 0 1px,
-            transparent 1px 18px
+            color-mix(in srgb, var(--color-ravu-400) 16%, white) 0 var(--stripe-w),
+            transparent var(--stripe-w) var(--stripe-gap)
         );
     }
 
     .ravu-pattern-dark {
         background-image: repeating-linear-gradient(
             135deg,
-            rgba(255, 255, 255, 0.055) 0 1px,
-            transparent 1px 18px
+            rgba(255, 255, 255, 0.055) 0 var(--stripe-w),
+            transparent var(--stripe-w) var(--stripe-gap)
+        );
+    }
+
+    /* ---- Cursor wave for the diagonal pattern -------------------------
+       Same idea as .ravu-grid-glow below, but for the 135deg chevron lines.
+
+       On the DARK variant the wave BLEEDS IN rather than brightening:
+       --pattern-o runs 0 (nothing) -> 1 (full). The mask is a single radial
+       lustre at the cursor. Both are driven from JS as custom properties.
+
+       No [mask-*] Tailwind utility may be placed on these elements — an
+       arbitrary utility has equal specificity but is emitted later, so it
+       silently replaces this mask. That exact bug hid the grid wave. */
+    .ravu-pattern-glow-dark {
+        --pattern-r: 0px;
+        --pattern-x: -100%;
+        --pattern-y: -100%;
+        --pattern-o: 0;
+        /* The resting stripes are rgba(255,255,255,0.055).
+
+           Calibration history, because this value is easy to get wrong:
+             0.42 -> striped wallpaper, swamped the section content
+             0.16 -> still too heavy; the stripes were clearly visible
+                     running through the dark partner cards, whose fill is
+                     only bg-white/[0.03] so the backdrop shows through
+             0.10 -> roughly 2x the resting weight. Reads as a wave passing
+                     over the texture without drawing lines across the cards.
+
+           Keep the stripe WIDTH at 1px to match the resting layer exactly —
+           a wider wave stripe sits off-centre on the resting one and the two
+           sets of lines visibly fail to line up. */
+        background-image: repeating-linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.10) 0 var(--stripe-w),
+            transparent var(--stripe-w) var(--stripe-gap)
+        );
+        opacity: var(--pattern-o);
+        /* Single mask only: a radial lustre centred on the cursor. */
+        -webkit-mask-image: radial-gradient(
+            circle var(--pattern-r) at var(--pattern-x) var(--pattern-y),
+            #000 0%,
+            transparent 100%
+        );
+        mask-image: radial-gradient(
+            circle var(--pattern-r) at var(--pattern-x) var(--pattern-y),
+            #000 0%,
+            transparent 100%
+        );
+    }
+
+    .ravu-pattern-glow-light {
+        --pattern-r: 0px;
+        --pattern-x: -100%;
+        --pattern-y: -100%;
+        --pattern-o: 0;
+        /* Mixed against WHITE, not transparent. color-mix() toward
+           transparent in this oklch space produced an out-of-gamut value
+           with a negative channel (color(srgb -0.278 0.770 1.052)), which
+           the browser clamps — the same trap that hid the grid. */
+        background-image: repeating-linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--color-ravu-500) 55%, white) 0 var(--stripe-w),
+            transparent var(--stripe-w) var(--stripe-gap)
+        );
+        opacity: var(--pattern-o);
+        -webkit-mask-image: radial-gradient(
+            circle var(--pattern-r) at var(--pattern-x) var(--pattern-y),
+            #000 0%,
+            transparent 100%
+        );
+        mask-image: radial-gradient(
+            circle var(--pattern-r) at var(--pattern-x) var(--pattern-y),
+            #000 0%,
+            transparent 100%
         );
     }
 

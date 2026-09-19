@@ -3,7 +3,13 @@ import { Eye, EyeOff, Info, Smartphone } from "lucide-react";
 import { useState } from "react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import RAVULogo from "../../Components/RAVULogo";
-import { Button, CheckList, Container, Eyebrow } from "../../Components/ui";
+import {
+    Button,
+    CheckList,
+    Container,
+    Eyebrow,
+    PatternBackdrop,
+} from "../../Components/ui";
 
 const FIELD =
     "mt-2 w-full rounded-lg border-ink-300 bg-white px-4 py-3 text-ink-900 placeholder:text-ink-400 focus:border-ravu-600 focus:outline-none focus:ring-2 focus:ring-ravu-200";
@@ -16,10 +22,7 @@ export default function Register() {
             <div className="grid lg:min-h-[42rem] lg:grid-cols-2">
                 {/* ------------------------------------------------ BRAND PANEL */}
                 <div className="relative hidden overflow-hidden bg-ink-950 p-12 lg:flex lg:items-center xl:p-16">
-                    <div
-                        aria-hidden="true"
-                        className="ravu-pattern-dark absolute inset-0"
-                    />
+                    <PatternBackdrop tone="dark" />
                     <div
                         aria-hidden="true"
                         className="absolute -right-24 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-ravu-600/25 blur-3xl"
