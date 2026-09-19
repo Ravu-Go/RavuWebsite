@@ -11,17 +11,19 @@
    support accent on slate neutrals. It is expressed here as two
    semantic token families so the whole site stays consistent:
 
-     ravu-*  -> emerald  (primary actions, eyebrows, accents)
-     ink-*   -> slate    (neutrals, surfaces, dark bands)
+      ravu-*  -> emerald  (primary actions, eyebrows, accents)
+      ink-*   -> slate    (neutrals, surfaces, dark bands)
 
    spare-* is the blue support accent used for depth and gradients.
    ============================================================ */
 
-@theme {
-    --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
-        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
-/* ravu-* = navy blue — primary accent changed to navy/blue identity */
+
+@theme {
+     --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+         "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+     /* ravu-* = navy blue — primary accent changed to navy/blue identity */
      --color-ravu-50: oklch(0.979 0.021 230);
      --color-ravu-100: oklch(0.95 0.052 230);
      --color-ravu-200: oklch(0.905 0.093 230);
@@ -34,37 +36,37 @@
      --color-ravu-900: oklch(0.378 0.077 230);
      --color-ravu-950: oklch(0.262 0.051 230);
 
-    /* ink-* = slate — neutrals, borders, dark bands, body text */
-    --color-ink-50: oklch(0.984 0.003 247.858);
-    --color-ink-100: oklch(0.968 0.007 247.896);
-    --color-ink-200: oklch(0.929 0.013 255.508);
-    --color-ink-300: oklch(0.869 0.022 252.894);
-    --color-ink-400: oklch(0.704 0.04 256.788);
-    --color-ink-500: oklch(0.554 0.046 257.417);
-    --color-ink-600: oklch(0.446 0.043 257.281);
-    --color-ink-700: oklch(0.372 0.044 257.287);
-    --color-ink-800: oklch(0.279 0.041 260.031);
-    --color-ink-900: oklch(0.208 0.042 265.755);
-    --color-ink-950: oklch(0.129 0.042 264.695);
+     /* ink-* = slate — neutrals, borders, dark bands, body text */
+     --color-ink-50: oklch(0.984 0.003 247.858);
+     --color-ink-100: oklch(0.968 0.007 247.896);
+     --color-ink-200: oklch(0.929 0.013 255.508);
+     --color-ink-300: oklch(0.869 0.022 252.894);
+     --color-ink-400: oklch(0.704 0.04 256.788);
+     --color-ink-500: oklch(0.554 0.046 257.417);
+     --color-ink-600: oklch(0.446 0.043 257.281);
+     --color-ink-700: oklch(0.372 0.044 257.287);
+     --color-ink-800: oklch(0.279 0.041 260.031);
+     --color-ink-900: oklch(0.208 0.042 265.755);
+     --color-ink-950: oklch(0.129 0.042 264.695);
 
-    /* spare-* = blue — the support accent already present on the site */
-    --color-spare-50: oklch(0.97 0.014 254.604);
-    --color-spare-100: oklch(0.932 0.032 255.585);
-    --color-spare-200: oklch(0.882 0.059 254.128);
-    --color-spare-300: oklch(0.809 0.105 251.813);
-    --color-spare-400: oklch(0.707 0.165 254.624);
-    --color-spare-500: oklch(0.623 0.214 259.815);
-    --color-spare-600: oklch(0.546 0.245 262.881);
-    --color-spare-700: oklch(0.488 0.243 264.376);
-    --color-spare-800: oklch(0.424 0.199 265.638);
-    --color-spare-900: oklch(0.379 0.146 265.522);
-    --color-spare-950: oklch(0.282 0.091 267.935);
+     /* spare-* = blue — the support accent already present on the site */
+     --color-spare-50: oklch(0.97 0.014 254.604);
+     --color-spare-100: oklch(0.932 0.032 255.585);
+     --color-spare-200: oklch(0.882 0.059 254.128);
+     --color-spare-300: oklch(0.809 0.105 251.813);
+     --color-spare-400: oklch(0.707 0.165 254.624);
+     --color-spare-500: oklch(0.623 0.214 259.815);
+     --color-spare-600: oklch(0.546 0.245 262.881);
+     --color-spare-700: oklch(0.488 0.243 264.376);
+     --color-spare-800: oklch(0.424 0.199 265.638);
+     --color-spare-900: oklch(0.379 0.146 265.522);
+     --color-spare-950: oklch(0.282 0.091 267.935);
 
-    --radius-card: 0.875rem;
+     --radius-card: 0.875rem;
 
-    --ease-ravu: cubic-bezier(0.22, 1, 0.36, 1);
+     --ease-ravu: cubic-bezier(0.22, 1, 0.36, 1);
 }
-
+/* ==== Base ==== */
 @layer base {
     html {
         -webkit-text-size-adjust: 100%;
@@ -72,7 +74,8 @@
     }
 
     body {
-        @apply bg-white font-sans text-ink-700 antialiased;
+        @apply bg-white font-sans antialiased;
+        color: var(--color-ink-700);
         overflow-x: hidden;
     }
 
@@ -80,7 +83,7 @@
     h2,
     h3,
     h4 {
-        @apply text-ink-950;
+        color: var(--color-ink-950);
         text-wrap: balance;
     }
 
@@ -98,6 +101,126 @@
         outline-offset: 2px;
     }
 }
+
+/* ==== Components ==== */
+@layer components {
+    /* ---- RAVU pattern language -------------------------------
+       The brand repeats a fine diagonal chevron motif derived
+       from the "R" mark. Applied sparingly as a signature. */
+    .ravu-pattern {
+        background-image: repeating-linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--color-ravu-400) 16%, transparent) 0 1px,
+            transparent 1px 18px
+        );
+    }
+
+    .ravu-pattern-dark {
+        background-image: repeating-linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.055) 0 1px,
+            transparent 1px 18px
+        );
+    }
+
+    .ravu-grid {
+        background-image: linear-gradient(
+                to right,
+                color-mix(in srgb, var(--color-ink-950) 5%, transparent) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                to bottom,
+                color-mix(in srgb, var(--color-ink-950) 5%, transparent) 1px,
+                transparent 1px
+            );
+        background-size: 64px 64px;
+    }
+
+    /* Emerald bleeding in from the left, blue from the right — the same
+       emerald-to-blue direction the original site used in its gradients. */
+    .ravu-mesh {
+        background-image: radial-gradient(
+                ellipse 62% 62% at 8% 0%,
+                color-mix(in srgb, var(--color-ravu-400) 25%, transparent),
+                transparent 62%
+            ),
+            radial-gradient(
+                ellipse 55% 55% at 100% 10%,
+                color-mix(in srgb, var(--color-spare-400) 20%, transparent),
+                transparent 64%
+            );
+    }
+
+    /* ---- Animation language ---------------------------------
+       ONE system for the whole site: 550ms in / 14px rise,
+       staggered at 70ms, RAVU easing. */
+    .ravu-reveal {
+        opacity: 0;
+        transform: translateY(14px);
+        animation: ravu-rise 0.55s var(--ease-ravu) forwards;
+    }
+
+    .ravu-reveal-delay-1 { animation-delay: 70ms; }
+    .ravu-reveal-delay-2 { animation-delay: 140ms; }
+    .ravu-reveal-delay-3 { animation-delay: 210ms; }
+    .ravu-reveal-delay-4 { animation-delay: 280ms; }
+    .ravu-reveal-delay-5 { animation-delay: 350ms; }
+
+    /* Scroll-triggered variant, driven by the Reveal component.
+       The animation runs once when data-visible flips to "true"; its end
+       state is the natural, fully-visible state, so content can never be
+       left hidden even if the observer never fires. */
+    .ravu-scroll-reveal {
+        opacity: 1;
+        transform: none;
+    }
+
+    .ravu-scroll-reveal[data-visible="true"] {
+        animation: ravu-rise 0.55s var(--ease-ravu) both;
+    }
+}
+
+@keyframes ravu-rise {
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Respect the user's motion preference across the whole system. */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .ravu-reveal,
+    .ravu-scroll-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        transition: none !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+@media print {
+    .ravu-pattern,
+    .ravu-pattern-dark,
+    .ravu-grid,
+    .ravu-mesh {
+        background-image: none;
+    }
+}
+
+
 
 @layer components {
     /* ---- RAVU pattern language -------------------------------
