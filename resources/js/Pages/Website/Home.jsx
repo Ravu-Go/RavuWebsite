@@ -76,70 +76,62 @@ export default function Home() {
     return (
         <WebsiteLayout>
             {/* ---------------------------------------------------------- HERO */}
-            <section className="relative overflow-hidden bg-white pt-10 pb-12 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-24">
-                <div className="mx-auto max-w-7xl px-5 sm:px-8">
-                    <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
-                        {/* Left Column: Heading, Subhead, Badges, Avatars */}
-                        <div className="lg:col-span-5">
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                                MOBILITY, CONNECTED
-                            </p>
+            <section className="relative overflow-hidden bg-white pt-12 pb-10 sm:pt-16 sm:pb-14 lg:pt-20 lg:pb-16">
+                <div className="mx-auto max-w-7xl px-5 text-center sm:px-8">
+                    {/* Eyebrow */}
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                        MOBILITY, CONNECTED
+                    </p>
 
-                            <h1 className="mt-4 text-4xl font-black leading-[1.05] tracking-tight text-slate-950 sm:text-5xl lg:text-[4rem]">
-                                Move
-                                <br />
-                                further
-                                <br />
-                                <span className="text-[#1864E8]">
-                                    together.
-                                </span>
-                            </h1>
+                    {/* Centered Headline */}
+                    <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
+                        Move further{" "}
+                        <span className="text-[#1864E8]">together.</span>
+                    </h1>
 
-                            <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-600 sm:text-base">
-                                A smarter way to get around. Ride, share and
-                                access more value — all in one app, across
-                                Tanzania.
-                            </p>
+                    {/* Centered Subhead */}
+                    <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
+                        A smarter way to get around. Ride, share and access more
+                        value — all in one app, across Tanzania.
+                    </p>
 
-                            {/* App store download buttons */}
-                            <div className="mt-8">
-                                <StoreButtons />
-                            </div>
+                    {/* Centered App Store Buttons */}
+                    <div className="mt-8 flex justify-center">
+                        <StoreButtons />
+                    </div>
 
-                            {/* Social proof avatars */}
-                            <div className="mt-8 flex items-center gap-3">
-                                <div className="flex -space-x-2 overflow-hidden">
-                                    <img
-                                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
-                                        alt="Ravu community member"
-                                    />
-                                    <img
-                                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80"
-                                        alt="Ravu driver"
-                                    />
-                                    <img
-                                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                                        src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&h=120&q=80"
-                                        alt="Ravu rider"
-                                    />
-                                </div>
-                                <p className="max-w-[170px] text-xs font-medium leading-tight text-slate-600">
-                                    People moving together across Tanzania
-                                </p>
-                            </div>
+                    {/* Centered Social Proof */}
+                    <div className="mt-6 flex items-center justify-center gap-3">
+                        <div className="flex -space-x-2 overflow-hidden">
+                            <img
+                                className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
+                                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+                                alt="Ravu community member"
+                            />
+                            <img
+                                className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
+                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80"
+                                alt="Ravu driver"
+                            />
+                            <img
+                                className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
+                                src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&h=120&q=80"
+                                alt="Ravu rider"
+                            />
                         </div>
+                        <p className="text-xs font-medium leading-tight text-slate-600">
+                            People moving together across Tanzania
+                        </p>
+                    </div>
 
-                        {/* Right Column: Hand holding Phone + fanned screens image */}
-                        <div className="lg:col-span-7">
-                            <div className="relative w-full">
-                                <img
-                                    src={headerImg}
-                                    alt="Ravu Ride-Sharing App Journey"
-                                    className="h-auto w-full object-contain select-none"
-                                />
-                            </div>
+                    {/* Full-Width Showcase Stage for Header.png */}
+                    <div className="relative mx-auto mt-12 max-w-6xl sm:mt-16">
+                        <div className="relative overflow-hidden rounded-2xl bg-slate-50/60 shadow-lg border border-slate-100">
+                            <img
+                                src={headerImg}
+                                alt="Ravu Ride-Sharing App Journey"
+                                className="h-auto w-full object-contain select-none"
+                            />
                         </div>
                     </div>
                 </div>
