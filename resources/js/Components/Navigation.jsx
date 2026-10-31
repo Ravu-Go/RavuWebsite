@@ -137,7 +137,7 @@ export default function Navigation({
                         className={`hidden min-h-10 items-center rounded-lg px-4 text-[13px] font-bold transition-colors sm:inline-flex ${
                             overMedia
                                 ? "bg-white text-ink-950 hover:bg-white/90"
-                                : "bg-ravu-600 text-white hover:bg-ravu-700"
+                                : "bg-[#00289a] text-white hover:bg-[#001f78]"
                         }`}
                     >
                         Partner With RAVU
@@ -222,7 +222,7 @@ export default function Navigation({
                                      <Link
                                          href="/partners"
                                          onClick={() => setIsOpen(false)}
-                                         className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg bg-ravu-600 text-sm font-bold text-white transition-colors hover:bg-ravu-700"
+                                         className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg bg-[#00289a] text-sm font-bold text-white transition-colors hover:bg-[#001f78]"
                                      >
                                          Partner With RAVU
                                          <ChevronRight

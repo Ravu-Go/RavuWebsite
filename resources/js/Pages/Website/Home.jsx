@@ -92,7 +92,7 @@ export default function Home() {
                     {/* Centered Subhead */}
                     <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
                         A smarter way to get around. Ride, share and access more
-                        value — all in one app, across Tanzania.
+                        value all in one app, across Tanzania.
                     </p>
 
                     {/* Centered App Store Buttons */}
@@ -123,17 +123,15 @@ export default function Home() {
                             People moving together across Tanzania
                         </p>
                     </div>
+                </div>
 
-                    {/* Full-Width Showcase Stage for Header.png */}
-                    <div className="relative mx-auto mt-12 max-w-6xl sm:mt-16">
-                        <div className="relative overflow-hidden rounded-2xl bg-slate-50/60 shadow-lg border border-slate-100">
-                            <img
-                                src={headerImg}
-                                alt="Ravu Ride-Sharing App Journey"
-                                className="h-auto w-full object-contain select-none"
-                            />
-                        </div>
-                    </div>
+                {/* Edge-to-Edge Full-Width Header Image */}
+                <div className="relative mt-10 w-full sm:mt-14">
+                    <img
+                        src={headerImg}
+                        alt="Ravu Ride-Sharing App Journey"
+                        className="h-auto w-full object-contain select-none"
+                    />
                 </div>
             </section>
 

@@ -30,8 +30,8 @@
      --color-ravu-300: oklch(0.845 0.143 230);
      --color-ravu-400: oklch(0.765 0.177 230);
      --color-ravu-500: oklch(0.696 0.17 230);
-     --color-ravu-600: oklch(0.596 0.145 230);
-     --color-ravu-700: oklch(0.508 0.118 230);
+     --color-ravu-600: #00289a;
+     --color-ravu-700: #001f78;
      --color-ravu-800: oklch(0.432 0.095 230);
      --color-ravu-900: oklch(0.378 0.077 230);
      --color-ravu-950: oklch(0.262 0.051 230);
