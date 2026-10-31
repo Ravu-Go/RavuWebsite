@@ -1,298 +1,309 @@
-import {
-    Banknote,
-    BadgeCheck,
-    Building2,
-    Bus,
-    Handshake,
-    Headphones,
-    Landmark,
-    ShieldCheck,
-    Store,
-    TrendingUp,
-    Wrench,
-} from "lucide-react";
+import { ShieldCheck, Users, Zap } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
-import {
-    AppPromo,
-    CTASection,
-    EcosystemSection,
-} from "../../Components/sections";
-import {
-    Button,
-    ButtonRow,
-    Card,
-    CardGrid,
-    Container,
-    Eyebrow,
-    GridBackdrop,
-    PatternBackdrop,
-    Reveal,
-    SectionTitle,
-    StepCard,
-    TrustPoint,
-} from "../../Components/ui";
-import riderImage from "../../../imgs/memberPlusPartners.png";
+import headerImg from "../../../imgs/Header.png";
+import mapImg from "../../../imgs/map.png";
+import footerBg from "../../../imgs/Footer.png";
 
-const PARTNER_TYPES = [
-    {
-        icon: Building2,
-        title: "Hotels & Hospitality",
-        text: "Reach RAVU members and mobility customers.",
-    },
-    {
-        icon: ShieldCheck,
-        title: "Insurance",
-        text: "Develop relevant protection solutions for mobility users.",
-    },
-    {
-        icon: Landmark,
-        title: "Banks & Financial Institutions",
-        text: "Reach an active mobility community.",
-    },
-    {
-        icon: Wrench,
-        title: "Workshops & Spare Parts",
-        text: "Become part of the RAVU service network.",
-    },
-    {
-        icon: Store,
-        title: "Businesses",
-        text: "Offer products, services and exclusive benefits to RAVU members.",
-    },
-    {
-        icon: Handshake,
-        title: "Technology Partners",
-        text: "Build connected mobility solutions with RAVU.",
-    },
-];
+/**
+ * Reusable official store buttons for App Store & Google Play
+ */
+function StoreButtons({ className = "" }) {
+    return (
+        <div className={`flex flex-wrap items-center gap-3 ${className}`}>
+            {/* Apple App Store */}
+            <a
+                href="#app-store"
+                className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+                <svg
+                    viewBox="0 0 384 512"
+                    className="h-5 w-5 fill-current shrink-0"
+                    aria-hidden="true"
+                >
+                    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 62.3 26 139.7c15.6 44.5 44 95.3 84.7 95.7 32 .3 42.4-21.7 82.2-21.7 39.4 0 50.8 21.7 84 21.7 41.5-.4 68.9-46.7 84.2-91.2 17.6-51.1 24.8-100.8 25.1-103.3-1.2-.6-70.3-26.9-71.5-45.7zm-61.9-158.4c17.5-21.6 29.5-51.5 26.2-81.9-25.3 1.1-56.5 17.2-74.6 38.6-16 18.8-30.2 49-26.4 78.4 28.3 2.2 57.3-13.5 74.8-35.1z" />
+                </svg>
+                <div className="text-left leading-none">
+                    <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
+                        Download on the
+                    </p>
+                    <p className="text-xs font-semibold tracking-tight text-white mt-0.5">
+                        App Store
+                    </p>
+                </div>
+            </a>
 
-const JOURNEY = [
-    {
-        title: "Discover RAVU",
-        text: "Understand the membership ecosystem and where you fit.",
-    },
-    {
-        title: "Register",
-        text: "Share your interest in becoming part of RAVU.",
-    },
-    {
-        title: "Access the ecosystem",
-        text: "Explore relevant benefits, partners and support.",
-    },
-    {
-        title: "Grow with RAVU",
-        text: "Move forward with a stronger mobility journey.",
-    },
-];
+            {/* Google Play Store */}
+            <a
+                href="#google-play"
+                className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+                <svg
+                    viewBox="0 0 512 512"
+                    className="h-5 w-5 shrink-0"
+                    aria-hidden="true"
+                >
+                    <path
+                        fill="#00E676"
+                        d="M32.8 19.3L275.6 262.1 213.9 323.8 16.5 37.8c-1.3 2.1-2 4.6-2 7.2v422c0 2.6.7 5.1 2 7.2L32.8 19.3z"
+                    />
+                    <path
+                        fill="#FFD54F"
+                        d="M352.3 338.8l-76.7-76.7L32.8 19.3C35.9 14.7 41.2 12 47 12c3.4 0 6.7.9 9.6 2.6l328.6 189.7-32.9 134.5z"
+                    />
+                    <path
+                        fill="#FF3D00"
+                        d="M56.6 497.4C53.7 499.1 50.4 500 47 500c-5.8 0-11.1-2.7-14.2-7.3l242.8-242.8 76.7 76.7L56.6 497.4z"
+                    />
+                    <path
+                        fill="#00B0FF"
+                        d="M495.6 238.2L385.2 174.5l-32.9 32.9 32.9 134.5 32.9-19 77.5-44.7c10.3-6 16.6-17.1 16.6-29 0-11.9-6.3-23-16.6-29z"
+                    />
+                </svg>
+                <div className="text-left leading-none">
+                    <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
+                        GET IT ON
+                    </p>
+                    <p className="text-xs font-semibold tracking-tight text-white mt-0.5">
+                        Google Play
+                    </p>
+                </div>
+            </a>
+        </div>
+    );
+}
 
 export default function Home() {
     return (
         <WebsiteLayout>
             {/* ---------------------------------------------------------- HERO */}
-            <section className="relative overflow-hidden border-b border-ink-200">
-                <div className="grid lg:min-h-[36rem] lg:grid-cols-[1.02fr_0.98fr]">
-                    {/* The backdrop must sit INSIDE this column. Placed on the
-                        <section> it spans the full width, but this column is
-                        `relative` with an opaque bg-white, so it paints OVER
-                        any absolutely-positioned sibling backdrop and the
-                        whole effect disappears. Inside the column the layers
-                        are children, so they render above its background. */}
-                    <div className="relative flex items-center bg-white">
-                        <GridBackdrop />
-                        <div className="relative w-full px-5 py-14 sm:px-8 sm:py-16 lg:px-14 lg:py-20">
-                            <div className="ravu-reveal">
-                                <Eyebrow>Mobility, connected</Eyebrow>
-                                <h1 className="mt-4 text-[2.4rem] font-black leading-[0.98] tracking-tight sm:text-5xl lg:text-[3.6rem]">
-                                    One Membership.
-                                    <br />
-                                    More Benefits.
-                                    <br />
-                                    <span className="text-ravu-600">
-                                        More Opportunities.
-                                    </span>
-                                </h1>
-                                <p className="mt-6 max-w-xl text-base leading-7 text-ink-600 sm:text-lg sm:leading-8">
-                                    RAVU is building a stronger mobility
-                                    ecosystem connecting the people,
-                                    businesses, services and technology that
-                                    keep communities moving.
-                                </p>
-                                <ButtonRow className="mt-8">
-                                    <Button href="/partners" size="lg">
-                                        Partner With RAVU
-                                    </Button>
-                                    <Button
-                                        href="/for-riders"
-                                        size="lg"
-                                        variant="outline"
-                                    >
-                                        Get the RAVU App
-                                    </Button>
-                                </ButtonRow>
-                                <p className="mt-6 text-xs font-bold uppercase tracking-[0.18em] text-ink-400">
-                                    Join. Save. Earn.
-                                </p>
+            <section className="relative overflow-hidden bg-white pt-10 pb-12 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-24">
+                <div className="mx-auto max-w-7xl px-5 sm:px-8">
+                    <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+                        {/* Left Column: Heading, Subhead, Badges, Avatars */}
+                        <div className="lg:col-span-5">
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                                MOBILITY, CONNECTED
+                            </p>
+
+                            <h1 className="mt-4 text-4xl font-black leading-[1.05] tracking-tight text-slate-950 sm:text-5xl lg:text-[4rem]">
+                                Move
+                                <br />
+                                further
+                                <br />
+                                <span className="text-[#1864E8]">
+                                    together.
+                                </span>
+                            </h1>
+
+                            <p className="mt-5 max-w-sm text-sm leading-relaxed text-slate-600 sm:text-base">
+                                A smarter way to get around. Ride, share and
+                                access more value — all in one app, across
+                                Tanzania.
+                            </p>
+
+                            {/* App store download buttons */}
+                            <div className="mt-8">
+                                <StoreButtons />
                             </div>
 
-                            <div className="ravu-reveal ravu-reveal-delay-3 mt-12 grid gap-6 border-t border-ink-200 pt-8 sm:grid-cols-3">
-                                <TrustPoint icon={ShieldCheck} title="Trusted">
-                                    A community built around mobility.
-                                </TrustPoint>
-                                <TrustPoint
-                                    icon={BadgeCheck}
-                                    title="Member value"
-                                >
-                                    Relevant benefits and offers.
-                                </TrustPoint>
-                                <TrustPoint icon={Headphones} title="Support">
-                                    Guidance when you need it.
-                                </TrustPoint>
+                            {/* Social proof avatars */}
+                            <div className="mt-8 flex items-center gap-3">
+                                <div className="flex -space-x-2 overflow-hidden">
+                                    <img
+                                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
+                                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
+                                        alt="Ravu community member"
+                                    />
+                                    <img
+                                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
+                                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80"
+                                        alt="Ravu driver"
+                                    />
+                                    <img
+                                        className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
+                                        src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&h=120&q=80"
+                                        alt="Ravu rider"
+                                    />
+                                </div>
+                                <p className="max-w-[170px] text-xs font-medium leading-tight text-slate-600">
+                                    People moving together across Tanzania
+                                </p>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="ravu-reveal ravu-reveal-delay-1 relative min-h-[20rem] overflow-hidden bg-ink-950 sm:min-h-[26rem] lg:min-h-full">
-                        <img
-                            src={riderImage}
-                            alt="RAVU rider in branded kit on a RAVU motorcycle"
-                            className="absolute inset-0 h-full w-full object-cover object-[58%_center]"
-                        />
-                        <div
-                            aria-hidden="true"
-                            className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white via-white/30 to-transparent lg:w-28"
-                        />
-                        <div className="absolute bottom-5 right-5 hidden rounded-lg bg-ink-950/85 px-4 py-3 backdrop-blur sm:block">
-                            <p className="text-xs font-bold uppercase tracking-[0.16em] text-ravu-400">
-                                RAVU
-                            </p>
-                            <p className="mt-1 text-sm font-semibold text-white">
-                                Together we drive better opportunities.
-                            </p>
+                        {/* Right Column: Hand holding Phone + fanned screens image */}
+                        <div className="lg:col-span-7">
+                            <div className="relative w-full">
+                                <img
+                                    src={headerImg}
+                                    alt="Ravu Ride-Sharing App Journey"
+                                    className="h-auto w-full object-contain select-none"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* --------------------------------------- MORE THAN A MEMBERSHIP */}
-            <section className="py-16 sm:py-20 lg:py-24">
-                <Container>
-                    <Reveal>
-                        <SectionTitle
-                            eyebrow="More than a membership"
-                            title="One membership. A whole ecosystem behind it."
-                            text="RAVU brings practical services, businesses, partners and community together around the people who keep movement happening."
-                        />
-                    </Reveal>
-
-                    <CardGrid className="mt-12">
-                        <Reveal>
-                            <Card icon={TrendingUp} title="Earn More">
-                                Access opportunities and ecosystem benefits
-                                designed around mobility.
-                            </Card>
-                        </Reveal>
-                        <Reveal delay={0.08}>
-                            <Card icon={Banknote} title="Spend Less">
-                                Discover relevant service benefits and partner
-                                offers.
-                            </Card>
-                        </Reveal>
-                        <Reveal delay={0.16}>
-                            <Card icon={Bus} title="Drive Better">
-                                Connect with support, training and protection.
-                            </Card>
-                        </Reveal>
-                    </CardGrid>
-                </Container>
-            </section>
-
-            {/* -------------------------------------------------- ECOSYSTEM */}
-            <EcosystemSection />
-
-            {/* ---------------------------------------------------- PARTNERS */}
-            <section className="relative overflow-hidden bg-ink-950 py-16 text-ink-300 sm:py-20 lg:py-24">
-                <PatternBackdrop tone="dark" />
-                <Container className="relative">
-                    <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
-                        <Reveal>
-                            <Eyebrow tone="light">Partner with RAVU</Eyebrow>
-                            <h2 className="mt-4 text-3xl font-black leading-[1.08] tracking-tight text-white sm:text-[2.5rem]">
-                                Build the mobility ecosystem with RAVU.
-                            </h2>
-                            <p className="mt-5 max-w-lg text-base leading-7 text-ink-300 sm:text-lg">
-                                RAVU connects organisations to an active
-                                mobility community. Whether you provide
-                                protection, finance, services or technology,
-                                there is a place for you in the ecosystem.
-                            </p>
-                            <div className="mt-8">
-                                <Button href="/partners" size="lg">
-                                    Partner With RAVU
-                                </Button>
+            {/* ------------------------------------------- 3 FEATURES STRIP */}
+            <section className="border-t border-b border-slate-100 bg-white py-10 sm:py-14">
+                <div className="mx-auto max-w-6xl px-5 sm:px-8">
+                    <div className="grid grid-cols-1 divide-y divide-slate-100 sm:grid-cols-3 sm:divide-y-0 sm:divide-x sm:divide-slate-200/80">
+                        {/* Feature 1 */}
+                        <div className="flex items-center gap-4 py-4 sm:py-0 sm:px-6 first:pl-0">
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
+                                <Zap size={20} className="fill-[#1864E8]" />
                             </div>
-                        </Reveal>
+                            <div>
+                                <h3 className="text-sm font-bold text-slate-900">
+                                    Get moving
+                                </h3>
+                                <p className="mt-0.5 max-w-[210px] text-xs leading-relaxed text-slate-500">
+                                    Reliable rides, whenever you need them.
+                                </p>
+                            </div>
+                        </div>
 
-                        <div className="grid gap-4 sm:grid-cols-2">
-                            {PARTNER_TYPES.map((partner, index) => (
-                                <Reveal
-                                    key={partner.title}
-                                    delay={index * 0.05}
-                                >
-                                    <Card
-                                        icon={partner.icon}
-                                        title={partner.title}
-                                        tone="dark"
-                                    >
-                                        {partner.text}
-                                    </Card>
-                                </Reveal>
-                            ))}
+                        {/* Feature 2 */}
+                        <div className="flex items-center gap-4 py-4 sm:py-0 sm:px-6">
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
+                                <Users size={20} />
+                            </div>
+                            <div>
+                                <h3 className="text-sm font-bold text-slate-900">
+                                    More value
+                                </h3>
+                                <p className="mt-0.5 max-w-[210px] text-xs leading-relaxed text-slate-500">
+                                    Exclusive member benefits and savings.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Feature 3 */}
+                        <div className="flex items-center gap-4 py-4 sm:py-0 sm:px-6 last:pr-0">
+                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
+                                <ShieldCheck size={20} />
+                            </div>
+                            <div>
+                                <h3 className="text-sm font-bold text-slate-900">
+                                    Feel safe
+                                </h3>
+                                <p className="mt-0.5 max-w-[210px] text-xs leading-relaxed text-slate-500">
+                                    Trusted drivers and a safer journey.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </Container>
+                </div>
             </section>
 
-            {/* ----------------------------------------------------- JOURNEY */}
-            <section className="border-y border-ink-200 bg-ink-50 py-16 sm:py-20 lg:py-24">
-                <Container>
-                    <Reveal>
-                        <SectionTitle
-                            eyebrow="How it works"
-                            title="Discover. Join. Connect. Grow."
-                            text="A clear route into a connected mobility ecosystem — for members and for organisations."
-                            align="center"
-                        />
-                    </Reveal>
+            {/* --------------------------------- THE RAVU APP (MAP SCREEN) */}
+            <section className="overflow-hidden bg-white py-16 sm:py-24 lg:py-28">
+                <div className="mx-auto max-w-6xl px-5 sm:px-8">
+                    <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+                        {/* Map Phone Image on the Left */}
+                        <div className="flex justify-center lg:col-span-6">
+                            <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md">
+                                <img
+                                    src={mapImg}
+                                    alt="Ravu mobile app interface showing map and destination search"
+                                    className="h-auto w-full select-none drop-shadow-xl"
+                                />
+                            </div>
+                        </div>
 
-                    <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                        {JOURNEY.map((step, index) => (
-                            <Reveal key={step.title} delay={index * 0.06}>
-                                <StepCard index={index} title={step.title}>
-                                    {step.text}
-                                </StepCard>
-                            </Reveal>
-                        ))}
+                        {/* Text & Store Badges on the Right */}
+                        <div className="lg:col-span-6">
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                                THE RAVU APP
+                            </p>
+                            <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:text-5xl lg:leading-[1.1]">
+                                Your journey
+                                <br />
+                                <span className="text-[#1864E8]">
+                                    in one app.
+                                </span>
+                            </h2>
+                            <p className="mt-5 max-w-md text-sm leading-relaxed text-slate-600 sm:text-base">
+                                Book rides, track your trip, access member
+                                benefits, find nearby services and more — all in
+                                one place.
+                            </p>
+                            <div className="mt-8">
+                                <StoreButtons />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* ----------------------- A GROWING COMMUNITY & STATS (CITY SKYLINE) */}
+            <section className="relative overflow-hidden bg-[#061023] py-20 text-white sm:py-28 lg:py-32">
+                {/* Background image with skyline & blue ribbons */}
+                <div className="pointer-events-none absolute inset-0">
+                    <img
+                        src={footerBg}
+                        alt=""
+                        className="h-full w-full object-cover object-right-top"
+                    />
+                    {/* Gradient overlay to guarantee high-contrast readability on the left */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#061023]/95 via-[#061023]/75 to-transparent sm:via-[#061023]/50" />
+                </div>
+
+                <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
+                    <div className="max-w-xl">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-400">
+                            A GROWING COMMUNITY
+                        </p>
+                        <h2 className="mt-4 text-3xl font-black leading-[1.1] tracking-tight text-white sm:text-4xl lg:text-5xl">
+                            More people.
+                            <br />
+                            Stronger communities.
+                        </h2>
+                        <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300 sm:text-base">
+                            RAVU connects riders, drivers, businesses and
+                            communities to create more value and opportunities
+                            across Tanzania.
+                        </p>
                     </div>
 
-                    <Reveal delay={0.1} className="mt-10 text-center">
-                        <Button href="/how-it-works" variant="outline">
-                            See how it works
-                        </Button>
-                    </Reveal>
-                </Container>
+                    {/* Stats Row */}
+                    <div className="mt-16 grid grid-cols-2 gap-8 border-t border-white/15 pt-10 sm:mt-20 sm:grid-cols-4 sm:gap-6">
+                        <div className="sm:border-r sm:border-white/15 sm:pr-6">
+                            <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                                100K+
+                            </p>
+                            <p className="mt-1 text-xs font-medium text-slate-300 sm:text-sm">
+                                Riders
+                            </p>
+                        </div>
+                        <div className="sm:border-r sm:border-white/15 sm:pr-6">
+                            <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                                10K+
+                            </p>
+                            <p className="mt-1 text-xs font-medium text-slate-300 sm:text-sm">
+                                Drivers
+                            </p>
+                        </div>
+                        <div className="sm:border-r sm:border-white/15 sm:pr-6">
+                            <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                                50+
+                            </p>
+                            <p className="mt-1 text-xs font-medium text-slate-300 sm:text-sm">
+                                Cities &amp; towns
+                            </p>
+                        </div>
+                        <div>
+                            <p className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                                100+
+                            </p>
+                            <p className="mt-1 text-xs font-medium text-slate-300 sm:text-sm">
+                                Business partners
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </section>
-
-            {/* ------------------------------------------------------- APP */}
-            <AppPromo />
-
-            {/* ------------------------------------------------------- CTA */}
-            <CTASection
-                eyebrow="Get involved"
-                title="Where do you join RAVU?"
-                text="Riders and drivers join through the RAVU app. Organisations partner with RAVU directly. Two journeys, one ecosystem."
-                primary={{ label: "Get the RAVU App", href: "/for-riders" }}
-                secondary={{ label: "Partner With RAVU", href: "/partners" }}
-            />
         </WebsiteLayout>
     );
 }

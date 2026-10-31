@@ -1,29 +1,56 @@
 import { Link, usePage } from "@inertiajs/react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { ChevronRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import RAVULogo from "./RAVULogo";
 
-const defaultItems = [
-    { label: "Home", href: "/" },
-    { label: "About RAVU", href: "/about-ravu" },
-    { label: "For Riders", href: "/for-riders" },
-    { label: "Membership", href: "/membership" },
-    { label: "Benefits", href: "/benefits" },
-    { label: "Partners", href: "/partners" },
-    { label: "How It Works", href: "/how-it-works" },
-    { label: "Support", href: "/support" },
+/**
+ * Navigation data. All destinations are existing routes in routes/web.php.
+ * "Get the RAVU App" points to /for-riders — the rider onboarding page —
+ * matching the previous CTA destination (no dedicated app-download route exists).
+ */
+const menuGroups = [
+    {
+        title: "Discover",
+        items: [
+            { label: "Home", href: "/" },
+            { label: "About RAVU", href: "/about-ravu" },
+            { label: "How It Works", href: "/how-it-works" },
+        ],
+    },
+    {
+        title: "Rider Membership",
+        items: [
+            { label: "For Riders", href: "/for-riders" },
+            { label: "Membership", href: "/membership" },
+            { label: "Benefits", href: "/benefits" },
+            { label: "Get the RAVU App", href: "/for-riders" },
+        ],
+    },
+    {
+        title: "Partnerships",
+        items: [
+            { label: "Partners", href: "/partners" },
+            { label: "Partner With RAVU", href: "/partners" },
+        ],
+    },
+    {
+        title: "Help & Account",
+        items: [
+            { label: "Support", href: "/support" },
+            { label: "Login", href: "/login" },
+        ],
+    },
 ];
 
 /**
  * RAVU primary navigation.
  *
- * Two conversion paths only:
- *   - "Partner With RAVU" -> organisations
- *   - "Get the RAVU App"  -> riders / drivers (operational onboarding lives in the app)
+ * Minimal header: brand logo, one "Partner With RAVU" CTA and a hamburger
+ * menu holding all remaining links, grouped by theme. The menu is available
+ * at every viewport width so nothing is lost by removing inline links.
  */
 export default function Navigation({
-    items = defaultItems,
     transparent = false,
     onDark = false,
 }) {
@@ -64,59 +91,28 @@ export default function Navigation({
         ? "border-transparent bg-transparent"
         : "border-ink-200/80 bg-white/95 shadow-[0_1px_0_0_rgba(10,13,12,0.04)] backdrop-blur";
 
-const NavLink = ({ item, mobile = false }) => {
-         const active = isActive(item.href);
-         const MotionLink = motion(Link);
-
-         if (mobile) {
-             return (
-                 <Link
-                     href={item.href}
-                     aria-current={active ? "page" : undefined}
-                     onClick={() => setIsOpen(false)}
-                     className={`flex items-center justify-between rounded-lg px-3.5 py-3 text-[15px] font-semibold transition-colors ${
-                         active
-                             ? "bg-ravu-50 text-ravu-800"
-                             : "text-ink-800 hover:bg-ink-50"
-                     }`}
-                 >
-                     {item.label}
-                     {active && (
-                         <span
-                             className="h-1.5 w-1.5 rounded-full bg-ravu-600"
-                             aria-hidden="true"
-                         />
-                     )}
-                 </Link>
-             );
-         }
-
-         return (
-             <MotionLink
-                 href={item.href}
-                 aria-current={active ? "page" : undefined}
-                 className={`relative py-2 text-[13px] font-semibold transition-colors ${
-                     overMedia
-                         ? "text-white/80 hover:text-white"
-                         : active
-                           ? "text-ink-950"
-                           : "text-ink-600 hover:text-ink-950"
-                 }`}
-                 whileHover={{ scale: 1.03 }}
-                 whileTap={{ scale: 0.97 }}
-             >
-                 {item.label}
-                 {active && (
-                     <span
-                         className={`absolute inset-x-0 -bottom-0.5 h-[2px] rounded-full ${
-                             overMedia ? "bg-ravu-400" : "bg-ravu-600"
-                         }`}
-                         aria-hidden="true"
-                     />
-                 )}
-             </MotionLink>
-         );
-     };
+    const toggleButton = (
+        <button
+            type="button"
+            onClick={() => setIsOpen((open) => !open)}
+            aria-expanded={isOpen}
+            aria-controls="ravu-navigation-menu"
+            aria-label={
+                isOpen ? "Close navigation menu" : "Open navigation menu"
+            }
+            className={`inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg transition-colors ${
+                overMedia
+                    ? "text-white hover:bg-white/10"
+                    : "text-ink-900 hover:bg-ink-100"
+            }`}
+        >
+            {isOpen ? (
+                <X size={22} aria-hidden="true" />
+            ) : (
+                <Menu size={22} aria-hidden="true" />
+            )}
+        </button>
+    );
 
     return (
         <header
@@ -135,66 +131,24 @@ const NavLink = ({ item, mobile = false }) => {
                     <RAVULogo variant={overMedia ? "light" : "dark"} />
                 </Link>
 
-                <div className="hidden items-center gap-6 xl:flex">
-                    {items.map((item) => (
-                        <NavLink key={item.href} item={item} />
-                    ))}
-                </div>
-
-                <div className="hidden items-center gap-2.5 lg:flex">
-                    <Link
-                        href="/login"
-                        className={`px-2 text-[13px] font-bold transition-colors ${
-                            overMedia
-                                ? "text-white/80 hover:text-white"
-                                : "text-ink-600 hover:text-ink-950"
-                        }`}
-                    >
-                        Login
-                    </Link>
+                <div className="flex items-center gap-2.5">
                     <Link
                         href="/partners"
-                        className={`inline-flex min-h-10 items-center rounded-lg px-4 text-[13px] font-bold transition-colors ${
+                        className={`hidden min-h-10 items-center rounded-lg px-4 text-[13px] font-bold transition-colors sm:inline-flex ${
                             overMedia
-                                ? "border border-white/30 text-white hover:bg-white/10"
-                                : "border border-ink-200 text-ink-900 hover:border-ink-950 hover:bg-ink-50"
+                                ? "bg-white text-ink-950 hover:bg-white/90"
+                                : "bg-ravu-600 text-white hover:bg-ravu-700"
                         }`}
                     >
                         Partner With RAVU
                     </Link>
-                    <Link
-                        href="/for-riders"
-                        className="inline-flex min-h-10 items-center rounded-lg bg-ravu-600 px-4 text-[13px] font-bold text-white transition-colors hover:bg-ravu-700"
-                    >
-                        Get the RAVU App
-                    </Link>
+                    {toggleButton}
                 </div>
-
-                <button
-                    type="button"
-                    className={`inline-flex h-10 w-10 items-center justify-center rounded-lg transition-colors lg:hidden ${
-                        overMedia
-                            ? "text-white hover:bg-white/10"
-                            : "text-ink-900 hover:bg-ink-100"
-                    }`}
-                    aria-label={
-                        isOpen ? "Close navigation menu" : "Open navigation menu"
-                    }
-                    aria-expanded={isOpen}
-                    aria-controls="ravu-mobile-navigation"
-                    onClick={() => setIsOpen((open) => !open)}
-                >
-                    {isOpen ? (
-                        <X size={22} aria-hidden="true" />
-                    ) : (
-                        <Menu size={22} aria-hidden="true" />
-                    )}
-                </button>
             </nav>
             <AnimatePresence initial={false}>
 {isOpen && (
                      <motion.div
-                         id="ravu-mobile-navigation"
+                         id="ravu-navigation-menu"
                          initial={
                              reduceMotion ? false : { opacity: 0, height: 0 }
                          }
@@ -206,52 +160,79 @@ const NavLink = ({ item, mobile = false }) => {
                              duration: reduceMotion ? 0 : 0.2,
                              ease: [0.22, 1, 0.36, 1],
                          }}
-                         className="overflow-hidden border-t border-ink-200 bg-white lg:hidden"
-                     >
-                         <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto px-5 pb-6 pt-3 sm:px-8">
-                             <motion.div
-                                 variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { staggerChildren: 0.1 } } }}
-                                 initial="hidden"
-                                 animate="visible"
-                                 className="space-y-1"
-                             >
-                                 {items.map((item) => (
-                                     <motion.div
-                                         key={item.href}
-                                         variants={{ hidden: { y: 20, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
+                             className="overflow-hidden border-t border-ink-200 bg-white"
+                         >
+                             <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto px-5 pb-8 pt-4 sm:px-8">
+                                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                                     {menuGroups.map((group) => (
+                                         <div key={group.title}>
+                                             <p
+                                                 className={`mb-1.5 px-3.5 text-[11px] font-bold uppercase tracking-[0.14em] ${
+                                                     overMedia
+                                                         ? "text-white/60"
+                                                         : "text-ink-400"
+                                                 }`}
+                                             >
+                                                 {group.title}
+                                             </p>
+                                             <ul className="space-y-0.5">
+                                                 {group.items.map((item) => {
+                                                     const active = isActive(
+                                                         item.href,
+                                                     );
+                                                     return (
+                                                         <li key={item.label}>
+                                                             <Link
+                                                                 href={item.href}
+                                                                 aria-current={
+                                                                     active
+                                                                         ? "page"
+                                                                         : undefined
+                                                                 }
+                                                                 onClick={() =>
+                                                                     setIsOpen(false)
+                                                                 }
+                                                                 className={`flex items-center justify-between gap-2 rounded-lg px-3.5 py-2.5 text-[15px] font-semibold transition-colors ${
+                                                                     active
+                                                                         ? overMedia
+                                                                             ? "bg-white/10 text-white"
+                                                                             : "bg-ravu-50 text-ravu-800"
+                                                                         : overMedia
+                                                                           ? "text-white/80 hover:bg-white/10 hover:text-white"
+                                                                           : "text-ink-800 hover:bg-ink-50 hover:text-ink-950"
+                                                                 }`}
+                                                             >
+                                                                 {item.label}
+                                                                 {active && (
+                                                                     <span
+                                                                         className="h-1.5 w-1.5 shrink-0 rounded-full bg-ravu-600"
+                                                                         aria-hidden="true"
+                                                                     />
+                                                                 )}
+                                                             </Link>
+                                                         </li>
+                                                     );
+                                                 })}
+                                             </ul>
+                                         </div>
+                                     ))}
+                                 </div>
+
+                                 <div className="mt-6 border-t border-ink-200 pt-5 sm:hidden">
+                                     <Link
+                                         href="/partners"
+                                         onClick={() => setIsOpen(false)}
+                                         className="inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-lg bg-ravu-600 text-sm font-bold text-white transition-colors hover:bg-ravu-700"
                                      >
-                                         <NavLink
-                                             item={item}
-                                             mobile
+                                         Partner With RAVU
+                                         <ChevronRight
+                                             size={16}
+                                             aria-hidden="true"
                                          />
-                                     </motion.div>
-                                 ))}
-                             </motion.div>
-                             <div className="mt-5 grid gap-2.5 border-t border-ink-200 pt-5">
-                                 <Link
-                                     href="/partners"
-                                     onClick={() => setIsOpen(false)}
-                                     className="inline-flex min-h-11 items-center justify-center rounded-lg border-ink-200 text-sm font-bold text-ink-900 transition-colors hover:bg-ink-50"
-                                 >
-                                     Partner With RAVU
-                                 </Link>
-                                 <Link
-                                     href="/for-riders"
-                                     onClick={() => setIsOpen(false)}
-                                     className="inline-flex min-h-11 items-center justify-center rounded-lg bg-ravu-600 text-sm font-bold text-white transition-colors hover:bg-ravu-700"
-                                 >
-                                     Get the RAVU App
-                                 </Link>
-                                 <Link
-                                     href="/login"
-                                     onClick={() => setIsOpen(false)}
-                                     className="inline-flex min-h-11 items-center justify-center rounded-lg text-sm font-bold text-ink-600 transition-colors hover:text-ink-950"
-                                 >
-                                     Login
-                                 </Link>
+                                     </Link>
+                                 </div>
                              </div>
-                         </div>
-                     </motion.div>
+                         </motion.div>
                  )}
             </AnimatePresence>
         </header>
