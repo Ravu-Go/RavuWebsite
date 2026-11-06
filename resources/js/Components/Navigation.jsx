@@ -50,6 +50,7 @@ const MENU_GROUPS = [
             { label: "Help & Support", href: "/support" },
             { label: "Sign in", href: "/login" },
             { label: "Register Interest", href: "/register" },
+            { label: "Super Admin CMS", href: "/super-admin" },
         ],
     },
 ];

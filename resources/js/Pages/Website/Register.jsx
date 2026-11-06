@@ -1,167 +1,306 @@
-import { Link } from "@inertiajs/react";
-import { Eye, EyeOff, Info, Smartphone } from "lucide-react";
+import { Link, useForm } from "@inertiajs/react";
+import {
+    AlertCircle,
+    ArrowRight,
+    Building2,
+    CheckCircle2,
+    Eye,
+    EyeOff,
+    Lock,
+    Mail,
+    Phone,
+    Smartphone,
+} from "lucide-react";
 import { useState } from "react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
-import RAVULogo from "../../Components/RAVULogo";
-import {
-    Button,
-    CheckList,
-    Container,
-    Eyebrow,
-    PatternBackdrop,
-} from "../../Components/ui";
-
-const FIELD =
-    "mt-2 w-full rounded-lg border-ink-300 bg-white px-4 py-3 text-ink-900 placeholder:text-ink-400 focus:border-ravu-600 focus:outline-none focus:ring-2 focus:ring-ravu-200";
+import logoImg from "../../../imgs/Logo.png";
 
 export default function Register() {
     const [visible, setVisible] = useState(false);
 
+    const { data, setData, post, processing, errors } = useForm({
+        name: "",
+        email: "",
+        phone: "",
+        category: "Fuel & Energy Station",
+        password: "",
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post("/register");
+    };
+
     return (
         <WebsiteLayout>
-            <div className="grid lg:min-h-[42rem] lg:grid-cols-2">
-                {/* ------------------------------------------------ BRAND PANEL */}
-                <div className="relative hidden overflow-hidden bg-ink-950 p-12 lg:flex lg:items-center xl:p-16">
-                    <PatternBackdrop tone="dark" />
-                    <div
-                        aria-hidden="true"
-                        className="absolute -right-24 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-ravu-600/25 blur-3xl"
-                    />
-                    <div className="relative max-w-md">
-                        <RAVULogo variant="light" markSize="lg" />
-                        <Eyebrow tone="light" className="mt-10">
-                            Register interest
-                        </Eyebrow>
-                        <h1 className="mt-4 text-4xl font-black leading-[1.06] tracking-tight text-white xl:text-5xl">
-                            A stronger journey starts with connection.
-                        </h1>
-                        <p className="mt-6 text-base leading-7 text-ink-300">
-                            Register your interest in the membership-based
-                            mobility ecosystem.
-                        </p>
-
-                        <CheckList
-                            tone="light"
-                            className="mt-8"
-                            items={[
-                                "Hear first as membership becomes available.",
-                                "Stay informed about the growing ecosystem.",
-                                "No membership fees are collected here.",
-                            ]}
+            <section className="min-h-[calc(100vh-120px)] flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8 bg-slate-50">
+                <div className="w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xl shadow-slate-900/5 grid lg:grid-cols-12">
+                    {/* Left Brand & Partner Benefits Column */}
+                    <div className="lg:col-span-5 bg-[#050B17] text-white p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute inset-0 opacity-30"
+                            style={{
+                                backgroundImage:
+                                    "radial-gradient(circle at 15% 15%, #00289a 0%, transparent 60%)",
+                            }}
                         />
-                    </div>
-                </div>
 
-                {/* ------------------------------------------------------- FORM */}
-                <div className="flex items-center bg-white">
-                    <Container size="narrow" className="py-14 sm:py-16">
-                        <div className="mx-auto w-full max-w-md">
+                        <div className="relative z-10">
                             <Link
                                 href="/"
-                                aria-label="RAVU home"
-                                className="inline-block rounded-md lg:hidden"
+                                className="inline-flex items-center gap-2.5"
                             >
-                                <RAVULogo />
+                                <img
+                                    src={logoImg}
+                                    alt="RAVU"
+                                    className="h-9 w-9 rounded-full object-cover ring-2 ring-white/15"
+                                />
+                                <span className="text-xl font-black tracking-tight text-white">
+                                    Ravu
+                                </span>
                             </Link>
 
-                            <h1 className="mt-8 text-3xl font-black tracking-tight lg:mt-0">
-                                Register interest
-                            </h1>
-                            <p className="mt-2 text-sm text-ink-600">
-                                Be among the people building the RAVU
-                                ecosystem.
-                            </p>
-
-                            <div className="mt-7 flex gap-3 rounded-lg border-ravu-200 bg-ravu-50 p-4">
-                                <Info
-                                    size={18}
-                                    className="mt-0.5 shrink-0 text-ravu-700"
-                                    aria-hidden="true"
-                                />
-                                <p className="text-xs leading-5 text-ravu-900">
-                                    This records your interest only. Full
-                                    membership onboarding is still being
-                                    developed, and submission will be connected
-                                    once the backend membership flow is
-                                    available.
-                                </p>
+                            <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-sky-300">
+                                <Building2 size={13} />
+                                <span>Partner Onboarding</span>
                             </div>
 
+                            <h1 className="mt-4 text-2xl sm:text-3xl font-black leading-tight tracking-tight text-white">
+                                Partner with the RAVU mobility ecosystem.
+                            </h1>
+
+                            <p className="mt-3 text-xs sm:text-sm leading-relaxed text-slate-300">
+                                Create your Partner Portal account to connect
+                                your business with thousands of verified RAVU
+                                riders and drivers across Tanzania.
+                            </p>
+
+                            <ul className="mt-7 space-y-3 border-t border-white/10 pt-6">
+                                {[
+                                    "Immediate access to your RAVU Partner Dashboard",
+                                    "Publish exclusive discounts for verified RAVU riders",
+                                    "Verify digital RAVU Member IDs at your branches",
+                                    "Sign in anytime using your registered partner email",
+                                ].map((item) => (
+                                    <li
+                                        key={item}
+                                        className="flex items-start gap-2.5 text-xs text-slate-200"
+                                    >
+                                        <CheckCircle2
+                                            size={15}
+                                            className="mt-0.5 shrink-0 text-sky-400"
+                                        />
+                                        <span>{item}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        <div className="relative z-10 mt-8 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                            <div className="flex items-start gap-3">
+                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#00289a] text-white">
+                                    <Smartphone size={15} />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-white">
+                                        Are you a Rider or Driver?
+                                    </p>
+                                    <p className="mt-0.5 text-[11px] leading-relaxed text-slate-400">
+                                        Rider membership registration takes
+                                        place in the{" "}
+                                        <Link
+                                            href="/for-riders"
+                                            className="font-semibold text-sky-300 hover:underline"
+                                        >
+                                            RAVU Mobile App
+                                        </Link>
+                                        .
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Partner Registration Form */}
+                    <div className="lg:col-span-7 p-7 sm:p-10 lg:p-12 flex flex-col justify-center">
+                        <div className="max-w-md w-full mx-auto">
+                            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950">
+                                Create Partner Account
+                            </h2>
+                            <p className="mt-1.5 text-xs sm:text-sm text-slate-500">
+                                Register your organization to access the RAVU
+                                Partner Dashboard.
+                            </p>
+
+                            {(errors.email ||
+                                errors.name ||
+                                errors.password) && (
+                                <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 px-3.5 py-3 text-xs font-semibold text-rose-700">
+                                    <AlertCircle
+                                        size={15}
+                                        className="mt-0.5 shrink-0"
+                                    />
+                                    <span>
+                                        {errors.email ||
+                                            errors.name ||
+                                            errors.password}
+                                    </span>
+                                </div>
+                            )}
+
                             <form
-                                className="mt-7 space-y-4"
-                                onSubmit={(event) => event.preventDefault()}
+                                className="mt-6 space-y-4"
+                                onSubmit={handleSubmit}
                             >
                                 <div>
                                     <label
                                         htmlFor="register-name"
-                                        className="text-sm font-bold text-ink-900"
+                                        className="block text-xs font-bold uppercase tracking-wider text-slate-700"
                                     >
-                                        Full name
+                                        Organization / Business Name
                                     </label>
-                                    <input
-                                        id="register-name"
-                                        name="name"
-                                        type="text"
-                                        autoComplete="name"
-                                        className={FIELD}
-                                    />
+                                    <div className="relative mt-1.5">
+                                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                            <Building2 size={16} />
+                                        </div>
+                                        <input
+                                            id="register-name"
+                                            type="text"
+                                            required
+                                            value={data.name}
+                                            onChange={(e) =>
+                                                setData("name", e.target.value)
+                                            }
+                                            placeholder="e.g. Kariakoo Auto Spares Ltd"
+                                            className="w-full rounded-xl border border-slate-200 bg-slate-50/60 py-2.5 pr-4 pl-10 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-[#00289a] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00289a]/15 transition-colors"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid gap-4 sm:grid-cols-2">
+                                    <div>
+                                        <label
+                                            htmlFor="register-email"
+                                            className="block text-xs font-bold uppercase tracking-wider text-slate-700"
+                                        >
+                                            Business Email
+                                        </label>
+                                        <div className="relative mt-1.5">
+                                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                                <Mail size={16} />
+                                            </div>
+                                            <input
+                                                id="register-email"
+                                                type="email"
+                                                required
+                                                value={data.email}
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "email",
+                                                        e.target.value,
+                                                    )
+                                                }
+                                                placeholder="partner@company.co.tz"
+                                                className="w-full rounded-xl border border-slate-200 bg-slate-50/60 py-2.5 pr-3 pl-10 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-[#00289a] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00289a]/15 transition-colors"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label
+                                            htmlFor="register-phone"
+                                            className="block text-xs font-bold uppercase tracking-wider text-slate-700"
+                                        >
+                                            Phone Number
+                                        </label>
+                                        <div className="relative mt-1.5">
+                                            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                                <Phone size={16} />
+                                            </div>
+                                            <input
+                                                id="register-phone"
+                                                type="tel"
+                                                value={data.phone}
+                                                onChange={(e) =>
+                                                    setData(
+                                                        "phone",
+                                                        e.target.value,
+                                                    )
+                                                }
+                                                placeholder="+255 712 345 678"
+                                                className="w-full rounded-xl border border-slate-200 bg-slate-50/60 py-2.5 pr-3 pl-10 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-[#00289a] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00289a]/15 transition-colors"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div>
                                     <label
-                                        htmlFor="register-email"
-                                        className="text-sm font-bold text-ink-900"
+                                        htmlFor="register-category"
+                                        className="block text-xs font-bold uppercase tracking-wider text-slate-700"
                                     >
-                                        Email
+                                        Business Sector
                                     </label>
-                                    <input
-                                        id="register-email"
-                                        name="email"
-                                        type="email"
-                                        autoComplete="email"
-                                        className={FIELD}
-                                    />
-                                </div>
-
-                                <div>
-                                    <label
-                                        htmlFor="register-phone"
-                                        className="text-sm font-bold text-ink-900"
+                                    <select
+                                        id="register-category"
+                                        value={data.category}
+                                        onChange={(e) =>
+                                            setData("category", e.target.value)
+                                        }
+                                        className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:border-[#00289a] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00289a]/15 transition-colors"
                                     >
-                                        Phone number
-                                    </label>
-                                    <input
-                                        id="register-phone"
-                                        name="phone"
-                                        type="tel"
-                                        autoComplete="tel"
-                                        className={FIELD}
-                                    />
+                                        <option>Fuel &amp; Energy Station</option>
+                                        <option>
+                                            Spare Parts &amp; Garage Workshop
+                                        </option>
+                                        <option>
+                                            Insurance &amp; Financial Services
+                                        </option>
+                                        <option>
+                                            Healthcare &amp; Medical Provider
+                                        </option>
+                                        <option>
+                                            Retail &amp; Merchant Partner
+                                        </option>
+                                        <option>
+                                            EV &amp; Fleet Infrastructure
+                                        </option>
+                                    </select>
                                 </div>
 
                                 <div>
                                     <label
                                         htmlFor="register-password"
-                                        className="text-sm font-bold text-ink-900"
+                                        className="block text-xs font-bold uppercase tracking-wider text-slate-700"
                                     >
-                                        Password
+                                        Create Password (min. 6 characters)
                                     </label>
-                                    <div className="relative">
+                                    <div className="relative mt-1.5">
+                                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                                            <Lock size={16} />
+                                        </div>
                                         <input
                                             id="register-password"
-                                            name="password"
-                                            type={
-                                                visible ? "text" : "password"
+                                            type={visible ? "text" : "password"}
+                                            required
+                                            minLength={6}
+                                            value={data.password}
+                                            onChange={(e) =>
+                                                setData(
+                                                    "password",
+                                                    e.target.value,
+                                                )
                                             }
-                                            autoComplete="new-password"
-                                            className={`${FIELD} pr-12`}
+                                            placeholder="••••••••"
+                                            className="w-full rounded-xl border border-slate-200 bg-slate-50/60 py-2.5 pr-10 pl-10 text-sm font-medium text-slate-900 placeholder:text-slate-400 focus:border-[#00289a] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00289a]/15 transition-colors"
                                         />
                                         <button
                                             type="button"
                                             onClick={() =>
-                                                setVisible((v) => !v)
+                                                setVisible(!visible)
                                             }
-                                            className="absolute inset-y-0 right-3 my-auto grid h-8 w-8 place-items-center rounded-md text-ink-500 transition-colors hover:text-ink-900"
+                                            className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                                             aria-label={
                                                 visible
                                                     ? "Hide password"
@@ -169,75 +308,44 @@ export default function Register() {
                                             }
                                         >
                                             {visible ? (
-                                                <EyeOff
-                                                    size={18}
-                                                    aria-hidden="true"
-                                                />
+                                                <EyeOff size={16} />
                                             ) : (
-                                                <Eye
-                                                    size={18}
-                                                    aria-hidden="true"
-                                                />
+                                                <Eye size={16} />
                                             )}
                                         </button>
                                     </div>
                                 </div>
 
-                                <label className="flex items-start gap-2.5 text-sm leading-6 text-ink-600">
-                                    <input
-                                        type="checkbox"
-                                        name="consent"
-                                        className="mt-1 h-4 w-4 shrink-0 rounded border-ink-300 text-ravu-600 focus:ring-ravu-500"
-                                    />
-                                    <span>
-                                        I agree to be contacted about RAVU
-                                        membership.
-                                    </span>
-                                </label>
-
-                                <Button
+                                <button
                                     type="submit"
-                                    size="lg"
-                                    className="w-full"
-                                    disabled
-                                    aria-disabled="true"
+                                    disabled={processing}
+                                    className="w-full mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-[#00289a] py-3 px-4 text-sm font-bold text-white shadow-sm hover:bg-[#001f78] active:scale-[0.99] disabled:opacity-60 cursor-pointer transition-all duration-150 group"
                                 >
-                                    Register interest
-                                </Button>
+                                    <span>
+                                        {processing
+                                            ? "Creating Partner Account..."
+                                            : "Register & Open Partner Dashboard"}
+                                    </span>
+                                    <ArrowRight
+                                        size={16}
+                                        className="transition-transform group-hover:translate-x-0.5"
+                                    />
+                                </button>
                             </form>
 
-                            <div className="mt-6 flex items-start gap-3 rounded-lg border-ink-200 bg-ink-50 p-4">
-                                <Smartphone
-                                    size={18}
-                                    className="mt-0.5 shrink-0 text-ravu-700"
-                                    aria-hidden="true"
-                                />
-                                <p className="text-xs leading-5 text-ink-600">
-                                    Are you a rider or driver? Operational
-                                    onboarding happens in the{" "}
-                                    <Link
-                                        href="/for-riders"
-                                        className="font-bold text-ravu-700 transition-colors hover:text-ravu-800"
-                                    >
-                                        RAVU app
-                                    </Link>
-                                    , not here.
-                                </p>
-                            </div>
-
-                            <p className="mt-6 text-sm text-ink-600">
-                                Already have an account?{" "}
+                            <div className="mt-7 pt-6 border-t border-slate-100 flex items-center justify-between text-xs text-slate-600">
+                                <span>Already have a Partner or Admin account?</span>
                                 <Link
                                     href="/login"
-                                    className="font-bold text-ravu-700 transition-colors hover:text-ravu-800"
+                                    className="font-bold text-[#00289a] hover:underline"
                                 >
-                                    Sign in
+                                    Sign in here →
                                 </Link>
-                            </p>
+                            </div>
                         </div>
-                    </Container>
+                    </div>
                 </div>
-            </div>
+            </section>
         </WebsiteLayout>
     );
 }

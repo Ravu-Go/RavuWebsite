@@ -4,10 +4,15 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { Toaster } from 'react-hot-toast';
 
+const pages = import.meta.glob('./Pages/**/*.jsx');
+
 createInertiaApp({
-  resolve: name => {
-    const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true });
-    return pages[`./Pages/${name}.jsx`];
+  resolve: (name) => {
+    const importPage = pages[`./Pages/${name}.jsx`];
+    if (!importPage) {
+      throw new Error(`Page not found: ./Pages/${name}.jsx`);
+    }
+    return importPage();
   },
   setup({ el, App, props }) {
     createRoot(el).render(
