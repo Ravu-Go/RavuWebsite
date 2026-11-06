@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\LoginProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
@@ -40,6 +41,7 @@ class HandleInertiaRequests extends Middleware
                     'id' => $authUser->id,
                     'name' => $authUser->name,
                     'email' => $authUser->email,
+                    'avatar' => $authUser->avatar ?? null,
                     'role' => $authUser->role ?? ($authUser->email === 'jux@ravu.com' ? 'super_admin' : 'partner'),
                 ];
             }
@@ -55,6 +57,9 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $user,
+                // Captured on the previous successful login; drives "Continue as …".
+                'rememberedProfile' => fn () => LoginProfile::read($request),
+                'googleEnabled' => (bool) (config('services.google.client_id') && config('services.google.client_secret')),
             ],
             'flash' => [
                 'success' => fn () => $request->hasSession() ? $request->session()->get('success') : null,
@@ -63,4 +68,3 @@ class HandleInertiaRequests extends Middleware
         ];
     }
 }
-

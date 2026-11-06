@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Support\LoginProfile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -93,7 +94,9 @@ class AuthController extends Controller
                         'role' => $role,
                     ]);
 
-                    $targetUrl = $role === 'super_admin' ? '/super-admin' : '/partner-dashboard';
+                    LoginProfile::capture($request, $user, 'password');
+
+                    $targetUrl = LoginProfile::homeFor($role);
 
                     return redirect()->to($targetUrl)->with('success', $role === 'super_admin'
                         ? 'Welcome back, Super Admin!'
@@ -114,6 +117,7 @@ class AuthController extends Controller
                 'email' => 'jux@ravu.com',
                 'role' => 'super_admin',
             ]);
+            LoginProfile::capture($request, $request->session()->get('authenticated_user'), 'password');
 
             return redirect()->to('/super-admin')->with('success', 'Welcome back, Super Admin!');
         }
@@ -128,6 +132,7 @@ class AuthController extends Controller
                 'category' => 'Fuel & Energy Station',
                 'phone' => '+255 754 200 100',
             ]);
+            LoginProfile::capture($request, $request->session()->get('authenticated_user'), 'password');
 
             return redirect()->to('/partner-dashboard')->with('success', 'Welcome back to your Partner Dashboard!');
         }
@@ -144,6 +149,7 @@ class AuthController extends Controller
                 'category' => $partnerData['category'] ?? 'Business Partner',
                 'phone' => $partnerData['phone'] ?? '',
             ]);
+            LoginProfile::capture($request, $request->session()->get('authenticated_user'), 'password');
 
             return redirect()->to('/partner-dashboard')->with('success', 'Welcome back to your Partner Dashboard!');
         }
@@ -228,6 +234,7 @@ class AuthController extends Controller
             'category' => $category,
             'role' => 'partner',
         ]);
+        LoginProfile::capture($request, $userRecord ?? $request->session()->get('authenticated_user'), 'password');
 
         return redirect()->to('/partner-dashboard')->with('success', 'Partner account created! Welcome to your RAVU Partner Dashboard.');
     }
@@ -245,6 +252,18 @@ class AuthController extends Controller
 
         $request->session()->forget(['authenticated_user', 'super_admin_user']);
 
+        // The remembered login profile cookie is intentionally kept so the
+        // next visit to /login can offer "Continue as …".
         return redirect('/login')->with('success', 'You have been signed out.');
+    }
+
+    /**
+     * Forget the remembered login profile ("Not you?").
+     */
+    public function forgetProfile(): RedirectResponse
+    {
+        LoginProfile::forget();
+
+        return redirect('/login');
     }
 }
