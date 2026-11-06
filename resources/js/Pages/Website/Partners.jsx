@@ -7,7 +7,8 @@ import {
     Wrench,
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
-import { CTASection, Hero } from "../../Components/sections";
+import CommunitySection from "../../Components/CommunitySection";
+import { Hero } from "../../Components/sections";
 import {
     Button,
     Card,
@@ -155,13 +156,7 @@ export default function Partners() {
                 </Container>
             </section>
 
-            <CTASection
-                eyebrow="Two journeys, one ecosystem"
-                title="Organisations partner. Riders join the app."
-                text="If you are an organisation, we would like to talk. If you ride or drive, your route into RAVU is the mobile app."
-                primary={{ label: "Contact RAVU", href: "/support" }}
-                secondary={{ label: "Get the RAVU App", href: "/for-riders" }}
-            />
+            <CommunitySection />
         </WebsiteLayout>
     );
 }

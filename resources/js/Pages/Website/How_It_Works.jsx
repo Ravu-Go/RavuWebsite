@@ -1,7 +1,7 @@
 import { Building2, UsersRound } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
+import CommunitySection from "../../Components/CommunitySection";
 import {
-    CTASection,
     EcosystemSection,
     Hero,
 } from "../../Components/sections";
@@ -124,13 +124,7 @@ export default function HowItWorks() {
 
             <EcosystemSection tone="dark" />
 
-            <CTASection
-                eyebrow="Start your journey"
-                title="Find your place in RAVU."
-                text="Members join through the app. Organisations partner with RAVU directly."
-                primary={{ label: "Get the RAVU App", href: "/for-riders" }}
-                secondary={{ label: "Partner With RAVU", href: "/partners" }}
-            />
+            <CommunitySection />
         </WebsiteLayout>
     );
 }

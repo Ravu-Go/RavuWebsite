@@ -1,6 +1,7 @@
 import { Banknote, HeartHandshake, ShieldCheck, Wrench } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
-import { CTASection, Hero } from "../../Components/sections";
+import CommunitySection from "../../Components/CommunitySection";
+import { Hero } from "../../Components/sections";
 import {
     Card,
     CardGrid,
@@ -65,13 +66,7 @@ export default function Benefits() {
                 </Container>
             </section>
 
-            <CTASection
-                eyebrow="Start here"
-                title="Membership is the way in."
-                text="Benefits are accessed through RAVU membership as services become available."
-                primary={{ label: "Explore Membership", href: "/membership" }}
-                secondary={{ label: "Get the RAVU App", href: "/for-riders" }}
-            />
+            <CommunitySection />
         </WebsiteLayout>
     );
 }

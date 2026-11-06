@@ -6,7 +6,8 @@ import {
     Wrench,
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
-import { AppPromo, CTASection, Hero } from "../../Components/sections";
+import CommunitySection from "../../Components/CommunitySection";
+import { AppPromo, Hero } from "../../Components/sections";
 import {
     Button,
     Card,
@@ -166,13 +167,7 @@ export default function ForRiders() {
 
             <AppPromo />
 
-            <CTASection
-                eyebrow="Next step"
-                title="Ready when you are."
-                text="Download the RAVU app when it is available, or learn more about what membership means."
-                primary={{ label: "Get the RAVU App", href: "/for-riders#app" }}
-                secondary={{ label: "Explore Membership", href: "/membership" }}
-            />
+            <CommunitySection />
         </WebsiteLayout>
     );
 }

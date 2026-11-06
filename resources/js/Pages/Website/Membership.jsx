@@ -1,6 +1,6 @@
 import { BadgeCheck, CreditCard, UsersRound } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
-import { CTASection } from "../../Components/sections";
+import CommunitySection from "../../Components/CommunitySection";
 import {
     Button,
     ButtonRow,
@@ -201,16 +201,7 @@ export default function Membership() {
                 </Container>
             </section>
 
-            <CTASection
-                eyebrow="Get started"
-                title="Register your interest in RAVU."
-                text="Share your details and RAVU will keep you informed as membership becomes available."
-                primary={{ label: "Register Interest", href: "/register" }}
-                secondary={{
-                    label: "Get the RAVU App",
-                    href: "/for-riders",
-                }}
-            />
+            <CommunitySection />
         </WebsiteLayout>
     );
 }

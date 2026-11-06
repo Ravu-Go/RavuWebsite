@@ -9,7 +9,8 @@ import {
     UsersRound,
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
-import { CTASection, EcosystemSection, Hero } from "../../Components/sections";
+import CommunitySection from "../../Components/CommunitySection";
+import { EcosystemSection, Hero } from "../../Components/sections";
 import {
     Card,
     CardGrid,
@@ -141,13 +142,7 @@ export default function AboutRavu() {
             {/* ---------------------------------------------------- ECOSYSTEM */}
             <EcosystemSection tone="dark" />
 
-            <CTASection
-                eyebrow="Work with RAVU"
-                title="Be part of what RAVU is building."
-                text="Whether you run a business, serve a community or move people every day, there is a place for you in the RAVU ecosystem."
-                primary={{ label: "Partner With RAVU", href: "/partners" }}
-                secondary={{ label: "Get the RAVU App", href: "/for-riders" }}
-            />
+            <CommunitySection />
         </WebsiteLayout>
     );
 }

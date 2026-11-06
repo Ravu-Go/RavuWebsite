@@ -1,6 +1,7 @@
 import { MessageSquare } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
-import { CTASection, FAQAccordion, Hero } from "../../Components/sections";
+import CommunitySection from "../../Components/CommunitySection";
+import { FAQAccordion, Hero } from "../../Components/sections";
 import {
     Button,
     Container,
@@ -122,13 +123,7 @@ export default function Support() {
                 </Container>
             </section>
 
-            <CTASection
-                eyebrow="Still deciding?"
-                title="See how RAVU fits together."
-                text="Understand the ecosystem, the membership journey and where you fit."
-                primary={{ label: "How It Works", href: "/how-it-works" }}
-                secondary={{ label: "Explore Membership", href: "/membership" }}
-            />
+            <CommunitySection />
         </WebsiteLayout>
     );
 }

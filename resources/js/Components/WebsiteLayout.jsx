@@ -11,6 +11,7 @@ export default function WebsiteLayout({
     children,
     transparentNav = false,
     onDarkNav = false,
+    hideFooter = false,
 }) {
     const { key } = usePage();
     const reduceMotion = useReducedMotion();
@@ -24,18 +25,19 @@ export default function WebsiteLayout({
                 Skip to content
             </a>
             <Navigation transparent={transparentNav} onDark={onDarkNav} />
-            <main id="main-content" className="flex-1">
+            <main id="main-content" className="flex-1 flex flex-col">
                 <motion.div
                     initial={reduceMotion ? undefined : { opacity: 0, y: 20 }}
                     animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                    exit={reduceMotion ? undefined : { opacity: 0, y: -20 }}
+                    exit={reduceMotion ? undefined : { opacity: 1, y: -20 }}
                     transition={{ duration: reduceMotion ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
                     key={key}
+                    className="flex-1 flex flex-col"
                 >
                     {children}
                 </motion.div>
             </main>
-            <Footer />
+            {!hideFooter && <Footer />}
         </div>
     );
 }
