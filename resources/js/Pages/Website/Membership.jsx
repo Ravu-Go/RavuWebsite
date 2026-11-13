@@ -12,7 +12,7 @@ import {
     SectionTitle,
     StepCard,
 } from "../../Components/ui";
-import riderIdImage from "../../../imgs/ravuRiderID.png";
+import riderIdImage from "../../../imgs/ravuRiderID.jpg";
 
 const MEANING = [
     "Access to relevant benefits as they become available.",

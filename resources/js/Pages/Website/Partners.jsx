@@ -19,7 +19,7 @@ import {
     SectionTitle,
     StepCard,
 } from "../../Components/ui";
-import fundRepairShop from "../../../imgs/fundRepairShop.png";
+import fundRepairShop from "../../../imgs/memberPlusPartners.png";
 
 const OPPORTUNITIES = [
     {

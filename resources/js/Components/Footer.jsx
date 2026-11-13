@@ -35,7 +35,7 @@ export default function Footer() {
                     <div className="lg:col-span-5">
                         <Link
                             href="/"
-                            prefetch
+                            prefetch="click"
                             aria-label="RAVU home"
                             className="inline-flex items-center gap-2.5"
                         >
@@ -124,7 +124,7 @@ export default function Footer() {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        prefetch
+                                        prefetch="click"
                                         className="transition-colors hover:text-white"
                                     >
                                         {link.label}
@@ -144,7 +144,7 @@ export default function Footer() {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        prefetch
+                                        prefetch="click"
                                         className="transition-colors hover:text-white"
                                     >
                                         {link.label}
@@ -164,7 +164,7 @@ export default function Footer() {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
-                                        prefetch
+                                        prefetch="click"
                                         className="transition-colors hover:text-white"
                                     >
                                         {link.label}

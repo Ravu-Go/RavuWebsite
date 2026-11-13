@@ -9,7 +9,7 @@ import {
     Reveal,
     SectionTitle,
 } from "../../Components/ui";
-import supportImage from "../../../imgs/support.png";
+import supportImage from "../../../imgs/support.jpg";
 
 const FAQ = [
     {

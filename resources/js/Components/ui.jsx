@@ -107,7 +107,7 @@ export function Button({
             );
         }
         return (
-            <Link href={href} prefetch className={classes} {...props}>
+            <Link href={href} prefetch="mount" className={classes} {...props}>
                 {content}
             </Link>
         );

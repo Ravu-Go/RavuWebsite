@@ -19,7 +19,7 @@ import {
     SectionTitle,
     StepCard,
 } from "../../Components/ui";
-import riderImage from "../../../imgs/rider.png";
+import riderImage from "../../../imgs/rider.jpg";
 
 const SUPPORT_AREAS = [
     {

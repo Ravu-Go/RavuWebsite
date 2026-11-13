@@ -1,7 +1,7 @@
 import { ShieldCheck, Users, Zap } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
-import headerImg from "../../../imgs/Header.png";
+import headerImg from "../../../imgs/Header.jpg";
 import mapImg from "../../../imgs/map.png";
 
 /**

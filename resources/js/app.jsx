@@ -4,15 +4,18 @@ import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { Toaster } from 'react-hot-toast';
 
-const pages = import.meta.glob('./Pages/**/*.jsx', { eager: true });
+// Lazy-load each page so only the code for the current page is fetched.
+// Inertia shows a spinner instantly and streams the page chunk in.
+const pages = import.meta.glob('./Pages/**/*.jsx');
 
 createInertiaApp({
+  title: (title) => `${title} — RAVU`,
   resolve: (name) => {
-    const page = pages[`./Pages/${name}.jsx`];
-    if (!page) {
+    const lazyPage = pages[`./Pages/${name}.jsx`];
+    if (!lazyPage) {
       throw new Error(`Page not found: ./Pages/${name}.jsx`);
     }
-    return page.default ? page : page;
+    return lazyPage();
   },
   setup({ el, App, props }) {
     createRoot(el).render(
@@ -22,4 +25,5 @@ createInertiaApp({
       </>
     );
   },
+  progress: { color: '#0ea5e9', showSpinner: true },
 });

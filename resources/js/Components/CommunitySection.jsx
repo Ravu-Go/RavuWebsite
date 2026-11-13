@@ -1,4 +1,4 @@
-import footerBg from "../../imgs/Footer.png";
+import footerBg from "../../imgs/Footer.jpg";
 
 /**
  * Shared Community & Stats skyline banner.

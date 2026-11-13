@@ -145,7 +145,7 @@ export default function Navigation({
                 {/* Brand Logo */}
                 <Link
                     href="/"
-                    prefetch
+                    prefetch="click"
                     aria-label="RAVU home"
                     onClick={() => setIsOpen(false)}
                     className="shrink-0 rounded-md transition-opacity hover:opacity-90"
@@ -161,7 +161,7 @@ export default function Navigation({
                             <Link
                                 key={link.label}
                                 href={link.href}
-                                prefetch
+                                prefetch="click"
                                 className={`relative py-1 text-sm font-semibold transition-colors ${
                                     active
                                         ? "text-slate-950 font-bold"
@@ -186,7 +186,7 @@ export default function Navigation({
                 <div className="flex items-center gap-2 sm:gap-3">
                     <Link
                         href="/login"
-                        prefetch
+                        prefetch="click"
                         className={`hidden lg:inline-flex py-1.5 px-3 text-xs font-semibold rounded-full transition-colors ${
                             overMedia
                                 ? "text-white/90 hover:text-white hover:bg-white/10"
@@ -198,7 +198,7 @@ export default function Navigation({
 
                     <Link
                         href="/for-riders"
-                        prefetch
+                        prefetch="click"
                         className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-slate-800 active:scale-[0.98] transition-all"
                     >
                         <span>Get the RAVU App</span>
@@ -207,7 +207,7 @@ export default function Navigation({
 
                     <Link
                         href="/partners"
-                        prefetch
+                        prefetch="click"
                         className="hidden xl:inline-flex items-center rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-semibold text-slate-700 hover:border-slate-400 hover:text-slate-950 transition-colors"
                     >
                         Partner
@@ -271,7 +271,7 @@ export default function Navigation({
                                                         <li key={item.label}>
                                                             <Link
                                                                 href={item.href}
-                                                                prefetch
+                                                                prefetch="click"
                                                                 aria-current={
                                                                     active
                                                                         ? "page"

@@ -54,15 +54,15 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
-import footerBg from "../../../imgs/Footer.png";
-import fundRepairShopImg from "../../../imgs/fundRepairShop.png";
-import headerImg from "../../../imgs/Header.png";
+import footerBg from "../../../imgs/Footer.jpg";
+import fundRepairShopImg from "../../../imgs/fundRepairShop.jpg";
+import headerImg from "../../../imgs/Header.jpg";
 import logoImg from "../../../imgs/Logo.png";
 import mapImg from "../../../imgs/map.png";
-import memberPlusPartnersImg from "../../../imgs/memberPlusPartners.png";
-import ravuRiderIdImg from "../../../imgs/ravuRiderID.png";
-import riderImg from "../../../imgs/rider.png";
-import supportImg from "../../../imgs/support.png";
+import memberPlusPartnersImg from "../../../imgs/memberPlusPartners.jpg";
+import ravuRiderIdImg from "../../../imgs/ravuRiderID.jpg";
+import riderImg from "../../../imgs/rider.jpg";
+import supportImg from "../../../imgs/support.jpg";
 
 const STORAGE_KEY = "ravu_cms_content_v1";
 
@@ -160,7 +160,7 @@ const INITIAL_CMS_DATA = {
                 description:
                     "A smarter way to get around. Ride, share and access more value — all in one app, across Tanzania.",
                 socialProofText: "People moving together across Tanzania",
-                heroImage: "Header.png",
+                heroImage: "Header.jpg",
             },
             featuresStrip: [
                 {
@@ -521,7 +521,7 @@ const INITIAL_CMS_DATA = {
         },
         {
             id: "med-2",
-            name: "Header.png",
+            name: "Header.jpg",
             label: "Home Hero 5-Screen Showcase",
             usedIn: "Home Page (Full-Width Hero Stage)",
             dimensions: "1672 × 941 px",
@@ -541,7 +541,7 @@ const INITIAL_CMS_DATA = {
         },
         {
             id: "med-4",
-            name: "Footer.png",
+            name: "Footer.jpg",
             label: "City Skyline & Blue Ribbons",
             usedIn: "Community & Stats Pre-Footer (All Pages)",
             dimensions: "1708 × 920 px",
@@ -551,7 +551,7 @@ const INITIAL_CMS_DATA = {
         },
         {
             id: "med-5",
-            name: "rider.png",
+            name: "rider.jpg",
             label: "RAVU Branded Motorcycle Rider",
             usedIn: "About RAVU, For Riders",
             dimensions: "1536 × 1024 px",
@@ -561,7 +561,7 @@ const INITIAL_CMS_DATA = {
         },
         {
             id: "med-6",
-            name: "ravuRiderID.png",
+            name: "ravuRiderID.jpg",
             label: "Verified Rider Digital ID Card",
             usedIn: "Membership Page",
             dimensions: "1122 × 1402 px",
@@ -571,7 +571,7 @@ const INITIAL_CMS_DATA = {
         },
         {
             id: "med-7",
-            name: "fundRepairShop.png",
+            name: "fundRepairShop.jpg",
             label: "Partner Workshop & Service Network",
             usedIn: "Partners Page",
             dimensions: "1536 × 1024 px",
@@ -581,7 +581,7 @@ const INITIAL_CMS_DATA = {
         },
         {
             id: "med-8",
-            name: "support.png",
+            name: "support.jpg",
             label: "Customer & Member Support",
             usedIn: "Support Page",
             dimensions: "1023 × 1537 px",
@@ -591,7 +591,7 @@ const INITIAL_CMS_DATA = {
         },
         {
             id: "med-9",
-            name: "memberPlusPartners.png",
+            name: "memberPlusPartners.jpg",
             label: "Members & Partners Network",
             usedIn: "Ecosystem Media Pool",
             dimensions: "1536 × 1024 px",

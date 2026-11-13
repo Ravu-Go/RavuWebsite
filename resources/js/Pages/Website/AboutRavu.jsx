@@ -19,7 +19,7 @@ import {
     Reveal,
     SectionTitle,
 } from "../../Components/ui";
-import riderImage from "../../../imgs/rider.png";
+import riderImage from "../../../imgs/rider.jpg";
 
 const VALUES = [
     {
