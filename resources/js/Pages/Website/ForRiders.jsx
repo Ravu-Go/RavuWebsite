@@ -5,7 +5,6 @@ import {
     Check,
     Handshake,
     ShieldCheck,
-    Smartphone,
     Wrench,
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
@@ -13,10 +12,9 @@ import CommunitySection from "../../Components/CommunitySection";
 import {
     AppPromo,
     FeatureStrip,
-    Hero,
     StoreButtons,
 } from "../../Components/sections";
-import riderImage from "../../../imgs/rider.jpg";
+import ridersConversationImg from "../../../imgs/RAVU Riders Lively Street Conversation.png";
 
 const SUPPORT_AREAS = [
     {
@@ -59,19 +57,109 @@ export default function ForRiders() {
     return (
         <WebsiteLayout>
             {/* ---------------------------------------------------------- HERO */}
-            <Hero
-                eyebrow="FOR RIDERS & DRIVERS"
-                title="A stronger ride starts with a"
-                highlight="stronger ecosystem."
-                text="RAVU begins with the boda boda and motorcycle communities whose work keeps people and places connected across Tanzania — and grows outward from there."
-                media={riderImage}
-                mediaAlt="RAVU rider in branded kit on a RAVU motorcycle"
-                layout="split"
-            >
-                <div className="mt-8">
-                    <StoreButtons />
+            <section className="relative overflow-hidden bg-white">
+                {/* Right-side blended background image on desktop */}
+                <div className="relative lg:min-h-[560px] xl:min-h-[600px] flex items-center">
+                    <div
+                        aria-hidden="true"
+                        className="hidden lg:block lg:absolute lg:inset-y-0 lg:right-0 lg:w-[64%] xl:w-[62%] select-none pointer-events-none"
+                    >
+                        <img
+                            src={ridersConversationImg}
+                            alt="RAVU riders in branded vests having a lively street conversation"
+                            fetchPriority="high"
+                            decoding="async"
+                            className="h-full w-full object-cover object-center"
+                        />
+                        {/* Smooth white gradient blend on the left seam */}
+                        <div className="absolute inset-y-0 left-0 w-44 xl:w-56 bg-gradient-to-r from-white via-white/85 to-transparent" />
+                        {/* Subtle top & bottom edge softness */}
+                        <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-white/50 to-transparent" />
+                    </div>
+
+                    {/* Diagonal two-tone blue corner ribbon (bottom-right) */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute bottom-0 right-0 z-10 hidden h-36 w-36 overflow-hidden lg:block"
+                    >
+                        <div className="absolute -bottom-16 -right-16 h-36 w-56 -rotate-45 bg-[#1864E8] shadow-lg" />
+                        <div className="absolute -bottom-20 -right-12 h-32 w-56 -rotate-45 bg-[#0B3B8C]" />
+                    </div>
+
+                    {/* Foreground Content Container */}
+                    <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
+                        <div className="max-w-xl lg:max-w-[540px]">
+                            {/* Solid Royal Blue Pill Badge */}
+                            <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
+                                FOR RIDERS &amp; DRIVERS
+                            </span>
+
+                            {/* Stacked Bold Headline */}
+                            <h1 className="mt-5 text-4xl font-black leading-[1.06] tracking-tight text-[#050B17] sm:text-5xl lg:text-[3.35rem]">
+                                A stronger ride.
+                                <br />
+                                A stronger community.
+                                <br />
+                                Real{" "}
+                                <span className="text-[#1864E8]">
+                                    opportunities.
+                                </span>
+                            </h1>
+
+                            {/* Body Copy */}
+                            <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600 sm:text-[17px]">
+                                RAVU begins with the boda boda and motorcycle
+                                communities whose work keeps people and places
+                                connected across Tanzania connecting you with
+                                membership benefits, practical support and
+                                opportunities to grow.
+                            </p>
+
+                            {/* Primary & Secondary Action Buttons */}
+                            <div className="mt-7 flex flex-wrap items-center gap-3.5">
+                                <Link
+                                    href="/for-riders#app"
+                                    prefetch
+                                    className="inline-flex items-center gap-2.5 rounded-xl bg-[#0B3B8C] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#00289a] active:scale-[0.98]"
+                                >
+                                    <span>Get the RAVU App</span>
+                                    <ArrowRight size={16} />
+                                </Link>
+                                <Link
+                                    href="/benefits"
+                                    prefetch
+                                    className="inline-flex items-center rounded-xl border border-slate-300 bg-white/95 px-6 py-3.5 text-sm font-bold text-slate-900 shadow-2xs transition-colors hover:border-slate-400 hover:bg-slate-50"
+                                >
+                                    Explore Member Benefits
+                                </Link>
+                            </div>
+
+                            {/* App Store & Google Play Store Badges */}
+                            <div className="mt-6">
+                                <StoreButtons />
+                            </div>
+                        </div>
+
+                        {/* Mobile / Tablet Image Presentation */}
+                        <div className="relative mt-10 overflow-hidden rounded-2xl border border-slate-100 shadow-lg lg:hidden">
+                            <img
+                                src={ridersConversationImg}
+                                alt="RAVU riders in branded vests having a lively street conversation"
+                                fetchPriority="high"
+                                decoding="async"
+                                className="h-auto w-full object-cover"
+                            />
+                            <div
+                                aria-hidden="true"
+                                className="pointer-events-none absolute bottom-0 right-0 h-20 w-20 overflow-hidden"
+                            >
+                                <div className="absolute -bottom-10 -right-10 h-20 w-32 -rotate-45 bg-[#1864E8]" />
+                                <div className="absolute -bottom-12 -right-8 h-16 w-32 -rotate-45 bg-[#0B3B8C]" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </Hero>
+            </section>
 
             {/* ------------------------------------------- 3 FEATURES STRIP */}
             <FeatureStrip items={SUPPORT_AREAS} />

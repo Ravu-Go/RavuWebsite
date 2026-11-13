@@ -12,9 +12,8 @@ import CommunitySection from "../../Components/CommunitySection";
 import {
     FAQAccordion,
     FeatureStrip,
-    Hero,
 } from "../../Components/sections";
-import supportImage from "../../../imgs/support.jpg";
+import supportVideo from "../../../imgs/Headset.mp4";
 
 const SUPPORT_CHANNELS = [
     {
@@ -61,17 +60,104 @@ export default function Support() {
     return (
         <WebsiteLayout>
             {/* ---------------------------------------------------------- HERO */}
-            <Hero
-                eyebrow="HELP & SUPPORT"
-                title="We're here to help you"
-                highlight="move forward."
-                text="Find straightforward answers about RAVU membership, the mobile app, member benefits and business partnerships."
-                primary={{ label: "Register Interest", href: "/register" }}
-                secondary={{ label: "Partner Sign In", href: "/login" }}
-                media={supportImage}
-                mediaAlt="A RAVU support specialist ready to help"
-                layout="split"
-            />
+            <section className="relative overflow-hidden bg-white">
+                <div className="relative flex items-center lg:min-h-[540px] xl:min-h-[580px]">
+                    {/* Right-side blended background image on desktop */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none hidden select-none lg:absolute lg:inset-y-0 lg:right-0 lg:block lg:w-[58%] xl:w-[56%]"
+                    >
+                        <video
+                            src={supportVideo}
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            fetchPriority="high"
+                            className="h-full w-full object-contain object-center py-6"
+                        />
+                        {/* Smooth white gradient blend on the left seam */}
+                        <div className="absolute inset-y-0 left-0 w-36 xl:w-48 bg-gradient-to-r from-white via-white/80 to-transparent" />
+                    </div>
+
+                    {/* Diagonal two-tone blue corner ribbon (bottom-right) */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute bottom-0 right-0 z-10 hidden h-36 w-36 overflow-hidden lg:block"
+                    >
+                        <div className="absolute -bottom-16 -right-16 h-36 w-56 -rotate-45 bg-[#1864E8] shadow-lg" />
+                        <div className="absolute -bottom-20 -right-12 h-32 w-56 -rotate-45 bg-[#0B3B8C]" />
+                    </div>
+
+                    {/* Foreground Content Container */}
+                    <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
+                        <div className="max-w-xl lg:max-w-[540px]">
+                            {/* Solid Royal Blue Pill Badge */}
+                            <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
+                                HELP &amp; SUPPORT
+                            </span>
+
+                            {/* Stacked Bold Headline */}
+                            <h1 className="mt-5 text-4xl font-black leading-[1.06] tracking-tight text-[#050B17] sm:text-5xl lg:text-[3.35rem]">
+                                Straightforward answers.
+                                <br />
+                                Dedicated support.
+                                <br />
+                                Here to help you{" "}
+                                <span className="text-[#1864E8]">
+                                    move forward.
+                                </span>
+                            </h1>
+
+                            {/* Body Copy */}
+                            <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600 sm:text-[17px]">
+                                Find clear guidance about RAVU membership, the
+                                mobile app, verified member benefits and
+                                business partnerships across Tanzania.
+                            </p>
+
+                            {/* Primary & Secondary Action Buttons */}
+                            <div className="mt-7 flex flex-wrap items-center gap-3.5">
+                                <Link
+                                    href="/register"
+                                    prefetch
+                                    className="inline-flex items-center gap-2.5 rounded-xl bg-[#0B3B8C] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#00289a] active:scale-[0.98]"
+                                >
+                                    <span>Register Interest</span>
+                                    <ArrowRight size={16} />
+                                </Link>
+                                <Link
+                                    href="/login"
+                                    prefetch
+                                    className="inline-flex items-center rounded-xl border border-slate-300 bg-white/95 px-6 py-3.5 text-sm font-bold text-slate-900 shadow-2xs transition-colors hover:border-slate-400 hover:bg-slate-50"
+                                >
+                                    Partner Portal Sign In
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Mobile / Tablet Image Presentation */}
+                        <div className="relative mt-10 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-lg lg:hidden">
+                            <video
+                                src={supportVideo}
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                fetchPriority="high"
+                                className="mx-auto h-64 w-full object-contain p-4"
+                            />
+                            <div
+                                aria-hidden="true"
+                                className="pointer-events-none absolute bottom-0 right-0 h-20 w-20 overflow-hidden"
+                            >
+                                <div className="absolute -bottom-10 -right-10 h-20 w-32 -rotate-45 bg-[#1864E8]" />
+                                <div className="absolute -bottom-12 -right-8 h-16 w-32 -rotate-45 bg-[#0B3B8C]" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* ------------------------------------------- 3 CHANNELS STRIP */}
             <FeatureStrip items={SUPPORT_CHANNELS} />

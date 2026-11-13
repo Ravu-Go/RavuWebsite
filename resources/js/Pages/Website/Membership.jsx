@@ -9,8 +9,8 @@ import {
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
-import { FeatureStrip, Hero } from "../../Components/sections";
-import riderIdImage from "../../../imgs/ravuRiderID.jpg";
+import { FeatureStrip } from "../../Components/sections";
+import riderIdImage from "../../../imgs/ravuRiderID1.png";
 
 const MEMBERSHIP_PILLARS = [
     {
@@ -68,17 +68,102 @@ export default function Membership() {
     return (
         <WebsiteLayout>
             {/* ------------------------------------------------------------ HERO */}
-            <Hero
-                eyebrow="RAVU MEMBERSHIP"
-                title="Membership that"
-                highlight="moves with you."
-                text="A RAVU membership connects you to a growing ecosystem of support, partner benefits and community built around your everyday mobility journey."
-                primary={{ label: "Register Interest", href: "/register" }}
-                secondary={{ label: "See Member Benefits", href: "/benefits" }}
-                media={riderIdImage}
-                mediaAlt="Example RAVU Rider Member ID card"
-                layout="split"
-            />
+            <section className="relative overflow-hidden bg-white">
+                <div className="relative flex items-center lg:min-h-[560px] xl:min-h-[600px]">
+                    {/* Right-side blended background image on desktop */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none hidden select-none lg:absolute lg:inset-y-0 lg:right-0 lg:block lg:w-[58%] xl:w-[56%]"
+                    >
+                        <img
+                            src={riderIdImage}
+                            alt="RAVU Rider Member ID card and branded lanyard"
+                            fetchPriority="high"
+                            decoding="async"
+                            className="h-full w-full object-cover object-left"
+                        />
+                        {/* Crisp left-edge white gradient blend */}
+                        <div className="absolute inset-y-0 left-0 w-24 xl:w-32 bg-gradient-to-r from-white via-white/80 to-transparent" />
+                        <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-white/40 to-transparent" />
+                    </div>
+
+                    {/* Diagonal two-tone blue corner ribbon (bottom-right) */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute bottom-0 right-0 z-10 hidden h-36 w-36 overflow-hidden lg:block"
+                    >
+                        <div className="absolute -bottom-16 -right-16 h-36 w-56 -rotate-45 bg-[#1864E8] shadow-lg" />
+                        <div className="absolute -bottom-20 -right-12 h-32 w-56 -rotate-45 bg-[#0B3B8C]" />
+                    </div>
+
+                    {/* Foreground Content Container */}
+                    <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
+                        <div className="max-w-xl lg:max-w-[500px] xl:max-w-[520px]">
+                            {/* Solid Royal Blue Pill Badge */}
+                            <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
+                                RAVU MEMBERSHIP
+                            </span>
+
+                            {/* Stacked Bold Headline */}
+                            <h1 className="mt-5 text-4xl font-black leading-[1.06] tracking-tight text-[#050B17] sm:text-5xl lg:text-[3.35rem]">
+                                One identity.
+                                <br />
+                                Everyday benefits.
+                                <br />
+                                Membership that{" "}
+                                <span className="text-[#1864E8]">
+                                    moves with you.
+                                </span>
+                            </h1>
+
+                            {/* Body Copy */}
+                            <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600 sm:text-[17px]">
+                                A RAVU membership connects you to a growing
+                                ecosystem of support, verified partner discounts
+                                and community built around your everyday
+                                mobility journey.
+                            </p>
+
+                            {/* Primary & Secondary Action Buttons */}
+                            <div className="mt-7 flex flex-wrap items-center gap-3.5">
+                                <Link
+                                    href="/register"
+                                    prefetch
+                                    className="inline-flex items-center gap-2.5 rounded-xl bg-[#0B3B8C] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#00289a] active:scale-[0.98]"
+                                >
+                                    <span>Register Interest</span>
+                                    <ArrowRight size={16} />
+                                </Link>
+                                <Link
+                                    href="/benefits"
+                                    prefetch
+                                    className="inline-flex items-center rounded-xl border border-slate-300 bg-white/95 px-6 py-3.5 text-sm font-bold text-slate-900 shadow-2xs transition-colors hover:border-slate-400 hover:bg-slate-50"
+                                >
+                                    See Member Benefits
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Mobile / Tablet Image Presentation */}
+                        <div className="relative mt-10 overflow-hidden rounded-2xl border border-slate-100 shadow-lg lg:hidden">
+                            <img
+                                src={riderIdImage}
+                                alt="RAVU Rider Member ID card and branded lanyard"
+                                fetchPriority="high"
+                                decoding="async"
+                                className="h-auto w-full object-cover"
+                            />
+                            <div
+                                aria-hidden="true"
+                                className="pointer-events-none absolute bottom-0 right-0 h-20 w-20 overflow-hidden"
+                            >
+                                <div className="absolute -bottom-10 -right-10 h-20 w-32 -rotate-45 bg-[#1864E8]" />
+                                <div className="absolute -bottom-12 -right-8 h-16 w-32 -rotate-45 bg-[#0B3B8C]" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* ------------------------------------------- 3 PILLARS STRIP */}
             <FeatureStrip items={MEMBERSHIP_PILLARS} />
@@ -99,7 +184,7 @@ export default function Membership() {
                             </h2>
                             <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
                                 Membership is designed for people who want to
-                                participate in a stronger mobility community —
+                                participate in a stronger mobility community
                                 and benefit from it every day as the ecosystem
                                 develops.
                             </p>

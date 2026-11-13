@@ -15,9 +15,9 @@ import {
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
-import { FeatureStrip, Hero } from "../../Components/sections";
+import { FeatureStrip } from "../../Components/sections";
 import partnerHeroImg from "../../../imgs/memberPlusPartners.jpg";
-import workshopImg from "../../../imgs/fundRepairShop.jpg";
+import workshopImg from "../../../imgs/fundRepairShop-.png";
 
 const PARTNER_PILLARS = [
     {
@@ -89,17 +89,102 @@ export default function Partners() {
     return (
         <WebsiteLayout>
             {/* ---------------------------------------------------------- HERO */}
-            <Hero
-                eyebrow="PARTNERS & BUSINESS"
-                title="Build the mobility ecosystem"
-                highlight="with RAVU."
-                text="RAVU creates space for businesses, workshops, financial institutions and service providers to connect with the communities that keep Tanzania moving."
-                primary={{ label: "Become a Partner", href: "/register" }}
-                secondary={{ label: "Partner Sign In", href: "/login" }}
-                media={partnerHeroImg}
-                mediaAlt="RAVU partner welcoming a verified RAVU member"
-                layout="split"
-            />
+            <section className="relative overflow-hidden bg-white">
+                <div className="relative lg:min-h-[560px] xl:min-h-[600px] flex items-center">
+                    {/* Right-side blended background image on desktop */}
+                    <div
+                        aria-hidden="true"
+                        className="hidden lg:block lg:absolute lg:inset-y-0 lg:right-0 lg:w-[66%] xl:w-[64%] select-none pointer-events-none"
+                    >
+                        <img
+                            src={partnerHeroImg}
+                            alt="RAVU riders, fuel partners, service partners and businesses connecting"
+                            fetchPriority="high"
+                            decoding="async"
+                            className="h-full w-full object-cover object-right"
+                        />
+                        {/* Smooth white gradient blend on the left seam */}
+                        <div className="absolute inset-y-0 left-0 w-56 xl:w-72 bg-gradient-to-r from-white via-white/95 to-transparent" />
+                        {/* Top-left subtle white mask so baked-in image text never shows through */}
+                        <div className="absolute left-0 top-0 h-56 w-80 bg-gradient-to-br from-white via-white/90 to-transparent" />
+                    </div>
+
+                    {/* Diagonal two-tone blue corner ribbon (bottom-right) */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute bottom-0 right-0 z-10 hidden h-36 w-36 overflow-hidden lg:block"
+                    >
+                        <div className="absolute -bottom-16 -right-16 h-36 w-56 -rotate-45 bg-[#1864E8] shadow-lg" />
+                        <div className="absolute -bottom-20 -right-12 h-32 w-56 -rotate-45 bg-[#0B3B8C]" />
+                    </div>
+
+                    {/* Foreground Content Container */}
+                    <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
+                        <div className="max-w-xl lg:max-w-[540px]">
+                            {/* Solid Royal Blue Pill Badge */}
+                            <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
+                                PARTNERS &amp; BUSINESS
+                            </span>
+
+                            {/* Stacked Bold Headline */}
+                            <h1 className="mt-5 text-4xl font-black leading-[1.06] tracking-tight text-[#050B17] sm:text-5xl lg:text-[3.35rem]">
+                                People. Partners.
+                                <br />
+                                A stronger mobility
+                                <br />
+                                <span className="text-[#1864E8]">
+                                    ecosystem.
+                                </span>
+                            </h1>
+
+                            {/* Body Copy */}
+                            <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600 sm:text-[17px]">
+                                RAVU creates space for businesses, workshops,
+                                fuel stations, financial institutions and
+                                service providers to connect with the verified
+                                communities that keep Tanzania moving.
+                            </p>
+
+                            {/* Primary & Secondary Action Buttons */}
+                            <div className="mt-7 flex flex-wrap items-center gap-3.5">
+                                <Link
+                                    href="/register"
+                                    prefetch
+                                    className="inline-flex items-center gap-2.5 rounded-xl bg-[#0B3B8C] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#00289a] active:scale-[0.98]"
+                                >
+                                    <span>Become a Partner</span>
+                                    <ArrowRight size={16} />
+                                </Link>
+                                <Link
+                                    href="/login"
+                                    prefetch
+                                    className="inline-flex items-center rounded-xl border border-slate-300 bg-white/95 px-6 py-3.5 text-sm font-bold text-slate-900 shadow-2xs transition-colors hover:border-slate-400 hover:bg-slate-50"
+                                >
+                                    Partner Portal Sign In
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Mobile / Tablet Image Presentation */}
+                        <div className="relative mt-10 overflow-hidden rounded-2xl border border-slate-100 shadow-lg lg:hidden">
+                            <img
+                                src={partnerHeroImg}
+                                alt="RAVU riders, fuel partners, service partners and businesses connecting"
+                                fetchPriority="high"
+                                decoding="async"
+                                className="h-auto w-full object-cover object-right"
+                            />
+                            <div
+                                aria-hidden="true"
+                                className="pointer-events-none absolute bottom-0 right-0 h-20 w-20 overflow-hidden"
+                            >
+                                <div className="absolute -bottom-10 -right-10 h-20 w-32 -rotate-45 bg-[#1864E8]" />
+                                <div className="absolute -bottom-12 -right-8 h-16 w-32 -rotate-45 bg-[#0B3B8C]" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* ------------------------------------------- 3 PILLARS STRIP */}
             <FeatureStrip items={PARTNER_PILLARS} />
@@ -148,35 +233,56 @@ export default function Partners() {
                 </div>
             </section>
 
-            {/* ---------------------------------- EDITORIAL SPLIT (WORKSHOP) */}
-            <section className="overflow-hidden border-t border-slate-100 bg-slate-50/50 py-16 sm:py-24">
-                <div className="mx-auto max-w-6xl px-5 sm:px-8">
-                    <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-                        <div className="lg:col-span-6">
-                            <div className="overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-900/5">
-                                <img
-                                    src={workshopImg}
-                                    alt="A RAVU partner repair shop serving riders"
-                                    loading="lazy"
-                                    decoding="async"
-                                    className="aspect-[4/3] w-full object-cover"
-                                />
-                            </div>
-                        </div>
+            {/* ---------------------------------- BLENDED BANNER (WORKSHOP) */}
+            <section className="relative overflow-hidden border-t border-slate-100 bg-white">
+                <div className="relative flex items-center lg:min-h-[560px] xl:min-h-[600px]">
+                    {/* Right-side blended background image on desktop */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none hidden select-none lg:absolute lg:inset-y-0 lg:right-0 lg:block lg:w-[64%] xl:w-[62%]"
+                    >
+                        <img
+                            src={workshopImg}
+                            alt="RAVU Workshop & Service mechanics repairing a member motorcycle"
+                            loading="lazy"
+                            decoding="async"
+                            className="h-full w-full object-cover object-center"
+                        />
+                        {/* Smooth white gradient blend on the left seam */}
+                        <div className="absolute inset-y-0 left-0 w-48 xl:w-64 bg-gradient-to-r from-white via-white/90 to-transparent" />
+                        <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-white/40 to-transparent" />
+                    </div>
 
-                        <div className="lg:col-span-6">
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                    {/* Diagonal two-tone blue corner ribbon (bottom-right) */}
+                    <div
+                        aria-hidden="true"
+                        className="pointer-events-none absolute bottom-0 right-0 z-10 hidden h-36 w-36 overflow-hidden lg:block"
+                    >
+                        <div className="absolute -bottom-16 -right-16 h-36 w-56 -rotate-45 bg-[#1864E8] shadow-lg" />
+                        <div className="absolute -bottom-20 -right-12 h-32 w-56 -rotate-45 bg-[#0B3B8C]" />
+                    </div>
+
+                    {/* Foreground Content Container */}
+                    <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-14 sm:px-8 sm:py-18 lg:px-10 lg:py-20">
+                        <div className="max-w-xl lg:max-w-[540px]">
+                            {/* Solid Royal Blue Pill Badge */}
+                            <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
                                 DESIGNED FOR REAL OPERATIONS
-                            </p>
-                            <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
-                                Practical tools for{" "}
+                            </span>
+
+                            {/* Stacked Bold Headline */}
+                            <h2 className="mt-5 text-3xl font-black leading-[1.08] tracking-tight text-[#050B17] sm:text-4xl lg:text-[2.85rem]">
+                                Practical tools for
+                                <br />
+                                every partner{" "}
                                 <span className="text-[#1864E8]">
-                                    every partner location.
+                                    location.
                                 </span>
                             </h2>
-                            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-                                Whether you operate a single workshop or a
-                                nationwide network of service stations, RAVU
+
+                            <p className="mt-4 max-w-lg text-base leading-relaxed text-slate-600 sm:text-[17px]">
+                                Whether you operate a single repair workshop or
+                                a nationwide network of service stations, RAVU
                                 makes it effortless to recognise members and
                                 deliver benefits at the point of service.
                             </p>
@@ -189,7 +295,7 @@ export default function Partners() {
                                 ].map((point) => (
                                     <li
                                         key={point}
-                                        className="flex items-start gap-3 text-sm text-slate-700"
+                                        className="flex items-start gap-3 text-sm font-medium text-slate-700"
                                     >
                                         <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
                                             <Check size={12} strokeWidth={3} />
@@ -203,18 +309,36 @@ export default function Partners() {
                                 <Link
                                     href="/login"
                                     prefetch
-                                    className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-xs font-bold text-white shadow-xs transition-all hover:bg-slate-800 sm:text-sm"
+                                    className="inline-flex items-center gap-2.5 rounded-xl bg-[#0B3B8C] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#00289a] active:scale-[0.98]"
                                 >
                                     <span>Open Partner Portal</span>
-                                    <ArrowRight size={15} />
+                                    <ArrowRight size={16} />
                                 </Link>
                                 <Link
                                     href="/support"
                                     prefetch
-                                    className="inline-flex items-center rounded-full border border-slate-200 bg-white px-6 py-3 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:text-slate-950 sm:text-sm"
+                                    className="inline-flex items-center rounded-xl border border-slate-300 bg-white/95 px-6 py-3.5 text-sm font-bold text-slate-900 shadow-2xs transition-colors hover:border-slate-400 hover:bg-slate-50"
                                 >
                                     Contact Partnership Team
                                 </Link>
+                            </div>
+                        </div>
+
+                        {/* Mobile / Tablet Image Presentation */}
+                        <div className="relative mt-10 overflow-hidden rounded-2xl border border-slate-100 shadow-lg lg:hidden">
+                            <img
+                                src={workshopImg}
+                                alt="RAVU Workshop & Service mechanics repairing a member motorcycle"
+                                loading="lazy"
+                                decoding="async"
+                                className="h-auto w-full object-cover"
+                            />
+                            <div
+                                aria-hidden="true"
+                                className="pointer-events-none absolute bottom-0 right-0 h-20 w-20 overflow-hidden"
+                            >
+                                <div className="absolute -bottom-10 -right-10 h-20 w-32 -rotate-45 bg-[#1864E8]" />
+                                <div className="absolute -bottom-12 -right-8 h-16 w-32 -rotate-45 bg-[#0B3B8C]" />
                             </div>
                         </div>
                     </div>
@@ -238,7 +362,7 @@ export default function Partners() {
                             </span>
                         </h2>
                         <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-                            A simple, practical process — no unnecessary
+                            A simple, practical process  no unnecessary
                             complexity.
                         </p>
                     </div>
