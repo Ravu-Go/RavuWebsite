@@ -16,51 +16,34 @@ import { useEffect, useRef, useState } from "react";
 export function Reveal({ children, delay = 0, className = "", as = "div" }) {
     const reduceMotion = useReducedMotion();
     const ref = useRef(null);
-    // Default to visible. The observer can only ever ADD the animation;
-    // it can never leave content stranded at opacity 0.
-    const [visible, setVisible] = useState(true);
-    const Tag = motion[as] || motion.div;
+    const Tag = as;
 
     useEffect(() => {
-        if (reduceMotion || typeof IntersectionObserver === "undefined") {
+        const node = ref.current;
+        if (!node || reduceMotion || typeof IntersectionObserver === "undefined") {
+            if (node) node.setAttribute("data-visible", "true");
             return;
         }
 
-        const node = ref.current;
-        if (!node) return;
-
-        // Only elements genuinely below the fold are staged for animation.
-        const rect = node.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.9) return;
-
-        setVisible(false);
-
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) {
-                    setVisible(true);
+                if (entry && entry.isIntersecting) {
+                    node.setAttribute("data-visible", "true");
                     observer.disconnect();
                 }
             },
-            { threshold: 0.01, rootMargin: "0px 0px -32px 0px" },
+            { threshold: 0.05, rootMargin: "0px 0px 40px 0px" },
         );
         observer.observe(node);
 
-        // Safety net: reveal unconditionally if the observer stays silent.
-        const fallback = window.setTimeout(() => setVisible(true), 1200);
-
-        return () => {
-            observer.disconnect();
-            window.clearTimeout(fallback);
-        };
+        return () => observer.disconnect();
     }, [reduceMotion]);
 
     return (
         <Tag
             ref={ref}
             className={`ravu-scroll-reveal ${className}`}
-            data-visible={visible ? "true" : "false"}
-            style={{ transitionDelay: reduceMotion ? "0ms" : `${delay}s` }}
+            style={{ animationDelay: reduceMotion ? "0ms" : `${delay}s` }}
         >
             {children}
         </Tag>
@@ -124,7 +107,7 @@ export function Button({
             );
         }
         return (
-            <Link href={href} className={classes} {...props}>
+            <Link href={href} prefetch className={classes} {...props}>
                 {content}
             </Link>
         );
@@ -230,11 +213,13 @@ export function GridBackdrop() {
             glow.dataset.active = energy > EPSILON ? "true" : "false";
         };
 
+        let cachedRect = null;
+        const updateRect = () => {
+            if (glow) cachedRect = glow.getBoundingClientRect();
+        };
+
         const onMove = (event) => {
-            // Measure the glow layer itself. It spans the hero exactly (it is
-            // an absolute inset-0 child of the same positioned parent), so its
-            // rect IS the hero rect — no separate wrapper element needed.
-            const rect = glow.getBoundingClientRect();
+            const rect = cachedRect || glow.getBoundingClientRect();
             if (!rect.width || !rect.height) return;
 
             const now = event.timeStamp || performance.now();
@@ -428,9 +413,14 @@ function useCursorWave(ref, prefix = "grid", tuning = {}) {
             }
         };
 
+        let cachedRect = null;
+        const updateRect = () => {
+            if (el) cachedRect = el.getBoundingClientRect();
+        };
+
         const onMove = (event) => {
             // Measure the layer itself; positioned to span its parent exactly.
-            const rect = el.getBoundingClientRect();
+            const rect = cachedRect || el.getBoundingClientRect();
             if (!rect.width || !rect.height) return;
 
             const now = event.timeStamp || performance.now();
@@ -465,6 +455,7 @@ function useCursorWave(ref, prefix = "grid", tuning = {}) {
         };
 
         const onEnter = (event) => {
+            updateRect();
             // Re-entering must not read as a huge jump from the last point.
             lastX = event.clientX;
             lastY = event.clientY;
@@ -472,6 +463,7 @@ function useCursorWave(ref, prefix = "grid", tuning = {}) {
         };
 
         const onLeave = () => {
+            cachedRect = null;
             lastX = null;
             lastY = null;
             // Let the crest sink naturally instead of snapping off.
@@ -481,6 +473,8 @@ function useCursorWave(ref, prefix = "grid", tuning = {}) {
         document.addEventListener("pointermove", onMove, { passive: true });
         document.addEventListener("pointerenter", onEnter, { passive: true });
         document.addEventListener("pointerleave", onLeave, { passive: true });
+        window.addEventListener("scroll", updateRect, { passive: true });
+        window.addEventListener("resize", updateRect);
         window.addEventListener("blur", onLeave);
 
         return () => {
@@ -488,6 +482,8 @@ function useCursorWave(ref, prefix = "grid", tuning = {}) {
             document.removeEventListener("pointermove", onMove);
             document.removeEventListener("pointerenter", onEnter);
             document.removeEventListener("pointerleave", onLeave);
+            window.removeEventListener("scroll", updateRect);
+            window.removeEventListener("resize", updateRect);
             window.removeEventListener("blur", onLeave);
         };
     }, [ref, prefix, reduceMotion, crestMin, crestMax, speedForMax, decay, epsilon]);

@@ -150,8 +150,7 @@
     .ravu-pattern-glow-light {
         --stripe-w: 1px;
         --stripe-gap: 18px;
-        /* Shared origin so every band's stripes are in phase with every other. */
-        background-attachment: fixed;
+        will-change: opacity;
     }
 
     .ravu-pattern {

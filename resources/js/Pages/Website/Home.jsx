@@ -130,6 +130,8 @@ export default function Home() {
                     <img
                         src={headerImg}
                         alt="Ravu Ride-Sharing App Journey"
+                        fetchPriority="high"
+                        decoding="async"
                         className="h-auto w-full object-contain select-none"
                     />
                 </div>
@@ -197,6 +199,8 @@ export default function Home() {
                                 <img
                                     src={mapImg}
                                     alt="Ravu mobile app interface showing map and destination search"
+                                    loading="lazy"
+                                    decoding="async"
                                     className="h-auto w-full select-none drop-shadow-xl"
                                 />
                             </div>

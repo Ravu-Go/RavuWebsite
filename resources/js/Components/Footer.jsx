@@ -35,12 +35,15 @@ export default function Footer() {
                     <div className="lg:col-span-5">
                         <Link
                             href="/"
+                            prefetch
                             aria-label="RAVU home"
                             className="inline-flex items-center gap-2.5"
                         >
                             <img
                                 src={logoImg}
                                 alt="RAVU"
+                                loading="lazy"
+                                decoding="async"
                                 className="h-8 w-8 rounded-full object-cover"
                             />
                             <span className="text-xl font-bold tracking-tight text-white">
@@ -121,6 +124,7 @@ export default function Footer() {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
+                                        prefetch
                                         className="transition-colors hover:text-white"
                                     >
                                         {link.label}
@@ -140,6 +144,7 @@ export default function Footer() {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
+                                        prefetch
                                         className="transition-colors hover:text-white"
                                     >
                                         {link.label}
@@ -159,6 +164,7 @@ export default function Footer() {
                                 <li key={link.label}>
                                     <Link
                                         href={link.href}
+                                        prefetch
                                         className="transition-colors hover:text-white"
                                     >
                                         {link.label}

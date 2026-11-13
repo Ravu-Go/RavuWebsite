@@ -1,7 +1,5 @@
 import Navigation from "./Navigation";
 import Footer from "./Footer";
-import { usePage } from "@inertiajs/react";
-import { motion, useReducedMotion } from "framer-motion";
 
 /**
  * The single RAVU page shell. Every website page renders inside this so the
@@ -13,9 +11,6 @@ export default function WebsiteLayout({
     onDarkNav = false,
     hideFooter = false,
 }) {
-    const { key } = usePage();
-    const reduceMotion = useReducedMotion();
-
     return (
         <div className="flex min-h-screen flex-col bg-white text-ink-700">
             <a
@@ -26,16 +21,7 @@ export default function WebsiteLayout({
             </a>
             <Navigation transparent={transparentNav} onDark={onDarkNav} />
             <main id="main-content" className="flex-1 flex flex-col">
-                <motion.div
-                    initial={reduceMotion ? undefined : { opacity: 0, y: 20 }}
-                    animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                    exit={reduceMotion ? undefined : { opacity: 1, y: -20 }}
-                    transition={{ duration: reduceMotion ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
-                    key={key}
-                    className="flex-1 flex flex-col"
-                >
-                    {children}
-                </motion.div>
+                {children}
             </main>
             {!hideFooter && <Footer />}
         </div>
