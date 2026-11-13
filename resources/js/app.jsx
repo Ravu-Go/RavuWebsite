@@ -9,7 +9,7 @@ import { Toaster } from 'react-hot-toast';
 const pages = import.meta.glob('./Pages/**/*.jsx');
 
 createInertiaApp({
-  title: (title) => `${title} — RAVU`,
+  title: (title) => `${title} ravu`,
   resolve: (name) => {
     const lazyPage = pages[`./Pages/${name}.jsx`];
     if (!lazyPage) {

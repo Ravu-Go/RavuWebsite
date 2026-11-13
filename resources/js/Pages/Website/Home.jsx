@@ -1,7 +1,7 @@
 import { ShieldCheck, Users, Zap } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
-import headerImg from "../../../imgs/Header.jpg";
+import headerVideo from "../../../imgs/Header.mp4";
 import mapImg from "../../../imgs/map.png";
 
 /**
@@ -125,13 +125,15 @@ export default function Home() {
                     </div>
                 </div>
 
-                {/* Edge-to-Edge Full-Width Header Image */}
+                {/* Edge-to-Edge Full-Width Header Video */}
                 <div className="relative mt-10 w-full sm:mt-14">
-                    <img
-                        src={headerImg}
-                        alt="Ravu Ride-Sharing App Journey"
-                        fetchPriority="high"
-                        decoding="async"
+                    <video
+                        src={headerVideo}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="auto"
                         className="h-auto w-full object-contain select-none"
                     />
                 </div>

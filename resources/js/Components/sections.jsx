@@ -1,29 +1,89 @@
 import { Link } from "@inertiajs/react";
-import { Minus, Plus, Smartphone } from "lucide-react";
+import { ArrowRight, Check, Minus, Plus, Smartphone } from "lucide-react";
 import { useState } from "react";
-import {
-    Button,
-    ButtonRow,
-    Card,
-    Container,
-    Eyebrow,
-    GridBackdrop,
-    PatternBackdrop,
-    Reveal,
-} from "./ui";
+import mapImg from "../../imgs/map.png";
 
 /* ==========================================================================
-   RAVU SHARED PAGE SECTIONS
-   Composed from the ui kit so every page keeps the same rhythm.
+   RAVU SHARED PAGE SECTIONS (Aligned with Home.jsx design language)
    ========================================================================== */
 
 /**
- * Page hero. `layout="split"` places supporting art beside the copy;
- * `layout="stacked"` is the quiet corporate variant used by text pages.
+ * Reusable official store buttons for App Store & Google Play (matching Home.jsx)
+ */
+export function StoreButtons({ className = "" }) {
+    return (
+        <div className={`flex flex-wrap items-center gap-3 ${className}`}>
+            {/* Apple App Store */}
+            <a
+                href="#app-store"
+                className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+                <svg
+                    viewBox="0 0 384 512"
+                    className="h-5 w-5 shrink-0 fill-current"
+                    aria-hidden="true"
+                >
+                    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 62.3 26 139.7c15.6 44.5 44 95.3 84.7 95.7 32 .3 42.4-21.7 82.2-21.7 39.4 0 50.8 21.7 84 21.7 41.5-.4 68.9-46.7 84.2-91.2 17.6-51.1 24.8-100.8 25.1-103.3-1.2-.6-70.3-26.9-71.5-45.7zm-61.9-158.4c17.5-21.6 29.5-51.5 26.2-81.9-25.3 1.1-56.5 17.2-74.6 38.6-16 18.8-30.2 49-26.4 78.4 28.3 2.2 57.3-13.5 74.8-35.1z" />
+                </svg>
+                <div className="text-left leading-none">
+                    <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
+                        Download on the
+                    </p>
+                    <p className="mt-0.5 text-xs font-semibold tracking-tight text-white">
+                        App Store
+                    </p>
+                </div>
+            </a>
+
+            {/* Google Play Store */}
+            <a
+                href="#google-play"
+                className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+                <svg
+                    viewBox="0 0 512 512"
+                    className="h-5 w-5 shrink-0"
+                    aria-hidden="true"
+                >
+                    <path
+                        fill="#00E676"
+                        d="M32.8 19.3L275.6 262.1 213.9 323.8 16.5 37.8c-1.3 2.1-2 4.6-2 7.2v422c0 2.6.7 5.1 2 7.2L32.8 19.3z"
+                    />
+                    <path
+                        fill="#FFD54F"
+                        d="M352.3 338.8l-76.7-76.7L32.8 19.3C35.9 14.7 41.2 12 47 12c3.4 0 6.7.9 9.6 2.6l328.6 189.7-32.9 134.5z"
+                    />
+                    <path
+                        fill="#FF3D00"
+                        d="M56.6 497.4C53.7 499.1 50.4 500 47 500c-5.8 0-11.1-2.7-14.2-7.3l242.8-242.8 76.7 76.7L56.6 497.4z"
+                    />
+                    <path
+                        fill="#00B0FF"
+                        d="M495.6 238.2L385.2 174.5l-32.9 32.9 32.9 134.5 32.9-19 77.5-44.7c10.3-6 16.6-17.1 16.6-29 0-11.9-6.3-23-16.6-29z"
+                    />
+                </svg>
+                <div className="text-left leading-none">
+                    <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
+                        GET IT ON
+                    </p>
+                    <p className="mt-0.5 text-xs font-semibold tracking-tight text-white">
+                        Google Play
+                    </p>
+                </div>
+            </a>
+        </div>
+    );
+}
+
+/**
+ * Page hero matching Home.jsx typography, whitespace, and clean white canvas.
+ * `layout="split"` places supporting art beside the copy;
+ * `layout="stacked"` is the centered editorial variant.
  */
 export function Hero({
     eyebrow,
     title,
+    highlight,
     text,
     primary,
     secondary,
@@ -35,59 +95,75 @@ export function Hero({
     const isSplit = layout === "split" && media;
 
     return (
-        <section className="relative overflow-hidden border-b border-ink-200 bg-white">
-            <GridBackdrop />
-
-            <Container className="relative py-14 sm:py-16 lg:py-20">
+        <section className="relative overflow-hidden bg-white pt-12 pb-12 sm:pt-16 sm:pb-16 lg:pt-20 lg:pb-20">
+            <div className="mx-auto max-w-6xl px-5 sm:px-8">
                 <div
                     className={
                         isSplit
-                            ? "grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14"
-                            : ""
+                            ? "grid items-center gap-10 lg:grid-cols-12 lg:gap-16"
+                            : "mx-auto max-w-3xl text-center"
                     }
                 >
-                    <div className={`ravu-reveal ${isSplit ? "" : "max-w-3xl"}`}>
-                        {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-                        <h1 className="mt-4 text-[2.1rem] font-black leading-[1.04] tracking-tight sm:text-5xl lg:text-[3.25rem]">
-                            {title}
+                    <div className={isSplit ? "lg:col-span-6" : ""}>
+                        {eyebrow && (
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                                {eyebrow}
+                            </p>
+                        )}
+                        <h1 className="mt-4 text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-[3.35rem]">
+                            {title}{" "}
+                            {highlight && (
+                                <span className="text-[#1864E8]">
+                                    {highlight}
+                                </span>
+                            )}
                         </h1>
                         {text && (
-                            <p className="mt-5 max-w-xl text-base leading-7 text-ink-600 sm:text-lg sm:leading-8">
+                            <p
+                                className={`mt-5 text-base leading-relaxed text-slate-600 sm:text-lg ${
+                                    isSplit ? "max-w-xl" : "mx-auto max-w-xl"
+                                }`}
+                            >
                                 {text}
                             </p>
                         )}
                         {(primary || secondary) && (
-                            <ButtonRow className="mt-8">
+                            <div
+                                className={`mt-8 flex flex-wrap items-center gap-3.5 ${
+                                    isSplit ? "" : "justify-center"
+                                }`}
+                            >
                                 {primary && (
-                                    <Button
+                                    <Link
                                         href={primary.href}
-                                        size="lg"
-                                        variant="primary"
+                                        prefetch
+                                        className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-xs font-bold text-white shadow-xs transition-all hover:bg-slate-800 active:scale-[0.98] sm:text-sm"
                                     >
-                                        {primary.label}
-                                    </Button>
+                                        <span>{primary.label}</span>
+                                        <ArrowRight size={15} />
+                                    </Link>
                                 )}
                                 {secondary && (
-                                    <Button
+                                    <Link
                                         href={secondary.href}
-                                        size="lg"
-                                        variant="outline"
+                                        prefetch
+                                        className="inline-flex items-center rounded-full border border-slate-200 bg-white px-6 py-3 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:text-slate-950 sm:text-sm"
                                     >
                                         {secondary.label}
-                                    </Button>
+                                    </Link>
                                 )}
-                            </ButtonRow>
+                            </div>
                         )}
                         {children}
                     </div>
 
                     {isSplit && (
-                        <div className="ravu-reveal ravu-reveal-delay-2 relative">
-                            <div className="overflow-hidden rounded-xl border-ink-200 bg-ink-50">
+                        <div className="lg:col-span-6">
+                            <div className="overflow-hidden rounded-3xl border border-slate-100 bg-slate-50 shadow-xl shadow-slate-900/5">
                                 <img
                                     src={media}
                                     alt={mediaAlt || ""}
-                                    loading="lazy"
+                                    fetchPriority="high"
                                     decoding="async"
                                     className="aspect-[4/3] w-full object-cover"
                                 />
@@ -95,55 +171,44 @@ export function Hero({
                         </div>
                     )}
                 </div>
-            </Container>
+            </div>
         </section>
     );
 }
 
-/** Dark closing call-to-action band. */
-export function CTASection({ eyebrow, title, text, primary, secondary }) {
+/**
+ * 3-Item Horizontal Feature Strip matching the Home.jsx 3-column divided bar.
+ */
+export function FeatureStrip({ items = [] }) {
     return (
-        <section className="relative overflow-hidden bg-ink-950 py-16 sm:py-20">
-            <PatternBackdrop tone="dark" />
-            <div
-                aria-hidden="true"
-                className="pointer-events-none absolute -right-24 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-ravu-600/20 blur-3xl"
-            />
-            <Container className="relative">
-                <Reveal className="max-w-2xl">
-                    {eyebrow && <Eyebrow tone="light">{eyebrow}</Eyebrow>}
-                    <h2 className="mt-4 text-3xl font-black leading-[1.08] tracking-tight text-white sm:text-[2.5rem]">
-                        {title}
-                    </h2>
-                    {text && (
-                        <p className="mt-5 max-w-xl text-base leading-7 text-ink-300 sm:text-lg">
-                            {text}
-                        </p>
-                    )}
-                    {(primary || secondary) && (
-                        <ButtonRow className="mt-8">
-                            {primary && (
-                                <Button
-                                    href={primary.href}
-                                    size="lg"
-                                    variant="primary"
-                                >
-                                    {primary.label}
-                                </Button>
-                            )}
-                            {secondary && (
-                                <Button
-                                    href={secondary.href}
-                                    size="lg"
-                                    variant="onDarkOutline"
-                                >
-                                    {secondary.label}
-                                </Button>
-                            )}
-                        </ButtonRow>
-                    )}
-                </Reveal>
-            </Container>
+        <section className="border-t border-b border-slate-100 bg-white py-10 sm:py-14">
+            <div className="mx-auto max-w-6xl px-5 sm:px-8">
+                <div className="grid grid-cols-1 divide-y divide-slate-100 sm:grid-cols-3 sm:divide-y-0 sm:divide-x sm:divide-slate-200/80">
+                    {items.map((item) => {
+                        const Icon = item.icon;
+                        return (
+                            <div
+                                key={item.title}
+                                className="flex items-center gap-4 py-4 first:pt-0 last:pb-0 sm:px-6 sm:py-0 sm:first:pl-0 sm:last:pr-0"
+                            >
+                                {Icon && (
+                                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
+                                        <Icon size={20} />
+                                    </div>
+                                )}
+                                <div>
+                                    <h3 className="text-sm font-bold text-slate-900">
+                                        {item.title}
+                                    </h3>
+                                    <p className="mt-0.5 max-w-[230px] text-xs leading-relaxed text-slate-500">
+                                        {item.text}
+                                    </p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
         </section>
     );
 }
@@ -151,192 +216,135 @@ export function CTASection({ eyebrow, title, text, primary, secondary }) {
 const ECOSYSTEM = [
     {
         title: "Members",
-        text: "People who join RAVU and participate in the ecosystem.",
+        text: "People who join RAVU and participate in the connected mobility community.",
     },
     {
         title: "Riders & Drivers",
-        text: "The mobility community whose work keeps places connected.",
+        text: "The boda boda and transport operators whose work keeps cities and towns moving.",
     },
     {
         title: "Businesses",
-        text: "Hotels, restaurants and organisations that serve and reach members.",
+        text: "Everyday merchants, fuel stations, and organisations serving active members.",
     },
     {
         title: "Partners",
-        text: "Insurers, banks, workshops, spare parts and technology partners.",
+        text: "Insurers, financial institutions, workshops, spare parts, and technology providers.",
     },
     {
         title: "Services",
-        text: "Support, protection and practical services around mobility.",
+        text: "Practical support, protection, and savings tailored around daily mobility.",
     },
     {
         title: "Community",
-        text: "A connected network that grows stronger as it grows wider.",
+        text: "A connected network across Tanzania that grows stronger with every participant.",
     },
 ];
 
 /**
- * Visual explanation of how RAVU connects people, businesses and services.
- * Deliberately reads as a human/business relationship map, not a system diagram.
+ * Clean Ecosystem overview section matching the Home.jsx slate + cobalt aesthetic.
  */
-export function EcosystemSection({ tone = "muted" }) {
-    const isDark = tone === "dark";
-
+export function EcosystemSection() {
     return (
-        <section
-            className={`relative overflow-hidden py-16 sm:py-20 lg:py-24 ${isDark ? "bg-ravu-950 text-ravu-100" : "bg-ink-50"
-                }`}
-        >
-            <PatternBackdrop tone={isDark ? "dark" : "light"} />
-            <Container className="relative">
-                <Reveal className="max-w-2xl">
-                    <Eyebrow tone={isDark ? "light" : "dark"}>
-                        The RAVU ecosystem
-                    </Eyebrow>
-                    <h2
-                        className={`mt-4 text-3xl font-black leading-[1.08] tracking-tight sm:text-[2.4rem] ${isDark ? "text-white" : "text-ink-950"
-                            }`}
-                    >
-                        RAVU sits at the centre and connects everyone around it.
-                    </h2>
-                    <p
-                        className={`mt-4 text-base leading-7 sm:text-lg ${isDark ? "text-ink-300" : "text-ink-600"
-                            }`}
-                    >
-                        The ecosystem works because each part strengthens the
-                        others people, businesses, services and opportunity,
-                        connected around mobility.
+        <section className="border-t border-slate-100 bg-slate-50/60 py-16 sm:py-24">
+            <div className="mx-auto max-w-6xl px-5 sm:px-8">
+                <div className="mx-auto max-w-2xl text-center">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                        THE RAVU ECOSYSTEM
                     </p>
-                </Reveal>
+                    <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
+                        Connecting everyone{" "}
+                        <span className="text-[#1864E8]">around mobility.</span>
+                    </h2>
+                    <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+                        The ecosystem works because each part strengthens the
+                        others — people, businesses, services and opportunity,
+                        connected in one network.
+                    </p>
+                </div>
 
-                <div className="relative mt-12">
-                    {/* Connector spine — a subtle brand line, not a diagram. */}
-                    <div
-                        aria-hidden="true"
-                        className={`absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 lg:block ${isDark ? "bg-white/10" : "bg-ink-200"
-                            }`}
-                    />
-
-                    <Reveal className="relative mx-auto max-w-md">
-                        <div className="rounded-xl border-ravu-500/40 bg-ink-950 px-6 py-5 text-center shadow-sm">
-                            <p className="text-xs font-bold uppercase tracking-[0.2em] text-ravu-400">
-                                RAVU
-                            </p>
-                            <p className="mt-1.5 text-sm text-ink-300">
-                                Membership &amp; ecosystem
+                <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                    {ECOSYSTEM.map((node, index) => (
+                        <div
+                            key={node.title}
+                            className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs transition-all hover:border-slate-300 hover:shadow-md"
+                        >
+                            <div className="flex items-center justify-between">
+                                <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#EBF3FE] text-xs font-black text-[#1864E8]">
+                                    0{index + 1}
+                                </span>
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#1864E8]/40" />
+                            </div>
+                            <h3 className="mt-4 text-base font-bold text-slate-950">
+                                {node.title}
+                            </h3>
+                            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                                {node.text}
                             </p>
                         </div>
-                    </Reveal>
-
-                    <div
-                        aria-hidden="true"
-                        className={`mx-auto mt-4 h-8 w-px ${isDark ? "bg-white/15" : "bg-ink-200"
-                            }`}
-                    />
-
-                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                        {ECOSYSTEM.map((node, index) => (
-                            <Reveal key={node.title} delay={index * 0.05}>
-                                <Card title={node.title} tone={isDark ? "dark" : "light"}>
-                                    {node.text}
-                                </Card>
-                            </Reveal>
-                        ))}
-                    </div>
+                    ))}
                 </div>
-            </Container>
+            </div>
         </section>
     );
 }
 
 /**
- * Rider/driver app pathway. The website's job is to hand riders to the app —
- * not to reproduce the operational experience here.
+ * Rider/driver app showcase matching the Home.jsx Map Phone showcase.
  */
 export function AppPromo() {
     return (
-        <section className="relative overflow-hidden border-y border-ink-200 bg-white py-16 sm:py-20 lg:py-24">
-            <div
-                aria-hidden="true"
-                className="ravu-mesh pointer-events-none absolute inset-0"
-            />
-            <Container className="relative">
-                <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-                    <Reveal>
-                        <Eyebrow>For riders &amp; drivers</Eyebrow>
-                        <h2 className="mt-4 text-3xl font-black leading-[1.08] tracking-tight sm:text-[2.4rem]">
-                            Are you a rider or driver?
-                        </h2>
-                        <p className="mt-5 max-w-xl text-base leading-7 text-ink-600 sm:text-lg">
-                            The RAVU app is where the operational experience
-                            lives — membership access, services, benefits and
-                            the day-to-day tools built around your journey.
-                        </p>
-                        <p className="mt-4 max-w-xl text-base leading-7 text-ink-600">
-                            This website is the front door to RAVU. The app is
-                            where you use it.
-                        </p>
-                        <ButtonRow className="mt-8">
-                            <Button href="/for-riders" size="lg">
-                                Get the RAVU App
-                            </Button>
-                            <Button
-                                href="/membership"
-                                size="lg"
-                                variant="outline"
-                            >
-                                Learn About Membership
-                            </Button>
-                        </ButtonRow>
-                        <p className="mt-5 text-xs leading-5 text-ink-500">
-                            App download links will be published here once the
-                            RAVU mobile app is available.
-                        </p>
-                    </Reveal>
-
-                    <Reveal delay={0.1} className="relative">
-                        <div className="relative mx-auto w-full max-w-sm">
-                            <div
-                                aria-hidden="true"
-                                className="absolute inset-6 rounded-[2rem] bg-ravu-500/15 blur-2xl"
+        <section
+            id="app"
+            className="overflow-hidden border-t border-slate-100 bg-white py-16 sm:py-24"
+        >
+            <div className="mx-auto max-w-6xl px-5 sm:px-8">
+                <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+                    <div className="flex justify-center lg:col-span-6">
+                        <div className="relative w-full max-w-xs sm:max-w-sm">
+                            <img
+                                src={mapImg}
+                                alt="RAVU mobile app interface"
+                                loading="lazy"
+                                decoding="async"
+                                className="h-auto w-full select-none drop-shadow-xl"
                             />
-                            <div className="relative rounded-[1.75rem] border-ink-200 bg-white p-2.5 shadow-sm">
-                                <div className="relative overflow-hidden rounded-[1.4rem] bg-ink-950 px-6 py-10 text-center">
-                                    <PatternBackdrop tone="dark" />
-                                    <div className="relative">
-                                        <span className="mx-auto grid h-14 w-14 place-items-center rounded-xl bg-ravu-500 text-ink-950">
-                                            <Smartphone
-                                                size={26}
-                                                aria-hidden="true"
-                                            />
-                                        </span>
-                                        <p className="mt-5 text-lg font-black text-white">
-                                            RAVU App
-                                        </p>
-                                        <p className="mt-1.5 text-sm text-ink-400">
-                                            Membership access and daily tools
-                                        </p>
-                                        <span className="mt-6 inline-flex rounded-lg border-white/20 px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-ink-300">
-                                            Coming soon
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                    </Reveal>
+                    </div>
+
+                    <div className="lg:col-span-6">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                            THE RAVU MOBILE APP
+                        </p>
+                        <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:text-5xl lg:leading-[1.1]">
+                            Built for your
+                            <br />
+                            <span className="text-[#1864E8]">
+                                everyday journey.
+                            </span>
+                        </h2>
+                        <p className="mt-5 max-w-md text-sm leading-relaxed text-slate-600 sm:text-base">
+                            Riders and drivers join and use RAVU directly
+                            through the mobile app — registration, digital
+                            member ID, partner discounts, and daily tools in one
+                            place.
+                        </p>
+                        <div className="mt-8">
+                            <StoreButtons />
+                        </div>
+                    </div>
                 </div>
-            </Container>
+            </div>
         </section>
     );
 }
 
-/** Accessible FAQ accordion using native disclosure semantics. */
+/** Accessible FAQ accordion styled in the clean slate + #1864E8 palette. */
 export function FAQAccordion({ items, className = "" }) {
     const [open, setOpen] = useState(0);
 
     return (
         <div
-            className={`divide-y divide-ink-200 overflow-hidden rounded-xl border-ink-200 bg-white ${className}`}
+            className={`divide-y divide-slate-200/80 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-2xs ${className}`}
         >
             {items.map((item, index) => {
                 const isOpen = open === index;
@@ -349,11 +357,15 @@ export function FAQAccordion({ items, className = "" }) {
                                 aria-expanded={isOpen}
                                 aria-controls={`faq-panel-${index}`}
                                 id={`faq-trigger-${index}`}
-                                className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left text-[15px] font-bold text-ink-950 transition-colors hover:bg-ink-50 sm:px-6"
+                                className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left text-[15px] font-bold text-slate-950 transition-colors hover:bg-slate-50/80 sm:px-6"
                             >
                                 <span>{item.question}</span>
                                 <span
-                                    className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-ink-100 text-ink-700"
+                                    className={`grid h-8 w-8 shrink-0 place-items-center rounded-full transition-colors ${
+                                        isOpen
+                                            ? "bg-[#1864E8] text-white"
+                                            : "bg-[#EBF3FE] text-[#1864E8]"
+                                    }`}
                                     aria-hidden="true"
                                 >
                                     {isOpen ? (
@@ -371,7 +383,7 @@ export function FAQAccordion({ items, className = "" }) {
                             hidden={!isOpen}
                             className="px-5 pb-5 sm:px-6"
                         >
-                            <p className="max-w-2xl text-sm leading-6 text-ink-600">
+                            <p className="max-w-2xl text-sm leading-relaxed text-slate-600">
                                 {item.answer}
                             </p>
                         </div>
@@ -387,7 +399,8 @@ export function InlineLink({ href, children }) {
     return (
         <Link
             href={href}
-            className="inline-flex items-center gap-1.5 text-sm font-bold text-ravu-700 transition-colors hover:text-ravu-800"
+            prefetch
+            className="inline-flex items-center gap-1.5 text-sm font-bold text-[#1864E8] transition-colors hover:text-[#00289a]"
         >
             {children}
         </Link>

@@ -1,126 +1,137 @@
-import { MessageSquare } from "lucide-react";
+import { Link } from "@inertiajs/react";
+import {
+    ArrowRight,
+    Building2,
+    HelpCircle,
+    MessageSquare,
+    ShieldCheck,
+    Smartphone,
+} from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
-import { FAQAccordion, Hero } from "../../Components/sections";
 import {
-    Button,
-    Container,
-    Eyebrow,
-    Reveal,
-    SectionTitle,
-} from "../../Components/ui";
+    FAQAccordion,
+    FeatureStrip,
+    Hero,
+} from "../../Components/sections";
 import supportImage from "../../../imgs/support.jpg";
+
+const SUPPORT_CHANNELS = [
+    {
+        icon: Smartphone,
+        title: "Riders & Drivers",
+        text: "In-app guidance for registration, Member ID and daily operations.",
+    },
+    {
+        icon: Building2,
+        title: "Partner Support",
+        text: "Dedicated onboarding and Partner Portal assistance for businesses.",
+    },
+    {
+        icon: ShieldCheck,
+        title: "Account & Verification",
+        text: "Help with membership status, profile updates and security.",
+    },
+];
 
 const FAQ = [
     {
         question: "What is RAVU?",
-        answer: "RAVU is a membership-based mobility ecosystem connecting people, services and opportunity. It is built around the communities who keep movement happening, and grows outward to include the businesses, services and technology that support them.",
+        answer: "RAVU is a membership-based mobility ecosystem connecting people, services and opportunity across Tanzania. It is built around the communities who keep movement happening, and grows outward to include the businesses, workshops and technology that support them.",
     },
     {
         question: "Who can become a member?",
-        answer: "RAVU begins with boda boda riders and motorcycle owners, and is designed to grow with mobility communities more broadly. Membership processes are still being developed, and RAVU will communicate clearly as each stage becomes available.",
+        answer: "RAVU begins with boda boda riders, drivers and motorcycle owners, and is designed to grow with mobility communities more broadly. Riders and drivers join and access their digital Member ID directly through the RAVU mobile app.",
     },
     {
         question: "How do I register?",
-        answer: "Use the registration page to share your interest. This does not yet create a full operational membership — it records your interest so RAVU can keep you informed as the membership journey becomes available. Riders and drivers will join and use RAVU primarily through the mobile app.",
+        answer: "Use the registration page to share your interest or download the RAVU mobile app. Registering online records your interest so RAVU can keep you informed as new membership benefits and partner locations launch in your region.",
     },
     {
-        question: "How can an organisation partner?",
-        answer: "Visit the Partners page to see the partnership opportunities, then start a conversation through this Support area. RAVU is looking for organisations that can add genuine value to members.",
+        question: "How can an organisation partner with RAVU?",
+        answer: "Visit the Partners page to explore partnership categories, or register your organisation's interest. Existing partners can sign in directly to the Partner Portal to verify member IDs and manage offers.",
     },
     {
-        question: "Need more help?",
-        answer: "RAVU's approved support contact channel is being finalised. Once it is available it will be published here, so you always reach the right team.",
+        question: "How do I access the Partner Portal?",
+        answer: "Click 'Sign in' in the top navigation bar and sign in with your partner credentials or authorised Google account to be routed automatically to your Partner Dashboard.",
     },
 ];
 
 export default function Support() {
     return (
         <WebsiteLayout>
+            {/* ---------------------------------------------------------- HERO */}
             <Hero
-                eyebrow="Support"
-                title="We're here to help you understand RAVU."
-                text="Find straightforward answers about membership, riders, benefits and partnership."
+                eyebrow="HELP & SUPPORT"
+                title="We're here to help you"
+                highlight="move forward."
+                text="Find straightforward answers about RAVU membership, the mobile app, member benefits and business partnerships."
                 primary={{ label: "Register Interest", href: "/register" }}
-                secondary={{ label: "Partner With RAVU", href: "/partners" }}
+                secondary={{ label: "Partner Sign In", href: "/login" }}
+                media={supportImage}
+                mediaAlt="A RAVU support specialist ready to help"
+                layout="split"
             />
 
-            <section className="py-16 sm:py-20 lg:py-24">
-                <Container>
-                    <div className="grid items-start gap-12 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16">
-                        <div>
-                            <Reveal>
-                                <SectionTitle
-                                    eyebrow="Frequently asked questions"
-                                    title="Helpful starting points."
-                                />
-                            </Reveal>
-                            <Reveal delay={0.08} className="mt-9">
-                                <FAQAccordion items={FAQ} />
-                            </Reveal>
+            {/* ------------------------------------------- 3 CHANNELS STRIP */}
+            <FeatureStrip items={SUPPORT_CHANNELS} />
 
-                            <Reveal
-                                delay={0.12}
-                                className="mt-8 flex gap-3 rounded-lg border-ink-200 bg-ink-50 p-5"
-                            >
-                                <MessageSquare
-                                    size={18}
-                                    className="mt-0.5 shrink-0 text-ravu-700"
-                                    aria-hidden="true"
-                                />
-                                <p className="text-sm leading-6 text-ink-600">
-                                    Can&rsquo;t find what you need? The RAVU
-                                    team is preparing an official support
-                                    channel, and it will appear here as soon as
-                                    it is confirmed.
+            {/* ---------------------------------------------------- FAQ SECTION */}
+            <section className="bg-white py-16 sm:py-24">
+                <div className="mx-auto max-w-6xl px-5 sm:px-8">
+                    <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
+                        <div className="lg:col-span-5">
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                                FREQUENTLY ASKED QUESTIONS
+                            </p>
+                            <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
+                                Helpful{" "}
+                                <span className="text-[#1864E8]">
+                                    starting points.
+                                </span>
+                            </h2>
+                            <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+                                Everything you need to know about how RAVU
+                                connects riders, members and partner businesses.
+                            </p>
+
+                            <div className="mt-8 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
+                                    <MessageSquare size={18} />
+                                </div>
+                                <h3 className="mt-4 text-base font-bold text-slate-950">
+                                    Need direct assistance?
+                                </h3>
+                                <p className="mt-1.5 text-xs leading-relaxed text-slate-600 sm:text-sm">
+                                    Whether you are registering interest as a
+                                    member or onboarding as a business partner,
+                                    our team is ready to guide you.
                                 </p>
-                            </Reveal>
+                                <div className="mt-5 flex flex-wrap gap-3">
+                                    <Link
+                                        href="/register"
+                                        prefetch
+                                        className="inline-flex items-center gap-1.5 rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-white transition-all hover:bg-slate-800"
+                                    >
+                                        <span>Register Interest</span>
+                                        <ArrowRight size={13} />
+                                    </Link>
+                                    <Link
+                                        href="/partners"
+                                        prefetch
+                                        className="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:text-slate-950"
+                                    >
+                                        Explore Partnerships
+                                    </Link>
+                                </div>
+                            </div>
                         </div>
 
-                        <div className="space-y-6">
-                            <Reveal>
-                                <img
-                                    src={supportImage}
-                                    alt="A RAVU support agent with a headset, ready to help"
-                                    loading="lazy"
-                                    decoding="async"
-                                    className="w-full rounded-xl border-ink-200 object-cover"
-                                />
-                            </Reveal>
-
-                            <Reveal delay={0.08}>
-                                <div className="rounded-xl border-ink-200 bg-ink-50 p-7">
-                                    <span className="grid h-11 w-11 place-items-center rounded-lg bg-white text-ravu-700">
-                                        <MessageSquare
-                                            size={21}
-                                            aria-hidden="true"
-                                        />
-                                    </span>
-                                    <Eyebrow className="mt-5">
-                                        Contact RAVU
-                                    </Eyebrow>
-                                    <p className="mt-3 text-sm leading-6 text-ink-600">
-                                        RAVU&rsquo;s approved support contact
-                                        details have not been published yet.
-                                        This area is ready to connect to the
-                                        official support channel as soon as it
-                                        is confirmed no phone numbers, email
-                                        addresses or messaging links are shown
-                                        here until they are real.
-                                    </p>
-                                    <div className="mt-6">
-                                        <Button
-                                            href="/partners"
-                                            variant="outline"
-                                        >
-                                            Explore Partnership
-                                        </Button>
-                                    </div>
-                                </div>
-                            </Reveal>
+                        <div className="lg:col-span-7">
+                            <FAQAccordion items={FAQ} />
                         </div>
                     </div>
-                </Container>
+                </div>
             </section>
 
             <CommunitySection />
