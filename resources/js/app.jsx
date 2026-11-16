@@ -3,6 +3,10 @@ import '../css/app.css';
 import { createRoot } from 'react-dom/client';
 import { createInertiaApp } from '@inertiajs/react';
 import { Toaster } from 'react-hot-toast';
+import { ensureInitialInertiaPage } from './cloudflare-spa-adapter';
+
+// Ensure initial #app[data-page] is hydrated when running on static Cloudflare Pages
+ensureInitialInertiaPage();
 
 // Lazy-load each page so only the code for the current page is fetched.
 // Inertia shows a spinner instantly and streams the page chunk in.

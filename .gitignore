@@ -14,6 +14,7 @@
 /.zed
 /auth.json
 /node_modules
+/dist
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot
@@ -21,6 +22,9 @@
 /storage/*.key
 /storage/pail
 /vendor
+.dev.vars
+.wrangler/
+workers/node_modules/
 _ide_helper.php
 Homestead.json
 Homestead.yaml
