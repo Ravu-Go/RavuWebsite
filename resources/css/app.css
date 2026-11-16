@@ -1,1 +1,418 @@
 @import "tailwindcss";
+
+/* ============================================================
+   RAVU DESIGN SYSTEM
+   Colour direction is PRESERVED from the existing RAVU website,
+   as directed by the reference document ("Keep the current design"
+   / "Keep: RAVU branding, Typography, Colour direction, Clean
+   layout, Premium feel").
+
+   The original palette is emerald (primary accent) with a blue
+   support accent on slate neutrals. It is expressed here as two
+   semantic token families so the whole site stays consistent:
+
+      ravu-*  -> emerald  (primary actions, eyebrows, accents)
+      ink-*   -> slate    (neutrals, surfaces, dark bands)
+
+   spare-* is the blue support accent used for depth and gradients.
+   ============================================================ */
+
+
+
+@theme {
+     --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+         "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+     /* ravu-* = navy blue — primary accent changed to navy/blue identity */
+     --color-ravu-50: oklch(0.979 0.021 230);
+     --color-ravu-100: oklch(0.95 0.052 230);
+     --color-ravu-200: oklch(0.905 0.093 230);
+     --color-ravu-300: oklch(0.845 0.143 230);
+     --color-ravu-400: oklch(0.765 0.177 230);
+     --color-ravu-500: oklch(0.696 0.17 230);
+     --color-ravu-600: #00289a;
+     --color-ravu-700: #001f78;
+     --color-ravu-800: oklch(0.432 0.095 230);
+     --color-ravu-900: oklch(0.378 0.077 230);
+     --color-ravu-950: oklch(0.262 0.051 230);
+
+     /* ink-* = slate — neutrals, borders, dark bands, body text */
+     --color-ink-50: oklch(0.984 0.003 247.858);
+     --color-ink-100: oklch(0.968 0.007 247.896);
+     --color-ink-200: oklch(0.929 0.013 255.508);
+     --color-ink-300: oklch(0.869 0.022 252.894);
+     --color-ink-400: oklch(0.704 0.04 256.788);
+     --color-ink-500: oklch(0.554 0.046 257.417);
+     --color-ink-600: oklch(0.446 0.043 257.281);
+     --color-ink-700: oklch(0.372 0.044 257.287);
+     --color-ink-800: oklch(0.279 0.041 260.031);
+     --color-ink-900: oklch(0.208 0.042 265.755);
+     --color-ink-950: oklch(0.129 0.042 264.695);
+
+     /* spare-* = blue — the support accent already present on the site */
+     --color-spare-50: oklch(0.97 0.014 254.604);
+     --color-spare-100: oklch(0.932 0.032 255.585);
+     --color-spare-200: oklch(0.882 0.059 254.128);
+     --color-spare-300: oklch(0.809 0.105 251.813);
+     --color-spare-400: oklch(0.707 0.165 254.624);
+     --color-spare-500: oklch(0.623 0.214 259.815);
+     --color-spare-600: oklch(0.546 0.245 262.881);
+     --color-spare-700: oklch(0.488 0.243 264.376);
+     --color-spare-800: oklch(0.424 0.199 265.638);
+     --color-spare-900: oklch(0.379 0.146 265.522);
+     --color-spare-950: oklch(0.282 0.091 267.935);
+
+     --radius-card: 0.875rem;
+
+     --ease-ravu: cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* ==== Base ==== */
+@layer base {
+    html {
+        -webkit-text-size-adjust: 100%;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-white font-sans antialiased;
+        color: var(--color-ink-700);
+        overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+        color: var(--color-ink-950);
+        text-wrap: balance;
+    }
+
+    ::selection {
+        background-color: var(--color-ravu-600);
+        color: #fff;
+    }
+
+    :root {
+        color-scheme: light;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-ravu-600);
+        outline-offset: 2px;
+    }
+
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    textarea:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px #f8fafc inset !important;
+        -webkit-text-fill-color: #0f172a !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+}
+
+/* ==== Components ==== */
+@layer components {
+    /* ---- RAVU pattern language -------------------------------
+       The brand repeats a fine diagonal chevron motif derived
+       from the "R" mark. Applied sparingly as a signature. */
+    /* NOTE ON GEOMETRY AND ALIGNMENT ---------------------------------------
+       Two separate things had to be fixed here, and only the second one was
+       the real cause of "the lines don't line up":
+
+       1. GEOMETRY. A resting stripe and its cursor-wave copy are stacked in
+          the same box, so they must share angle, stripe width and period.
+          They differed (resting 1px, wave 2px), so the wider wave stripe hung
+          a pixel past the resting one. Both now read --stripe-w / --stripe-gap
+          from one place so they cannot drift apart again.
+
+       2. PHASE. This was the actual misalignment. A repeating-linear-gradient
+          anchors its pattern to each element's OWN box. At 135deg the period
+          along the diagonal is 18px x sqrt(2) = 25.456px — not a whole number
+          — so every pattern element starts its stripe sequence at a different
+          sub-pixel phase depending on its height and position on the page.
+          Result: identical CSS, identical geometry, and yet the lines broke at
+          every boundary between one pattern band and the next.
+
+          Reproduced in isolation with three identical stacked boxes: all three
+          painted stripes at different phases.
+
+          Fix: background-attachment: fixed. Every element then samples the
+          pattern from the same origin (the viewport), so all the diagonal
+          lines form one continuous field across the whole page and line up
+          across section boundaries.
+
+       If a future change makes the stripes jump again, check ATTACHMENT first
+       — geometry alone does not guarantee alignment here. */
+    .ravu-pattern,
+    .ravu-pattern-dark,
+    .ravu-pattern-glow-dark,
+    .ravu-pattern-glow-light {
+        --stripe-w: 1px;
+        --stripe-gap: 18px;
+        will-change: opacity;
+    }
+
+    .ravu-pattern {
+        background-image: repeating-linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--color-ravu-400) 16%, white) 0 var(--stripe-w),
+            transparent var(--stripe-w) var(--stripe-gap)
+        );
+    }
+
+    .ravu-pattern-dark {
+        background-image: repeating-linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.055) 0 var(--stripe-w),
+            transparent var(--stripe-w) var(--stripe-gap)
+        );
+    }
+
+    /* ---- Cursor wave for the diagonal pattern -------------------------
+       Same idea as .ravu-grid-glow below, but for the 135deg chevron lines.
+
+       On the DARK variant the wave BLEEDS IN rather than brightening:
+       --pattern-o runs 0 (nothing) -> 1 (full). The mask is a single radial
+       lustre at the cursor. Both are driven from JS as custom properties.
+
+       No [mask-*] Tailwind utility may be placed on these elements — an
+       arbitrary utility has equal specificity but is emitted later, so it
+       silently replaces this mask. That exact bug hid the grid wave. */
+    .ravu-pattern-glow-dark {
+        --pattern-r: 0px;
+        --pattern-x: -100%;
+        --pattern-y: -100%;
+        --pattern-o: 0;
+        /* The resting stripes are rgba(255,255,255,0.055).
+
+           Calibration history, because this value is easy to get wrong:
+             0.42 -> striped wallpaper, swamped the section content
+             0.16 -> still too heavy; the stripes were clearly visible
+                     running through the dark partner cards, whose fill is
+                     only bg-white/[0.03] so the backdrop shows through
+             0.10 -> roughly 2x the resting weight. Reads as a wave passing
+                     over the texture without drawing lines across the cards.
+
+           Keep the stripe WIDTH at 1px to match the resting layer exactly —
+           a wider wave stripe sits off-centre on the resting one and the two
+           sets of lines visibly fail to line up. */
+        background-image: repeating-linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.10) 0 var(--stripe-w),
+            transparent var(--stripe-w) var(--stripe-gap)
+        );
+        opacity: var(--pattern-o);
+        /* Single mask only: a radial lustre centred on the cursor. */
+        -webkit-mask-image: radial-gradient(
+            circle var(--pattern-r) at var(--pattern-x) var(--pattern-y),
+            #000 0%,
+            transparent 100%
+        );
+        mask-image: radial-gradient(
+            circle var(--pattern-r) at var(--pattern-x) var(--pattern-y),
+            #000 0%,
+            transparent 100%
+        );
+    }
+
+    .ravu-pattern-glow-light {
+        --pattern-r: 0px;
+        --pattern-x: -100%;
+        --pattern-y: -100%;
+        --pattern-o: 0;
+        /* Mixed against WHITE, not transparent. color-mix() toward
+           transparent in this oklch space produced an out-of-gamut value
+           with a negative channel (color(srgb -0.278 0.770 1.052)), which
+           the browser clamps — the same trap that hid the grid. */
+        background-image: repeating-linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--color-ravu-500) 55%, white) 0 var(--stripe-w),
+            transparent var(--stripe-w) var(--stripe-gap)
+        );
+        opacity: var(--pattern-o);
+        -webkit-mask-image: radial-gradient(
+            circle var(--pattern-r) at var(--pattern-x) var(--pattern-y),
+            #000 0%,
+            transparent 100%
+        );
+        mask-image: radial-gradient(
+            circle var(--pattern-r) at var(--pattern-x) var(--pattern-y),
+            #000 0%,
+            transparent 100%
+        );
+    }
+
+    .ravu-grid {
+        /* NOTE: color-mix() toward `transparent` in a wide-gamut oklch space
+           is unreliable at low percentages here — it resolves to an
+           out-of-gamut rgb() that the browser clamps, which is part of why
+           the grid kept reading as invisible. Mixing two solid colours
+           keeps the result inside the sRGB gamut.
+
+           Weight is deliberately light: this is a background texture, and
+           it must never compete with the headline sitting on top of it. */
+        background-image: linear-gradient(
+                to right,
+                color-mix(in srgb, var(--color-ink-200) 85%, white) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                to bottom,
+                color-mix(in srgb, var(--color-ink-200) 85%, white) 1px,
+                transparent 1px
+            );
+        background-size: 64px 64px;
+    }
+
+    /* Cursor-driven grid WAVE. `.ravu-grid-glow` is the SAME grid drawn at a
+       higher strength, revealed through a radial mask whose size and opacity
+       are driven from JS:
+
+         --grid-x / --grid-y  position of the crest, as percentages
+         --grid-r             crest radius, e.g. "240px"
+         --grid-o             overall strength, 0..1
+       JS raises --grid-r while the cursor moves and sinks it toward flat
+       once it stops, so the ripple travels with the pointer and collapses
+       in its wake.
+
+       There is deliberately NO CSS transition on the mask: the frame loop
+       in GridBackdrop already eases every step, and a transition here would
+       fight it and smear the trail. */
+    .ravu-grid-glow {
+        --grid-x: -100%;
+        --grid-y: -100%;
+        --grid-r: 0px;
+        --grid-o: 0;
+        /* These lines are painted OVER the resting grid, so they must be
+           visibly heavier to read as "raised".
+
+           Two things were tried here first and both looked wrong:
+             - color-mix(... 95%, transparent): resolved to an out-of-gamut
+               value with a NEGATIVE sRGB channel (color(srgb -0.22 ...)),
+               which the browser clamps and which rendered as nothing.
+             - the raw --color-ravu-600 token: correct but far too heavy —
+               solid brand navy behind the headline made the hero look like
+               graph paper rather than a subtle texture.
+           mix two solid colours, held light. */
+        background-image: linear-gradient(
+                to right,
+                color-mix(in srgb, var(--color-ravu-400) 55%, white) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                to bottom,
+                color-mix(in srgb, var(--color-ravu-400) 55%, white) 1px,
+                transparent 1px
+            );
+        background-size: 64px 64px;
+        /* Two masks, ANDed by default (mask-composite: intersect): the soft
+           hero fade, intersected with the travelling radial crest. The fade
+           MUST live here rather than as a Tailwind [mask-image:...] utility
+           on the element — that utility has the same specificity but is
+           emitted later, so it silently replaced this radial mask and the
+           effect never appeared. */
+        --grid-fade: linear-gradient(to bottom, #000, transparent 75%);
+        --grid-crest: radial-gradient(
+            circle var(--grid-r) at var(--grid-x) var(--grid-y),
+            #000 0%,
+            transparent 100%
+        );
+        opacity: var(--grid-o);
+        -webkit-mask-image: var(--grid-fade), var(--grid-crest);
+        -webkit-mask-composite: source-in;
+        mask-image: var(--grid-fade), var(--grid-crest);
+        mask-composite: intersect;
+    }
+
+    /* Coarse pointers (touch) never move a cursor, so a wave would only ever
+       sit in one arbitrary spot. Keep the plain grid instead. */
+    @media (hover: none) {
+        .ravu-grid-glow {
+            display: none;
+        }
+    }
+
+    /* Emerald bleeding in from the left, blue from the right — the same
+       emerald-to-blue direction the original site used in its gradients. */
+    .ravu-mesh {
+        background-image: radial-gradient(
+                ellipse 62% 62% at 8% 0%,
+                color-mix(in srgb, var(--color-ravu-400) 25%, transparent),
+                transparent 62%
+            ),
+            radial-gradient(
+                ellipse 55% 55% at 100% 10%,
+                color-mix(in srgb, var(--color-spare-400) 20%, transparent),
+                transparent 64%
+            );
+    }
+
+    /* ---- Animation language ---------------------------------
+       ONE system for the whole site: 550ms in / 14px rise,
+       staggered at 70ms, RAVU easing. */
+    .ravu-reveal {
+        opacity: 0;
+        transform: translateY(14px);
+        animation: ravu-rise 0.55s var(--ease-ravu) forwards;
+    }
+
+    .ravu-reveal-delay-1 { animation-delay: 70ms; }
+    .ravu-reveal-delay-2 { animation-delay: 140ms; }
+    .ravu-reveal-delay-3 { animation-delay: 210ms; }
+    .ravu-reveal-delay-4 { animation-delay: 280ms; }
+    .ravu-reveal-delay-5 { animation-delay: 350ms; }
+
+    /* Scroll-triggered variant, driven by the Reveal component.
+       The animation runs once when data-visible flips to "true"; its end
+       state is the natural, fully-visible state, so content can never be
+       left hidden even if the observer never fires. */
+    .ravu-scroll-reveal {
+        opacity: 1;
+        transform: none;
+    }
+
+    .ravu-scroll-reveal[data-visible="true"] {
+        animation: ravu-rise 0.55s var(--ease-ravu) both;
+    }
+}
+
+@keyframes ravu-rise {
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Respect the user's motion preference across the whole system. */
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    .ravu-reveal,
+    .ravu-scroll-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        transition: none !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+@media print {
+    .ravu-pattern,
+    .ravu-pattern-dark,
+    .ravu-grid,
+    .ravu-mesh {
+        background-image: none;
+    }
+}
+

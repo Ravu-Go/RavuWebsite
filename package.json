@@ -3,8 +3,14 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
-        "dev": "vite"
+        "build": "vite build && node scripts/build-cloudflare.mjs",
+        "build:cf": "vite build && node scripts/build-cloudflare.mjs",
+        "dev": "vite",
+        "pages:dev": "npm run build && wrangler pages dev dist --port 8788",
+        "pages:deploy": "npm run build && wrangler pages deploy dist --project-name=ravu-website",
+        "workers:dev": "npm run build && wrangler dev",
+        "workers:deploy": "npm run build && wrangler deploy",
+        "workers:types": "wrangler types"
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4.1.17",
@@ -14,8 +20,10 @@
         "babel-plugin-react-compiler": "^1.0.0",
         "concurrently": "^9.2.1",
         "laravel-vite-plugin": "^2.0.1",
+        "playwright-core": "^1.65.0",
         "tailwindcss": "^4.1.17",
-        "vite": "^7.2.4"
+        "vite": "^7.2.4",
+        "wrangler": "^4.162.0"
     },
     "optionalDependencies": {
         "@laravel/multiplex": "^0.4.1"

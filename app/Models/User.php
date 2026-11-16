@@ -10,12 +10,28 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
+#[Fillable(['name', 'email', 'password', 'role', 'google_id', 'avatar', 'last_login_at', 'last_login_provider', 'last_login_ip'])]
+#[Hidden(['password', 'remember_token', 'google_id'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    /**
+     * Check if the user has super admin privileges.
+     */
+    public function isSuperAdmin(): bool
+    {
+        return ($this->role ?? null) === 'super_admin' || in_array($this->email, ['jux@ravu.com', 'ravu.limited@gmail.com'], true);
+    }
+
+    /**
+     * Resolve the web portal role for this user.
+     */
+    public function portalRole(): string
+    {
+        return $this->isSuperAdmin() ? 'super_admin' : ($this->role ?? 'partner');
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -26,6 +42,7 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
         ];
     }
