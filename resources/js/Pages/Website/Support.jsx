@@ -8,12 +8,14 @@ import {
     Smartphone,
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
+import ViewportVideo from "../../Components/ViewportVideo";
 import CommunitySection from "../../Components/CommunitySection";
 import {
     FAQAccordion,
     FeatureStrip,
 } from "../../Components/sections";
 import supportVideo from "../../../imgs/Headset.mp4";
+import supportPoster from "../../../imgs/Headset-poster.jpg";
 
 const SUPPORT_CHANNELS = [
     {
@@ -71,13 +73,9 @@ export default function Support() {
                         aria-hidden="true"
                         className="pointer-events-none hidden select-none lg:absolute lg:inset-y-0 lg:right-0 lg:block lg:w-[58%] xl:w-[56%]"
                     >
-                        <video
+                        <ViewportVideo
                             src={supportVideo}
-                            autoPlay
-                            loop
-                            muted
-                            playsInline
-                            fetchPriority="high"
+                            poster={supportPoster}
                             className="h-full w-full object-contain object-center py-6"
                         />
                         {/* Smooth white gradient blend on the left seam */}
@@ -142,13 +140,9 @@ export default function Support() {
 
                         {/* Mobile / Tablet Image Presentation */}
                         <div className="relative mt-10 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-lg lg:hidden">
-                            <video
+                            <ViewportVideo
                                 src={supportVideo}
-                                autoPlay
-                                loop
-                                muted
-                                playsInline
-                                fetchPriority="high"
+                                poster={supportPoster}
                                 className="mx-auto h-64 w-full object-contain p-4"
                             />
                             <div

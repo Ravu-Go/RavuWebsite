@@ -66,14 +66,18 @@ export default function Navigation({
 
     useEffect(() => {
         let ticking = false;
+        let previousScrolled = null;
         const updateScrollState = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    setIsScrolled(window.scrollY > 8);
-                    ticking = false;
-                });
-                ticking = true;
-            }
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(() => {
+                const nextScrolled = window.scrollY > 8;
+                if (nextScrolled !== previousScrolled) {
+                    previousScrolled = nextScrolled;
+                    setIsScrolled(nextScrolled);
+                }
+                ticking = false;
+            });
         };
         updateScrollState();
         window.addEventListener("scroll", updateScrollState, { passive: true });

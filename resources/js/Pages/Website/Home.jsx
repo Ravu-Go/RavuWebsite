@@ -2,7 +2,9 @@ import { ShieldCheck, Users, Zap } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
 import EcosystemSlideshow from "../../Components/EcosystemSlideshow";
+import ViewportVideo from "../../Components/ViewportVideo";
 import headerVideo from "../../../imgs/Header.mp4";
+import headerPoster from "../../../imgs/Header.jpg";
 import mapImg from "../../../imgs/map.png";
 import fleetMultiVehicleImg from "../../../imgs/ravu_fleet_multi_vehicle.jpg";
 import insuranceProtectionImg from "../../../imgs/ravu_insurance_protection.jpg";
@@ -234,13 +236,9 @@ export default function Home() {
 
                 {/* Edge-to-Edge Full-Width Header Video */}
                 <div className="relative mt-10 w-full sm:mt-14">
-                    <video
+                    <ViewportVideo
                         src={headerVideo}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        preload="auto"
+                        poster={headerPoster}
                         className="h-auto w-full object-contain select-none"
                     />
                 </div>
@@ -301,7 +299,7 @@ export default function Home() {
             {/* ----------------------- INTERACTIVE ECOSYSTEM SLIDESHOW */}
             <EcosystemSlideshow
                 eyebrow="THE RAVU ECOSYSTEM IN MOTION"
-                title="Mobility, protection and savings —"
+                title="Mobility, protection and savings"
                 highlight="connected in one network."
                 description="Swipe or click through how RAVU connects riders, Bajaj operators, private car owners, commercial fleets, insurers and garages across Tanzania."
                 slides={HOME_SLIDES}
