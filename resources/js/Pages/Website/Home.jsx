@@ -1,8 +1,115 @@
 import { ShieldCheck, Users, Zap } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
+import EcosystemSlideshow from "../../Components/EcosystemSlideshow";
 import headerVideo from "../../../imgs/Header.mp4";
 import mapImg from "../../../imgs/map.png";
+import fleetMultiVehicleImg from "../../../imgs/ravu_fleet_multi_vehicle.jpg";
+import insuranceProtectionImg from "../../../imgs/ravu_insurance_protection.jpg";
+import sparePartsGarageImg from "../../../imgs/ravu_spare_parts_garage.jpg";
+import riderIdImg from "../../../imgs/ravuRiderID1.png";
+import mobilityHubImg from "../../../imgs/RAVU Mobility Hub in Tanzania.png";
+
+const HOME_SLIDES = [
+    {
+        id: "home-slide-ecosystem",
+        tabLabel: "Multi-Vehicle Ecosystem",
+        badge: "6 Vehicle & Member Categories",
+        caption: "Dar es Salaam & Nationwide",
+        eyebrow: "AGGREGATING TANZANIA'S MOBILITY MARKET",
+        title: "From boda boda & Bajaj to private cars, trucks, buses and fleets.",
+        description:
+            "RAVU connects motorcycle riders, Bajaj three-wheeler operators, private vehicle owners, commercial drivers, logistics trucks and passenger bus fleets into one structured ecosystem.",
+        bullets: [
+            "Motorcycles (boda boda & delivery) and Bajaj three-wheelers",
+            "Private family sedans, SUVs, pickups & household vehicles",
+            "Commercial taxis, ride-hailing, trucks, buses & corporate fleets",
+        ],
+        ctaLabel: "Explore Membership",
+        ctaHref: "/membership",
+        image: fleetMultiVehicleImg,
+        imageAlt:
+            "RAVU multi-vehicle ecosystem in Dar es Salaam showing motorcycles, Bajaj, SUV, delivery truck and bus",
+    },
+    {
+        id: "home-slide-insurance",
+        tabLabel: "Insurance (20%–30% OFF)",
+        badge: "20% – 30% Member Discount Target",
+        caption: "8 Protection Product Lines",
+        eyebrow: "EXCLUSIVE INSURANCE BENEFITS PROGRAM",
+        title: "Affordable insurance protection for your vehicle, family and business.",
+        description:
+            "Through strategic partnerships with leading insurers, verified RAVU members unlock exclusive discounted premiums and simplified enrollment across 8 protection lines.",
+        bullets: [
+            "Motorcycle, Bajaj, Private Motor Vehicle & Commercial Fleet cover",
+            "Personal Accident, Health & Medical, Family Life & SME protection",
+            "Reduced deductibles, priority claims & 24/7 roadside assistance",
+        ],
+        ctaLabel: "View Insurance Benefits",
+        ctaHref: "/benefits",
+        image: insuranceProtectionImg,
+        imageAlt:
+            "Tanzanian insurance advisor reviewing RAVU digital insurance policy with motorcycle rider and car owner",
+    },
+    {
+        id: "home-slide-maintenance",
+        tabLabel: "Spare Parts & Garages",
+        badge: "10%–25% Off Parts • 5%–20% Off Labor",
+        caption: "Official Service Network",
+        eyebrow: "SPARE PARTS, MAINTENANCE & GARAGE PROGRAM",
+        title: "Lower your biggest operating expense at trusted garages & parts shops.",
+        description:
+            "Keep your vehicle earning on the road with guaranteed discounts on genuine spare parts, tires, batteries, lubricants and priority mechanical servicing.",
+        bullets: [
+            "10%–25% OFF motorcycle, car, truck & bus spare parts, tires & batteries",
+            "5%–20% OFF routine maintenance, engine, brake & suspension repairs",
+            "Commercial Fleet Discount Program with bulk pricing & priority bays",
+        ],
+        ctaLabel: "Explore Partner Network",
+        ctaHref: "/partners",
+        image: sparePartsGarageImg,
+        imageAlt:
+            "RAVU partner mechanical garage and spare parts shop in Dar es Salaam",
+    },
+    {
+        id: "home-slide-id",
+        tabLabel: "Verified Member ID",
+        badge: "Instant Partner Verification",
+        caption: "Digital & Physical ID",
+        eyebrow: "ONE RECOGNISED IDENTITY",
+        title: "Present your RAVU Member ID to unlock instant savings.",
+        description:
+            "Every verified member receives an official RAVU Member ID recognized across participating insurance desks, spare parts retailers, tire centers, fuel stations and garages.",
+        bullets: [
+            "Instant verification through the RAVU Partner Portal",
+            "Transparent member pricing across all participating branches",
+            "Loyalty rewards for safe, claim-free and active members",
+        ],
+        ctaLabel: "How It Works",
+        ctaHref: "/how-it-works",
+        image: riderIdImg,
+        imageAlt: "Verified RAVU Rider Member ID card",
+    },
+    {
+        id: "home-slide-pilot",
+        tabLabel: "Dar es Salaam Pilot",
+        badge: "200 – 500 Initial Cohort • 4 – 6 Months",
+        caption: "Dar es Salaam Launch",
+        eyebrow: "STRUCTURED PHASED ROLLOUT",
+        title: "Launching in Dar es Salaam and scaling across Tanzania.",
+        description:
+            "Our 4–6 month Dar es Salaam pilot program connects 200–500 initial riders, drivers and vehicle owners directly with foundational insurance, spare parts and workshop partners.",
+        bullets: [
+            "Priority onboarding for Dar es Salaam riders, drivers & fleets",
+            "Direct referrals and marketing activations for foundational partners",
+            "Building Tanzania's most trusted mobility support network",
+        ],
+        ctaLabel: "Join Priority Cohort",
+        ctaHref: "/register",
+        image: mobilityHubImg,
+        imageAlt: "RAVU Mobility Hub in Dar es Salaam, Tanzania",
+    },
+];
 
 /**
  * Reusable official store buttons for App Store & Google Play
@@ -190,6 +297,15 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
+            {/* ----------------------- INTERACTIVE ECOSYSTEM SLIDESHOW */}
+            <EcosystemSlideshow
+                eyebrow="THE RAVU ECOSYSTEM IN MOTION"
+                title="Mobility, protection and savings —"
+                highlight="connected in one network."
+                description="Swipe or click through how RAVU connects riders, Bajaj operators, private car owners, commercial fleets, insurers and garages across Tanzania."
+                slides={HOME_SLIDES}
+            />
 
             {/* --------------------------------- THE RAVU APP (MAP SCREEN) */}
             <section className="overflow-hidden bg-white py-16 sm:py-24 lg:py-28">

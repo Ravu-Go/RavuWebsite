@@ -2,65 +2,190 @@ import { Link } from "@inertiajs/react";
 import {
     ArrowRight,
     BadgeCheck,
+    Building2,
+    Car,
     Check,
     CreditCard,
+    Layers,
     ShieldCheck,
+    Truck,
+    Users,
     UsersRound,
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
+import EcosystemSlideshow from "../../Components/EcosystemSlideshow";
 import { FeatureStrip } from "../../Components/sections";
 import riderIdImage from "../../../imgs/ravuRiderID1.png";
+import fleetMultiVehicleImg from "../../../imgs/ravu_fleet_multi_vehicle.jpg";
+import insuranceProtectionImg from "../../../imgs/ravu_insurance_protection.jpg";
+import sparePartsGarageImg from "../../../imgs/ravu_spare_parts_garage.jpg";
+import mobilityHubImg from "../../../imgs/RAVU Mobility Hub in Tanzania.png";
+
+const MEMBERSHIP_SLIDES = [
+    {
+        id: "mem-slide-categories",
+        tabLabel: "6 Mobility Categories",
+        badge: "Riders • Bajaj • Cars • Trucks • Buses • Fleets",
+        caption: "Inclusive Ecosystem",
+        eyebrow: "WHO CAN BECOME A MEMBER",
+        title: "One membership built for every vehicle owner and operator.",
+        description:
+            "RAVU aggregates motorcycle riders, Bajaj operators, private family vehicle owners, commercial drivers, logistics trucks, passenger buses and fleet operators into one powerful network.",
+        bullets: [
+            "Categories A & B: Boda boda, delivery riders, Bajaj & taxi drivers",
+            "Category C: Private sedans, SUVs, pickups & household vehicles",
+            "Categories D, E & F: Trucks, logistics, buses & commercial fleets",
+        ],
+        ctaLabel: "Register Membership Interest",
+        ctaHref: "/register",
+        image: fleetMultiVehicleImg,
+        imageAlt:
+            "RAVU multi-vehicle categories in Dar es Salaam",
+    },
+    {
+        id: "mem-slide-insurance",
+        tabLabel: "Insurance Protection",
+        badge: "20% – 30% Preferred Member Discount",
+        caption: "Vehicle, Health & Family Cover",
+        eyebrow: "PROTECTING LIVELIHOODS & FAMILIES",
+        title: "Discounted insurance for your vehicle, health and loved ones.",
+        description:
+            "Use your RAVU membership to access preferred rates across comprehensive vehicle insurance, personal accident cover, family medical plans and education protection.",
+        bullets: [
+            "Minimum 20% target discount on standard insurance premiums",
+            "Flexible payment plans, reduced excess & priority claims",
+            "Coverage options for spouses, dependents & SME businesses",
+        ],
+        ctaLabel: "See All Insurance Benefits",
+        ctaHref: "/benefits",
+        image: insuranceProtectionImg,
+        imageAlt:
+            "RAVU member reviewing insurance benefits with advisor",
+    },
+    {
+        id: "mem-slide-maintenance",
+        tabLabel: "Parts & Garage Savings",
+        badge: "10%–25% Off Parts • 5%–20% Off Garages",
+        caption: "Reduced Operating Costs",
+        eyebrow: "KEEP YOUR VEHICLE EARNING",
+        title: "Save on every spare part, tire change, battery and service visit.",
+        description:
+            "Maintenance is one of the largest expenses for any vehicle owner. RAVU members enjoy guaranteed discounts and priority service bays at accredited garages.",
+        bullets: [
+            "10%–25% OFF genuine parts, tires, batteries, lubricants & filters",
+            "5%–20% OFF routine servicing, engine, brake & electrical repairs",
+            "Reduced vehicle downtime and higher daily net earnings",
+        ],
+        ctaLabel: "Explore Partner Garages",
+        ctaHref: "/partners",
+        image: sparePartsGarageImg,
+        imageAlt:
+            "RAVU member vehicle being serviced at official partner garage",
+    },
+    {
+        id: "mem-slide-community",
+        tabLabel: "Dar es Salaam Pilot",
+        badge: "200 – 500 Initial Members • 4 – 6 Months",
+        caption: "Priority Onboarding",
+        eyebrow: "JOIN THE FOUNDATIONAL COHORT",
+        title: "Your journey starts here in Dar es Salaam.",
+        description:
+            "Join the initial 200–500 verified members in our Dar es Salaam strategic pilot cohort and be first to access new partner discounts as RAVU expands across Tanzania.",
+        bullets: [
+            "Verified digital & physical RAVU Member ID recognition",
+            "Direct access to pilot insurance and workshop partners",
+            "Community support, safety training & financial inclusion programs",
+        ],
+        ctaLabel: "Join Priority Cohort",
+        ctaHref: "/register",
+        image: mobilityHubImg,
+        imageAlt: "RAVU Mobility Hub in Dar es Salaam, Tanzania",
+    },
+];
 
 const MEMBERSHIP_PILLARS = [
     {
         icon: CreditCard,
         title: "Verified Member ID",
-        text: "One recognised identity connecting you to the RAVU ecosystem.",
+        text: "One recognised identity connecting riders, drivers, vehicle owners and fleets.",
     },
     {
         icon: BadgeCheck,
-        title: "Partner privileges",
-        text: "Unlock everyday savings across workshops, fuel and services.",
+        title: "Guaranteed partner discounts",
+        text: "20%–30% insurance target discounts, 10%–25% off spare parts & 5%–20% off garages.",
     },
     {
         icon: UsersRound,
-        title: "Growing network",
-        text: "Built to expand with more benefits as the community grows.",
+        title: "Multi-vehicle ecosystem",
+        text: "Serving motorcycles, Bajaj, private cars, taxis, trucks, buses and commercial fleets.",
     },
 ];
 
 const MEANING = [
-    "Access to relevant partner benefits and discounts as they become available.",
-    "Direct connection to verified workshops, fuel stations and service providers.",
-    "A recognised mobility identity built around trust and participation.",
-    "Continuous progress and new opportunities within a growing ecosystem.",
+    "Exclusive member pricing on motorcycle, Bajaj, private car, fleet, health and family insurance.",
+    "10%–25% OFF genuine spare parts, tires, batteries, lubricants and filters at partner suppliers.",
+    "5%–20% OFF routine maintenance, engine servicing, brakes and diagnostics at official garages.",
+    "Volume-based Fleet Discount Program for commercial transport, delivery and logistics operators.",
+];
+
+const MEMBER_CATEGORIES = [
+    {
+        icon: Users,
+        title: "Motorcycle & Boda Boda Riders",
+        text: "Boda boda operators, delivery riders, commercial motorcycle operators and private motorcycle owners.",
+    },
+    {
+        icon: Car,
+        title: "Bajaj & Commercial Vehicle Drivers",
+        text: "Commercial & private Bajaj (three-wheeler) operators, taxi drivers, ride-hailing drivers and service vehicles.",
+    },
+    {
+        icon: ShieldCheck,
+        title: "Private Vehicle Owners & Families",
+        text: "Individual members and households owning sedans, SUVs, pickups and personal family vehicles.",
+    },
+    {
+        icon: Truck,
+        title: "Truck Owners & Logistics Operators",
+        text: "Cargo transport operators, long-haul trucking businesses, construction transport and distribution companies.",
+    },
+    {
+        icon: Building2,
+        title: "Bus Owners & Passenger Transit",
+        text: "Urban bus operators, intercity bus companies, school transport providers and staff shuttle services.",
+    },
+    {
+        icon: Layers,
+        title: "Fleet Owners & SMEs",
+        text: "Commercial, corporate, delivery, rental, logistics and motorcycle fleets accessing bulk parts & fleet insurance.",
+    },
 ];
 
 const JOURNEY = [
     {
         title: "Register",
-        text: "Share your interest in joining RAVU or sign up in the mobile app.",
+        text: "Share your interest online or sign up directly in the RAVU mobile app.",
     },
     {
         title: "Apply",
-        text: "Complete the streamlined membership onboarding process.",
+        text: "Select your mobility category — rider, driver, private vehicle owner or fleet operator.",
     },
     {
         title: "Verification",
-        text: "Receive your verified RAVU Member ID and clear guidance.",
+        text: "Receive your verified RAVU Member ID for instant recognition at partner branches.",
     },
     {
-        title: "Participate",
-        text: "Connect with fellow riders, drivers and community hubs.",
+        title: "Protect & Insure",
+        text: "Access preferred member insurance rates (20%+ target discount) and flexible payment plans.",
     },
     {
-        title: "Access benefits",
-        text: "Redeem partner offers and practical operational support.",
+        title: "Save on Maintenance",
+        text: "Redeem 10%–25% spare parts discounts and 5%–20% garage servicing discounts.",
     },
     {
-        title: "Grow",
-        text: "Move forward with a stronger, connected mobility network.",
+        title: "Grow with RAVU",
+        text: "Lower operating costs, reduce vehicle downtime and build long-term financial security.",
     },
 ];
 
@@ -70,7 +195,6 @@ export default function Membership() {
             {/* ------------------------------------------------------------ HERO */}
             <section className="relative overflow-hidden bg-white">
                 <div className="relative flex items-center lg:min-h-[560px] xl:min-h-[600px]">
-                    {/* Right-side blended background image on desktop */}
                     <div
                         aria-hidden="true"
                         className="pointer-events-none hidden select-none lg:absolute lg:inset-y-0 lg:right-0 lg:block lg:w-[58%] xl:w-[56%]"
@@ -82,12 +206,10 @@ export default function Membership() {
                             decoding="async"
                             className="h-full w-full object-cover object-left"
                         />
-                        {/* Crisp left-edge white gradient blend */}
                         <div className="absolute inset-y-0 left-0 w-24 xl:w-32 bg-gradient-to-r from-white via-white/80 to-transparent" />
                         <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-white/40 to-transparent" />
                     </div>
 
-                    {/* Diagonal two-tone blue corner ribbon (bottom-right) */}
                     <div
                         aria-hidden="true"
                         className="pointer-events-none absolute bottom-0 right-0 z-10 hidden h-36 w-36 overflow-hidden lg:block"
@@ -96,35 +218,31 @@ export default function Membership() {
                         <div className="absolute -bottom-20 -right-12 h-32 w-56 -rotate-45 bg-[#0B3B8C]" />
                     </div>
 
-                    {/* Foreground Content Container */}
                     <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
                         <div className="max-w-xl lg:max-w-[500px] xl:max-w-[520px]">
-                            {/* Solid Royal Blue Pill Badge */}
                             <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
                                 RAVU MEMBERSHIP
                             </span>
 
-                            {/* Stacked Bold Headline */}
                             <h1 className="mt-5 text-4xl font-black leading-[1.06] tracking-tight text-[#050B17] sm:text-5xl lg:text-[3.35rem]">
                                 One identity.
                                 <br />
-                                Everyday benefits.
+                                Lower operating costs.
                                 <br />
                                 Membership that{" "}
                                 <span className="text-[#1864E8]">
-                                    moves with you.
+                                    protects &amp; pays.
                                 </span>
                             </h1>
 
-                            {/* Body Copy */}
                             <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600 sm:text-[17px]">
-                                A RAVU membership connects you to a growing
-                                ecosystem of support, verified partner discounts
-                                and community built around your everyday
-                                mobility journey.
+                                A RAVU membership connects motorcycle riders,
+                                Bajaj operators, private vehicle owners,
+                                families and commercial fleets to exclusive
+                                insurance discounts, genuine spare parts savings
+                                and priority garage servicing across Tanzania.
                             </p>
 
-                            {/* Primary & Secondary Action Buttons */}
                             <div className="mt-7 flex flex-wrap items-center gap-3.5">
                                 <Link
                                     href="/register"
@@ -139,12 +257,11 @@ export default function Membership() {
                                     prefetch
                                     className="inline-flex items-center rounded-xl border border-slate-300 bg-white/95 px-6 py-3.5 text-sm font-bold text-slate-900 shadow-2xs transition-colors hover:border-slate-400 hover:bg-slate-50"
                                 >
-                                    See Member Benefits
+                                    See Member Discounts
                                 </Link>
                             </div>
                         </div>
 
-                        {/* Mobile / Tablet Image Presentation */}
                         <div className="relative mt-10 overflow-hidden rounded-2xl border border-slate-100 shadow-lg lg:hidden">
                             <img
                                 src={riderIdImage}
@@ -153,13 +270,6 @@ export default function Membership() {
                                 decoding="async"
                                 className="h-auto w-full object-cover"
                             />
-                            <div
-                                aria-hidden="true"
-                                className="pointer-events-none absolute bottom-0 right-0 h-20 w-20 overflow-hidden"
-                            >
-                                <div className="absolute -bottom-10 -right-10 h-20 w-32 -rotate-45 bg-[#1864E8]" />
-                                <div className="absolute -bottom-12 -right-8 h-16 w-32 -rotate-45 bg-[#0B3B8C]" />
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -168,8 +278,62 @@ export default function Membership() {
             {/* ------------------------------------------- 3 PILLARS STRIP */}
             <FeatureStrip items={MEMBERSHIP_PILLARS} />
 
-            {/* -------------------------------------------------- WHAT IT MEANS */}
+            {/* -------------------------------------------------- MEMBERSHIP SLIDESHOW */}
+            <EcosystemSlideshow
+                eyebrow="MEMBERSHIP IN ACTION"
+                title="Built for riders, vehicle owners,"
+                highlight="families and fleets."
+                description="Explore how RAVU membership delivers real savings and protection across all six mobility categories."
+                slides={MEMBERSHIP_SLIDES}
+            />
+
+            {/* -------------------------------------------------- WHO CAN JOIN */}
             <section className="bg-white py-16 sm:py-24">
+                <div className="mx-auto max-w-6xl px-5 sm:px-8">
+                    <div className="max-w-2xl">
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1864E8]">
+                            WHO RAVU SERVES
+                        </p>
+                        <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
+                            Built for every vehicle owner and{" "}
+                            <span className="text-[#1864E8]">
+                                mobility operator.
+                            </span>
+                        </h2>
+                        <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
+                            RAVU begins with boda boda riders and Bajaj
+                            operators and expands across six connected vehicle
+                            and fleet categories so every member household and
+                            transport business benefits from collective scale.
+                        </p>
+                    </div>
+
+                    <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                        {MEMBER_CATEGORIES.map((cat) => {
+                            const Icon = cat.icon;
+                            return (
+                                <div
+                                    key={cat.title}
+                                    className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs transition-all hover:border-slate-300 hover:shadow-md"
+                                >
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
+                                        <Icon size={20} />
+                                    </div>
+                                    <h3 className="mt-5 text-base font-bold text-slate-950">
+                                        {cat.title}
+                                    </h3>
+                                    <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                                        {cat.text}
+                                    </p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
+
+            {/* -------------------------------------------------- WHAT IT MEANS */}
+            <section className="border-t border-slate-100 bg-white py-16 sm:py-24">
                 <div className="mx-auto max-w-6xl px-5 sm:px-8">
                     <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
                         <div className="lg:col-span-6">
@@ -177,16 +341,16 @@ export default function Membership() {
                                 WHAT IT MEANS
                             </p>
                             <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
-                                Your place in{" "}
+                                Your financial advantage{" "}
                                 <span className="text-[#1864E8]">
-                                    the ecosystem.
+                                    on the road.
                                 </span>
                             </h2>
                             <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-                                Membership is designed for people who want to
-                                participate in a stronger mobility community
-                                and benefit from it every day as the ecosystem
-                                develops.
+                                Rather than negotiating alone, RAVU members
+                                access structured corporate-grade discounts on
+                                insurance, spare parts, tires, batteries,
+                                lubricants and mechanical repairs.
                             </p>
 
                             <ul className="mt-6 space-y-3.5">
@@ -210,13 +374,13 @@ export default function Membership() {
                                     <CreditCard size={20} />
                                 </div>
                                 <h3 className="mt-5 text-lg font-bold text-slate-950">
-                                    Your membership, made visible.
+                                    Your membership, verified instantly.
                                 </h3>
                                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                                    A RAVU Rider Member ID represents verified
-                                    connection to the people, partner locations
-                                    and opportunities that make up the
-                                    ecosystem.
+                                    Present your RAVU Member ID at participating
+                                    insurers, spare parts shops, tire centers
+                                    and garages for instant verification and
+                                    transparent member pricing.
                                 </p>
                             </div>
 
@@ -225,13 +389,14 @@ export default function Membership() {
                                     <ShieldCheck size={20} />
                                 </div>
                                 <h3 className="mt-5 text-lg font-bold text-slate-950">
-                                    Built to grow with you.
+                                    Protection for you and your family.
                                 </h3>
                                 <p className="mt-2 text-sm leading-relaxed text-slate-600">
-                                    Membership is an entry point, not an end
-                                    state. As new partner services and ecosystem
-                                    benefits launch across Tanzania, members are
-                                    connected directly to them.
+                                    Beyond vehicle coverage and workshop
+                                    discounts, RAVU membership extends into
+                                    personal accident cover, family medical
+                                    plans, education protection and claim-free
+                                    loyalty rewards.
                                 </p>
                             </div>
                         </div>
@@ -252,7 +417,7 @@ export default function Membership() {
                         </h2>
                         <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
                             Six simple steps from registration to everyday
-                            value.
+                            savings and protection.
                         </p>
                     </div>
 
@@ -275,20 +440,27 @@ export default function Membership() {
                         ))}
                     </div>
 
-                    {/* Rollout Transparency Banner */}
+                    {/* Dar es Salaam Pilot Rollout Banner */}
                     <div className="mt-12 flex flex-col items-start justify-between gap-6 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs sm:flex-row sm:items-center sm:p-8">
                         <div className="flex items-start gap-4">
                             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
                                 <UsersRound size={20} />
                             </div>
                             <div>
-                                <h3 className="text-base font-bold text-slate-950">
-                                    Membership is rolling out step by step
-                                </h3>
+                                <div className="flex flex-wrap items-center gap-2">
+                                    <h3 className="text-base font-bold text-slate-950">
+                                        Dar es Salaam Strategic Pilot Cohort
+                                    </h3>
+                                    <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
+                                        200 – 500 Initial Members • 4 – 6 Months
+                                    </span>
+                                </div>
                                 <p className="mt-1 max-w-2xl text-sm leading-relaxed text-slate-600">
-                                    Registering your interest today ensures you
-                                    are first in line as new partner benefits
-                                    and onboarding stages go live in your area.
+                                    RAVU is launching its initial pilot cohort
+                                    of 200–500 verified riders, drivers and
+                                    vehicle owners in Dar es Salaam before
+                                    expanding nationwide. Register today to join
+                                    the priority onboarding wave.
                                 </p>
                             </div>
                         </div>
@@ -297,7 +469,7 @@ export default function Membership() {
                             prefetch
                             className="inline-flex shrink-0 items-center gap-2 rounded-full bg-slate-950 px-5 py-2.5 text-xs font-bold text-white transition-all hover:bg-slate-800"
                         >
-                            <span>Register Now</span>
+                            <span>Join Priority Cohort</span>
                             <ArrowRight size={14} />
                         </Link>
                     </div>

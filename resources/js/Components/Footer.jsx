@@ -51,10 +51,20 @@ export default function Footer() {
                             </span>
                         </Link>
 
-                        <p className="mt-4 text-xs leading-relaxed text-slate-400">
-                            People. Partners.
+                        <p className="mt-4 max-w-sm text-xs leading-relaxed text-slate-400">
+                            &ldquo;Building a trusted ecosystem that delivers
+                            mobility, opportunity, protection, and prosperity
+                            for every rider.&rdquo;
                             <br />
-                            A Stronger Mobility Ecosystem.
+                            <span className="mt-1.5 inline-block text-slate-500">
+                                RAVU Ltd • Dar es Salaam, Tanzania •{" "}
+                                <a
+                                    href="mailto:nyindo@posteo.de"
+                                    className="text-sky-400 hover:underline"
+                                >
+                                    nyindo@posteo.de
+                                </a>
+                            </span>
                         </p>
 
                         {/* Social icons */}

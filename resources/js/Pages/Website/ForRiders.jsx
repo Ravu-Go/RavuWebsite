@@ -9,28 +9,112 @@ import {
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
+import EcosystemSlideshow from "../../Components/EcosystemSlideshow";
 import {
     AppPromo,
     FeatureStrip,
     StoreButtons,
 } from "../../Components/sections";
 import ridersConversationImg from "../../../imgs/RAVU Riders Lively Street Conversation.png";
+import ridersSharingMomentImg from "../../../imgs/RAVU Riders Sharing a Moment.png";
+import insuranceProtectionImg from "../../../imgs/ravu_insurance_protection.jpg";
+import sparePartsGarageImg from "../../../imgs/ravu_spare_parts_garage.jpg";
+import fleetMultiVehicleImg from "../../../imgs/ravu_fleet_multi_vehicle.jpg";
+
+const RIDER_SLIDES = [
+    {
+        id: "rider-slide-community",
+        tabLabel: "Riders & Operators",
+        badge: "Verified Mobility Community",
+        caption: "Boda Boda • Bajaj • Taxis",
+        eyebrow: "BUILT AROUND PEOPLE ON THE ROAD",
+        title: "Move from operating alone to a recognized, protected network.",
+        description:
+            "RAVU aggregates individual riders and drivers into a trusted community with collective bargaining power, digital identity and professional development.",
+        bullets: [
+            "Digital RAVU Member ID right inside the mobile app",
+            "Access to member awareness campaigns & safety programs",
+            "Financial inclusion and asset growth opportunities",
+        ],
+        ctaLabel: "Explore Membership",
+        ctaHref: "/membership",
+        image: ridersSharingMomentImg,
+        imageAlt: "RAVU riders sharing a moment in Dar es Salaam",
+    },
+    {
+        id: "rider-slide-insurance",
+        tabLabel: "20%–30% Off Insurance",
+        badge: "20% – 30% Member Discount Target",
+        caption: "Rider, Passenger & Family Protection",
+        eyebrow: "AFFORDABLE PROTECTION ON EVERY TRIP",
+        title: "Protect yourself, your motorcycle or Bajaj, and your family.",
+        description:
+            "Get exclusive member discounts on comprehensive and third-party insurance, personal accident cover, passenger liability and family medical plans.",
+        bullets: [
+            "Simplified policy enrollment and flexible payment plans",
+            "Reduced deductibles/excess & priority claims processing",
+            "Emergency roadside assistance & claim-free loyalty rewards",
+        ],
+        ctaLabel: "See Insurance Benefits",
+        ctaHref: "/benefits",
+        image: insuranceProtectionImg,
+        imageAlt: "RAVU rider reviewing discounted insurance policy",
+    },
+    {
+        id: "rider-slide-garage",
+        tabLabel: "10%–25% Off Parts & Garages",
+        badge: "10%–25% Off Parts • 5%–20% Off Labor",
+        caption: "Less Downtime, Higher Earnings",
+        eyebrow: "LOWER DAILY OPERATING COSTS",
+        title: "Genuine spare parts, tires, batteries and trusted mechanics.",
+        description:
+            "Every shilling saved on maintenance goes directly to your take-home income. Redeem guaranteed member discounts at official RAVU partner garages and parts shops.",
+        bullets: [
+            "10%–25% OFF genuine spare parts, tires, batteries & lubricants",
+            "5%–20% OFF routine servicing, engine, brake & suspension work",
+            "Priority service access so you get back on the road faster",
+        ],
+        ctaLabel: "View Partner Network",
+        ctaHref: "/partners",
+        image: sparePartsGarageImg,
+        imageAlt: "RAVU mechanics servicing a member motorcycle and vehicle",
+    },
+    {
+        id: "rider-slide-growth",
+        tabLabel: "Grow to Fleets",
+        badge: "From Single Rider to Fleet Owner",
+        caption: "Career & Business Progression",
+        eyebrow: "LONG-TERM PROSPERITY",
+        title: "Grow from a single bike or Bajaj into a multi-vehicle operator.",
+        description:
+            "Whether you ride a boda boda, drive a Bajaj or taxi, own a family car, or manage a commercial delivery or bus fleet, RAVU grows alongside your ambitions.",
+        bullets: [
+            "Fleet Discount Program for multi-vehicle owners",
+            "SME business protection & asset insurance packages",
+            "Connected across 50+ cities and towns in Tanzania",
+        ],
+        ctaLabel: "Register Now",
+        ctaHref: "/register",
+        image: fleetMultiVehicleImg,
+        imageAlt: "Multi-vehicle mobility fleet in Dar es Salaam",
+    },
+];
 
 const SUPPORT_AREAS = [
     {
-        icon: BadgeCheck,
-        title: "Membership access",
-        text: "Connect with verified benefits and partner services across the network.",
+        icon: ShieldCheck,
+        title: "20%–30% Insurance Savings",
+        text: "Exclusive discounts on motorcycle, Bajaj, car, personal accident & family cover.",
     },
     {
         icon: Wrench,
-        title: "Practical support",
-        text: "Mobility-focused services built around your everyday operations.",
+        title: "10%–25% Off Parts & Garages",
+        text: "Save on genuine spare parts, tires, batteries, lubricants and priority mechanical repairs.",
     },
     {
         icon: Handshake,
-        title: "Connected community",
-        text: "Move forward as part of an organised, recognised rider community.",
+        title: "All Vehicle Categories",
+        text: "Serving boda boda riders, Bajaj operators, taxi drivers, trucks, buses and fleets.",
     },
 ];
 
@@ -164,6 +248,15 @@ export default function ForRiders() {
             {/* ------------------------------------------- 3 FEATURES STRIP */}
             <FeatureStrip items={SUPPORT_AREAS} />
 
+            {/* ------------------------------------------- RIDER SLIDESHOW */}
+            <EcosystemSlideshow
+                eyebrow="RIDER & DRIVER SHOWCASE"
+                title="Real protection and everyday savings"
+                highlight="for life on the road."
+                description="See how RAVU supports boda boda riders, Bajaj operators, taxi drivers and fleet owners every day."
+                slides={RIDER_SLIDES}
+            />
+
             {/* ------------------------------------------- APP IS THE FRONT DOOR */}
             <section className="bg-white py-16 sm:py-24">
                 <div className="mx-auto max-w-6xl px-5 sm:px-8">
@@ -214,10 +307,10 @@ export default function ForRiders() {
 
                                 <ul className="mt-6 space-y-4">
                                     {[
-                                        "Verified digital RAVU Member ID inside the app.",
-                                        "Direct access to fuel, workshop and financial partner benefits.",
-                                        "A recognised identity across the wider RAVU mobility network.",
-                                        "Clear step-by-step guidance at every stage of your journey.",
+                                        "Verified digital RAVU Member ID inside the app for instant partner recognition.",
+                                        "20%–30% preferred member discount target on motorcycle, Bajaj, car & personal accident insurance.",
+                                        "10%–25% OFF genuine spare parts, tires, batteries & lubricants + 5%–20% OFF garage servicing.",
+                                        "Priority claims processing, emergency roadside assistance & claim-free loyalty rewards.",
                                     ].map((item) => (
                                         <li
                                             key={item}

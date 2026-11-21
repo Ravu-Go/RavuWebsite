@@ -250,21 +250,29 @@ export default function Register() {
                                         }
                                         className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-2.5 text-sm font-medium text-slate-900 focus:border-[#00289a] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00289a]/15 transition-colors"
                                     >
-                                        <option>Fuel &amp; Energy Station</option>
                                         <option>
-                                            Spare Parts &amp; Garage Workshop
+                                            Spare Parts Supplier &amp; Auto Retailer (10%–25% Member Discount)
                                         </option>
                                         <option>
-                                            Insurance &amp; Financial Services
+                                            Mechanical Garage &amp; Vehicle Service Center (5%–20% Member Discount)
                                         </option>
                                         <option>
-                                            Healthcare &amp; Medical Provider
+                                            Insurance Underwriter &amp; Protection Provider (20%+ Member Discount)
                                         </option>
                                         <option>
-                                            Retail &amp; Merchant Partner
+                                            Tire, Battery &amp; Lubricant Center
                                         </option>
                                         <option>
-                                            EV &amp; Fleet Infrastructure
+                                            Fuel &amp; Energy Station
+                                        </option>
+                                        <option>
+                                            Commercial Fleet, Truck &amp; Bus Service Partner
+                                        </option>
+                                        <option>
+                                            Healthcare &amp; Family Medical Provider
+                                        </option>
+                                        <option>
+                                            Bank &amp; Financial Institution
                                         </option>
                                     </select>
                                 </div>

@@ -35,24 +35,28 @@ const SUPPORT_CHANNELS = [
 
 const FAQ = [
     {
-        question: "What is RAVU?",
-        answer: "RAVU is a membership-based mobility ecosystem connecting people, services and opportunity across Tanzania. It is built around the communities who keep movement happening, and grows outward to include the businesses, workshops and technology that support them.",
+        question: "What is RAVU Ltd?",
+        answer: "RAVU Ltd (based in Dar es Salaam, Tanzania) is building a comprehensive membership-based mobility ecosystem that aggregates motorcycle (boda boda) riders, Bajaj operators, private vehicle owners, commercial drivers, truck & bus operators and fleet owners into one structured network — unlocking exclusive insurance protection, spare parts discounts and priority garage services.",
     },
     {
-        question: "Who can become a member?",
-        answer: "RAVU begins with boda boda riders, drivers and motorcycle owners, and is designed to grow with mobility communities more broadly. Riders and drivers join and access their digital Member ID directly through the RAVU mobile app.",
+        question: "Who can become a RAVU member?",
+        answer: "RAVU serves six core mobility categories: (A) Motorcycle & Boda Boda Riders, (B) Bajaj (Three-Wheeler) & Commercial Vehicle Operators, (C) Private Motor Vehicle Owners & Member Households, (D) Truck Owners & Logistics Companies, (E) Bus Owners & Passenger Transport Companies, and (F) Commercial & Corporate Fleet Owners.",
     },
     {
-        question: "How do I register?",
-        answer: "Use the registration page to share your interest or download the RAVU mobile app. Registering online records your interest so RAVU can keep you informed as new membership benefits and partner locations launch in your region.",
+        question: "What discounts do members receive on insurance?",
+        answer: "Through RAVU's Strategic Insurance Partnership Program, verified members access a targeted 20%–30% preferred discount on standard premiums across 8 product lines (Motorcycle, Bajaj, Private Motor Vehicle, Commercial Fleet, Personal Accident, Health & Medical, Life & Family Protection, and SME Business Protection), along with value-added perks such as reduced deductibles, priority claims processing, flexible payment plans, and roadside assistance.",
     },
     {
-        question: "How can an organisation partner with RAVU?",
-        answer: "Visit the Partners page to explore partnership categories, or register your organisation's interest. Existing partners can sign in directly to the Partner Portal to verify member IDs and manage offers.",
+        question: "What discounts do members receive on spare parts and garage services?",
+        answer: "Verified RAVU members receive 10%–25% OFF genuine spare parts, tires, batteries, lubricants, filters and accessories, plus 5%–20% OFF routine maintenance, engine servicing, suspension, brakes, electrical diagnostics and wheel alignment at participating garages. Commercial fleets also qualify for the RAVU Fleet Discount Program with volume-based bulk pricing and priority service bay booking.",
     },
     {
-        question: "How do I access the Partner Portal?",
-        answer: "Click 'Sign in' in the top navigation bar and sign in with your partner credentials or authorised Google account to be routed automatically to your Partner Dashboard.",
+        question: "How does the Dar es Salaam Strategic Pilot Program work?",
+        answer: "New insurance and service partnerships launch through a 4–6 month pilot in Dar es Salaam with an initial cohort of 200–500 active verified riders, drivers and vehicle owners. The pilot measures member utilization, discount effectiveness and service turnaround before scaling nationwide.",
+    },
+    {
+        question: "How can an organization partner with RAVU?",
+        answer: "Insurers, spare parts suppliers, mechanical garages, tire & battery centers, fuel stations and financial institutions can register directly via the Partner Registration page or contact Saleh Nyindo (Founder & CEO, RAVU Ltd, Dar es Salaam) at nyindo@posteo.de.",
     },
 ];
 

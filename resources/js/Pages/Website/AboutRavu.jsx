@@ -1,13 +1,18 @@
 import { Link } from "@inertiajs/react";
 import {
     ArrowRight,
+    Award,
     Check,
     Globe2,
     Lightbulb,
+    Mail,
+    MapPin,
+    Quote,
     Share2,
     ShieldCheck,
     Target,
     UsersRound,
+    Wrench,
 } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
@@ -20,18 +25,18 @@ import serviceHubImg from "../../../imgs/RAVU Riders at the Service Hub.png";
 const VALUES = [
     {
         icon: ShieldCheck,
-        title: "Trust",
-        text: "Clear, responsible relationships at every point in the ecosystem.",
+        title: "Trust & Protection",
+        text: "Structured relationships that deliver real insurance, safety and financial security.",
     },
     {
         icon: UsersRound,
-        title: "Community",
-        text: "Mobility is people first, and progress works better together.",
+        title: "Aggregated Community Power",
+        text: "Transforming a fragmented market into a single organized network with collective bargaining power.",
     },
     {
         icon: Share2,
-        title: "Inclusion",
-        text: "A platform designed to grow with the people who keep movement happening.",
+        title: "Financial Inclusion",
+        text: "Lowering daily operating costs so riders, drivers, families and fleets can prosper.",
     },
 ];
 
@@ -39,18 +44,27 @@ const PURPOSE_CARDS = [
     {
         icon: Globe2,
         title: "Our Vision",
-        text: "A stronger, more connected mobility ecosystem across Tanzania where people can participate and grow.",
+        text: "To build Tanzania's most trusted mobility support ecosystem serving riders, drivers, private vehicle owners, transport operators and fleet owners.",
     },
     {
         icon: Target,
         title: "Our Mission",
-        text: "Connect mobility communities with relevant support, trusted partner services and everyday opportunity.",
+        text: "Improve the lives of mobility professionals and vehicle owners through income opportunities, professional development, financial inclusion, safety solutions and essential services.",
     },
     {
         icon: Lightbulb,
-        title: "Our Approach",
-        text: "Start with real mobility needs on the ground and build practical ecosystem connections around them.",
+        title: "Our Strategic Approach",
+        text: "Aggregate a fragmented mobility sector into a verified, structured network — lowering customer acquisition costs for partners while delivering 20%–30% insurance and 10%–25% spare parts savings to members.",
     },
+];
+
+const LONG_TERM_PILLARS = [
+    "Embedded insurance solutions & digital policy management inside the RAVU platform",
+    "Official RAVU Service Centers & Official RAVU Spare Parts Suppliers nationwide",
+    "Commercial Fleet Maintenance Programs & volume-based bulk spare-parts pricing",
+    "National Roadside Assistance, Vehicle Inspection & Tire and Battery Programs",
+    "Predictable Maintenance Subscription Packages & tier-based rider/driver rewards",
+    "Family protection packages, health/life insurance & financial wellness initiatives",
 ];
 
 export default function AboutRavu() {
@@ -59,7 +73,6 @@ export default function AboutRavu() {
             {/* ---------------------------------------------------------- HERO */}
             <section className="relative overflow-hidden bg-white">
                 <div className="relative flex items-center lg:min-h-[560px] xl:min-h-[600px]">
-                    {/* Right-side blended background image on desktop */}
                     <div
                         aria-hidden="true"
                         className="pointer-events-none hidden select-none lg:absolute lg:inset-y-0 lg:right-0 lg:block lg:w-[64%] xl:w-[62%]"
@@ -71,12 +84,10 @@ export default function AboutRavu() {
                             decoding="async"
                             className="h-full w-full object-cover object-center"
                         />
-                        {/* Smooth white gradient blend on the left seam */}
                         <div className="absolute inset-y-0 left-0 w-44 xl:w-56 bg-gradient-to-r from-white via-white/85 to-transparent" />
                         <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-white/40 to-transparent" />
                     </div>
 
-                    {/* Diagonal two-tone blue corner ribbon (bottom-right) */}
                     <div
                         aria-hidden="true"
                         className="pointer-events-none absolute bottom-0 right-0 z-10 hidden h-36 w-36 overflow-hidden lg:block"
@@ -85,40 +96,38 @@ export default function AboutRavu() {
                         <div className="absolute -bottom-20 -right-12 h-32 w-56 -rotate-45 bg-[#0B3B8C]" />
                     </div>
 
-                    {/* Foreground Content Container */}
                     <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
                         <div className="max-w-xl lg:max-w-[540px]">
-                            {/* Solid Royal Blue Pill Badge */}
                             <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
-                                ABOUT RAVU
+                                ABOUT RAVU LTD
                             </span>
 
-                            {/* Stacked Bold Headline */}
                             <h1 className="mt-5 text-4xl font-black leading-[1.06] tracking-tight text-[#050B17] sm:text-5xl lg:text-[3.35rem]">
-                                Mobility works better
+                                Mobility, opportunity,
                                 <br />
-                                when its people are{" "}
+                                protection and{" "}
                                 <span className="text-[#1864E8]">
-                                    connected.
+                                    prosperity.
                                 </span>
                             </h1>
 
-                            {/* Body Copy */}
                             <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600 sm:text-[17px]">
-                                RAVU is building a membership-based mobility
-                                ecosystem around the riders, drivers, owners,
-                                partners and communities who keep movement
-                                happening across Tanzania.
+                                Based in Dar es Salaam, Tanzania, RAVU Ltd is
+                                building a comprehensive membership ecosystem
+                                that connects motorcycle (boda boda) riders,
+                                Bajaj operators, private vehicle owners,
+                                commercial fleets, trucks and buses with
+                                exclusive insurance protection, genuine spare
+                                parts and trusted mechanical garages.
                             </p>
 
-                            {/* Primary & Secondary Action Buttons */}
                             <div className="mt-7 flex flex-wrap items-center gap-3.5">
                                 <Link
                                     href="/partners"
                                     prefetch
                                     className="inline-flex items-center gap-2.5 rounded-xl bg-[#0B3B8C] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#00289a] active:scale-[0.98]"
                                 >
-                                    <span>Partner With RAVU</span>
+                                    <span>Explore Strategic Partnerships</span>
                                     <ArrowRight size={16} />
                                 </Link>
                                 <Link
@@ -131,7 +140,6 @@ export default function AboutRavu() {
                             </div>
                         </div>
 
-                        {/* Mobile / Tablet Image Presentation */}
                         <div className="relative mt-10 overflow-hidden rounded-2xl border border-slate-100 shadow-lg lg:hidden">
                             <img
                                 src={serviceHubImg}
@@ -140,13 +148,6 @@ export default function AboutRavu() {
                                 decoding="async"
                                 className="h-auto w-full object-cover"
                             />
-                            <div
-                                aria-hidden="true"
-                                className="pointer-events-none absolute bottom-0 right-0 h-20 w-20 overflow-hidden"
-                            >
-                                <div className="absolute -bottom-10 -right-10 h-20 w-32 -rotate-45 bg-[#1864E8]" />
-                                <div className="absolute -bottom-12 -right-8 h-16 w-32 -rotate-45 bg-[#0B3B8C]" />
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -169,9 +170,11 @@ export default function AboutRavu() {
                             </span>
                         </h2>
                         <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-                            RAVU brings connected services, trusted
-                            relationships and practical progress to the mobility
-                            economy starting with the people at its centre.
+                            Rather than serving operators individually, RAVU
+                            aggregates a fragmented market into a structured
+                            network — creating measurable financial advantages
+                            for members and scalable distribution for partner
+                            organizations.
                         </p>
                     </div>
 
@@ -199,71 +202,101 @@ export default function AboutRavu() {
                 </div>
             </section>
 
-            {/* ------------------------------------------------------ WHO RAVU IS */}
+            {/* -------------------- LONG-TERM STRATEGIC VISION & LEADERSHIP */}
             <section className="border-t border-slate-100 bg-white py-16 sm:py-24">
                 <div className="mx-auto max-w-6xl px-5 sm:px-8">
-                    <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+                    <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
                         <div className="lg:col-span-6">
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                                WHO RAVU IS
+                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1864E8]">
+                                LONG-TERM STRATEGIC VISION
                             </p>
                             <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
-                                A mobility ecosystem,{" "}
+                                Building Tanzania&apos;s most impactful{" "}
                                 <span className="text-[#1864E8]">
-                                    not just an app.
+                                    mobility protection &amp; service network.
                                 </span>
                             </h2>
                             <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-                                RAVU exists to make mobility work better for
-                                everyone involved in it the people who move,
-                                the businesses they move between and the
-                                services that support them.
+                                Starting with our 4–6 month Dar es Salaam pilot
+                                program (200–500 initial members), RAVU is
+                                expanding into a nationwide ecosystem of
+                                accredited service centers, embedded protection
+                                and financial inclusion.
                             </p>
 
-                            <div className="mt-8 flex flex-wrap items-center gap-3.5">
-                                <Link
-                                    href="/how-it-works"
-                                    prefetch
-                                    className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 text-xs font-bold text-white shadow-xs transition-all hover:bg-slate-800 sm:text-sm"
-                                >
-                                    <span>See How It Works</span>
-                                    <ArrowRight size={15} />
-                                </Link>
-                                <Link
-                                    href="/for-riders"
-                                    prefetch
-                                    className="inline-flex items-center rounded-full border border-slate-200 bg-white px-6 py-3 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:text-slate-950 sm:text-sm"
-                                >
-                                    For Riders &amp; Drivers
-                                </Link>
-                            </div>
+                            <ul className="mt-6 space-y-3">
+                                {LONG_TERM_PILLARS.map((point) => (
+                                    <li
+                                        key={point}
+                                        className="flex items-start gap-3 text-sm font-medium text-slate-700"
+                                    >
+                                        <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
+                                            <Check size={12} strokeWidth={3} />
+                                        </span>
+                                        <span>{point}</span>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
 
+                        {/* Founder & CEO Executive Perspective Card */}
                         <div className="lg:col-span-6">
-                            <div className="rounded-3xl border border-slate-200/80 bg-slate-50/70 p-7 sm:p-9">
-                                <ul className="space-y-4">
-                                    {[
-                                        "A membership ecosystem connecting people, businesses, services and technology.",
-                                        "Built around real everyday mobility needs, not abstract technology.",
-                                        "Designed to grow alongside the local communities it serves.",
-                                        "Open to vetted partners who add genuine, measurable value to members.",
-                                    ].map((point) => (
-                                        <li
-                                            key={point}
-                                            className="flex items-start gap-3.5 rounded-2xl border border-slate-200/70 bg-white p-4 shadow-2xs"
-                                        >
-                                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
-                                                <Check
-                                                    size={12}
-                                                    strokeWidth={3}
-                                                />
-                                            </span>
-                                            <span className="text-sm font-medium text-slate-800">
-                                                {point}
-                                            </span>
-                                        </li>
-                                    ))}
-                                </ul>
+                            <div className="rounded-3xl bg-[#050B17] p-8 text-white shadow-xl sm:p-10">
+                                <span className="inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-400/10 px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider text-sky-300">
+                                    <Award size={13} />
+                                    <span>Leadership &amp; Founder Vision</span>
+                                </span>
+
+                                <blockquote className="mt-6 space-y-4">
+                                    <p className="text-lg font-bold leading-snug text-white sm:text-xl">
+                                        &ldquo;Building a trusted ecosystem that
+                                        delivers mobility, opportunity,
+                                        protection, and prosperity for every
+                                        rider.&rdquo;
+                                    </p>
+                                    <p className="text-sm leading-relaxed text-slate-300">
+                                        &ldquo;We believe that affordable
+                                        insurance and reliable vehicle
+                                        maintenance are not only a commercial
+                                        opportunity, but a social and economic
+                                        necessity for the communities we serve.
+                                        Together with our strategic partners, we
+                                        are lowering operating costs, protecting
+                                        families, and driving mobility forward
+                                        across Tanzania.&rdquo;
+                                    </p>
+                                </blockquote>
+
+                                <div className="mt-7 border-t border-white/10 pt-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div>
+                                        <p className="text-base font-black text-white">
+                                            Saleh Nyindo
+                                        </p>
+                                        <p className="text-xs font-semibold text-sky-300">
+                                            Founder &amp; CEO, RAVU Ltd
+                                        </p>
+                                        <p className="mt-1 flex items-center gap-1.5 text-xs text-slate-400">
+                                            <MapPin size={12} />
+                                            <span>Dar es Salaam, Tanzania</span>
+                                            <span>•</span>
+                                            <a
+                                                href="mailto:nyindo@posteo.de"
+                                                className="text-sky-300 hover:underline"
+                                            >
+                                                nyindo@posteo.de
+                                            </a>
+                                        </p>
+                                    </div>
+
+                                    <Link
+                                        href="/partners"
+                                        prefetch
+                                        className="inline-flex items-center gap-2 rounded-xl bg-[#1864E8] px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-[#0B3B8C] self-start sm:self-auto"
+                                    >
+                                        <span>View Partnership Proposals</span>
+                                        <ArrowRight size={14} />
+                                    </Link>
+                                </div>
                             </div>
                         </div>
                     </div>
