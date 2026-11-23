@@ -1,6 +1,6 @@
 {
     "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "ravu-website",
+    "name": "staging",
     "main": "workers/app.js",
     "compatibility_date": "2026-11-01",
     "assets": {
