@@ -1,4 +1,4 @@
-import footerBg from "../../imgs/Footer.jpg";
+import { keyFor, Lines, resolveMedia, useSiteContent } from "../content";
 
 /**
  * Shared Community & Stats skyline banner.
@@ -7,24 +7,16 @@ import footerBg from "../../imgs/Footer.jpg";
  * Optimized with high-contrast text scrim on the left and full-vibrancy
  * illuminated Dar es Salaam city skyline & neon blue ribbons on the right.
  */
-export default function CommunitySection({
-    eyebrow = "A GROWING COMMUNITY",
-    title = (
-        <>
-            More people.
-            <br />
-            Stronger communities.
-        </>
-    ),
-    text = "RAVU connects riders, drivers, businesses and communities to create more value and opportunities across Tanzania.",
-}) {
+export default function CommunitySection() {
+    const { community } = useSiteContent("global");
+    const { eyebrow, text, stats } = community;
     return (
         <section className="relative overflow-hidden bg-[#061023] py-20 text-white sm:py-24 lg:py-28">
             {/* Background image stage */}
             <div className="pointer-events-none absolute inset-0 select-none">
                 {/* Skyline & illuminated ribbons image */}
                 <img
-                    src={footerBg}
+                    src={resolveMedia(community.image)}
                     alt=""
                     aria-hidden="true"
                     loading="lazy"
@@ -59,7 +51,7 @@ export default function CommunitySection({
                     </span>
 
                     <h2 className="mt-5 text-3xl font-black leading-[1.08] tracking-tight text-white sm:text-4xl lg:text-5xl">
-                        {title}
+                        <Lines text={community.title} />
                     </h2>
 
                     <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300 sm:text-base">
@@ -73,41 +65,25 @@ export default function CommunitySection({
                     was the main source of scroll jank on this section. */}
                 <div className="mt-14 sm:mt-16 rounded-2xl border border-white/10 bg-[#0B1220]/90 p-6 shadow-2xl shadow-black/40 sm:p-8">
                     <div className="grid grid-cols-2 gap-8 divide-y divide-white/10 sm:grid-cols-4 sm:gap-6 sm:divide-y-0 sm:divide-x sm:divide-white/10">
-                        <div className="sm:pr-6">
-                            <p className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
-                                100K+
-                            </p>
-                            <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-sky-300">
-                                Active Riders
-                            </p>
-                        </div>
-
-                        <div className="pt-6 sm:pt-0 sm:px-6">
-                            <p className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
-                                10K+
-                            </p>
-                            <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-sky-300">
-                                Drivers &amp; Operators
-                            </p>
-                        </div>
-
-                        <div className="pt-6 sm:pt-0 sm:px-6">
-                            <p className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
-                                50+
-                            </p>
-                            <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-sky-300">
-                                Cities &amp; Towns
-                            </p>
-                        </div>
-
-                        <div className="pt-6 sm:pt-0 sm:pl-6">
-                            <p className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
-                                100+
-                            </p>
-                            <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-sky-300">
-                                Business Partners
-                            </p>
-                        </div>
+                        {stats.map((stat, index) => (
+                            <div
+                                key={keyFor(stat, index)}
+                                className={
+                                    index === 0
+                                        ? "sm:pr-6"
+                                        : index === stats.length - 1
+                                          ? "pt-6 sm:pt-0 sm:pl-6"
+                                          : "pt-6 sm:pt-0 sm:px-6"
+                                }
+                            >
+                                <p className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
+                                    {stat.value}
+                                </p>
+                                <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-sky-300">
+                                    {stat.label}
+                                </p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -1,0 +1,153 @@
+{
+    "seo": {
+        "title": "Member Benefits — RAVU Ecosystem",
+        "description": "Discover savings, financial access, protection, maintenance and community support through RAVU membership."
+    },
+    "hero": {
+        "eyebrow": "EXCLUSIVE MEMBER BENEFITS",
+        "title": "Measurable savings around",
+        "highlight": "every mobility journey.",
+        "text": "RAVU aggregates the purchasing power of riders, drivers, private vehicle owners and commercial fleets to unlock exclusive 20%–30% insurance discounts, 10%–25% spare parts savings and 5%–20% garage service discounts.",
+        "primaryCta": { "label": "Explore Membership", "href": "/membership" },
+        "secondaryCta": { "label": "Partner With RAVU", "href": "/partners" },
+        "image": "fundRepairShop.jpg",
+        "imageAlt": "RAVU member accessing workshop maintenance benefits"
+    },
+    "features": [
+        { "icon": "ShieldCheck", "title": "20% – 30% Insurance Savings", "text": "Preferred member discounts across motorcycle, Bajaj, car, fleet, health and family insurance." },
+        { "icon": "Wrench", "title": "10% – 25% Off Spare Parts", "text": "Exclusive savings on genuine parts, tires, batteries, lubricants and filters." },
+        { "icon": "BadgeCheck", "title": "5% – 20% Off Garage Services", "text": "Priority servicing, repairs, diagnostics and inspections at official partner garages." }
+    ],
+    "slideshow": {
+        "eyebrow": "VISUAL BENEFITS TOUR",
+        "title": "See how RAVU membership",
+        "highlight": "lowers your everyday costs.",
+        "description": "Browse our flagship member benefit programs across insurance protection, genuine spare parts, mechanical servicing and fleet operations.",
+        "slides": [
+            {
+                "tabLabel": "20%–30% Off Insurance",
+                "badge": "20% – 30% Preferred Member Discount",
+                "caption": "8 Protection Lines",
+                "eyebrow": "INSURANCE & PROTECTION BENEFITS",
+                "title": "Comprehensive protection for your ride, family and fleet.",
+                "description": "Verified RAVU members access preferred insurance pricing and simplified enrollment across motorcycles, Bajaj, private family cars, commercial fleets, health and personal accident cover.",
+                "bullets": [
+                    "Minimum 20% target discount on standard insurance premiums",
+                    "Reduced deductibles/excess, priority claims & flexible payment plans",
+                    "Emergency roadside assistance & claim-free loyalty rewards"
+                ],
+                "ctaLabel": "Register for Benefits",
+                "ctaHref": "/register",
+                "image": "ravu_insurance_protection.jpg",
+                "imageAlt": "RAVU member reviewing discounted insurance policy in Dar es Salaam"
+            },
+            {
+                "tabLabel": "10%–25% Off Spare Parts",
+                "badge": "10% – 25% OFF Genuine Parts & Tires",
+                "caption": "Official Parts & Garage Network",
+                "eyebrow": "MAINTENANCE & GARAGE BENEFITS",
+                "title": "Genuine spare parts, tires, batteries and priority workshop bays.",
+                "description": "Reduce your daily operating costs and minimize vehicle downtime with guaranteed member discounts on parts and mechanical labor across Tanzania.",
+                "bullets": [
+                    "10%–25% OFF motorcycle, car, truck & bus spare parts",
+                    "10%–25% OFF tires, batteries, engine lubricants & filters",
+                    "5%–20% OFF engine servicing, brakes, suspension & diagnostics"
+                ],
+                "ctaLabel": "Explore Membership",
+                "ctaHref": "/membership",
+                "image": "ravu_spare_parts_garage.jpg",
+                "imageAlt": "RAVU partner garage and spare parts shop in Dar es Salaam"
+            },
+            {
+                "tabLabel": "Fleet & Multi-Vehicle",
+                "badge": "Volume Pricing & Priority Booking",
+                "caption": "All 6 Mobility Categories",
+                "eyebrow": "COMMERCIAL FLEET DISCOUNT PROGRAM",
+                "title": "Tailored savings for private cars, trucks, buses and commercial fleets.",
+                "description": "Whether you own a single motorcycle, a family SUV or a commercial fleet of delivery vans, trucks and buses, RAVU scales your savings across every vehicle.",
+                "bullets": [
+                    "Volume-based pricing & bulk spare-parts discounts for fleets",
+                    "Priority service bay booking & dedicated account management",
+                    "Customized preventive maintenance & fleet insurance packages"
+                ],
+                "ctaLabel": "Partner or Enquire",
+                "ctaHref": "/partners",
+                "image": "ravu_fleet_multi_vehicle.jpg",
+                "imageAlt": "Motorcycles, Bajaj, SUV, commercial truck and bus in Dar es Salaam"
+            },
+            {
+                "tabLabel": "Instant ID Redemption",
+                "badge": "Verified RAVU Member ID",
+                "caption": "Seamless Point-of-Sale Recognition",
+                "eyebrow": "EFFORTLESS REDEMPTION",
+                "title": "Show your RAVU Member ID and save immediately at partner locations.",
+                "description": "No complicated paperwork — partner staff verify your RAVU Member ID in seconds through the Partner Portal and apply your member discount on the spot.",
+                "bullets": [
+                    "Recognized at participating insurers, garages, parts shops & stations",
+                    "Transparent discount terms and warranty support",
+                    "Track all your member benefits inside the RAVU mobile app"
+                ],
+                "ctaLabel": "Get the RAVU App",
+                "ctaHref": "/for-riders",
+                "image": "memberPlusPartners.jpg",
+                "imageAlt": "RAVU members and partner businesses connecting"
+            }
+        ]
+    },
+    "areas": {
+        "eyebrow": "MEASURABLE FINANCIAL ADVANTAGE",
+        "title": "Benefits that lower costs and",
+        "highlight": "protect livelihoods.",
+        "text": "Every RAVU partnership is structured around clear discount benchmarks and priority service standards — serving boda boda riders, Bajaj operators, private car owners, families, trucks, buses and commercial fleets.",
+        "items": [
+            {
+                "icon": "ShieldCheck",
+                "badge": "20% – 30% Member Discount Target",
+                "title": "Exclusive Insurance & Protection Program",
+                "text": "Access discounted comprehensive and third-party coverage for motorcycles (boda boda), Bajaj three-wheelers, private family vehicles and commercial fleets — plus personal accident, health/medical, family life protection and SME business insurance.",
+                "bullets": [
+                    "Reduced deductibles/excess & priority claims processing",
+                    "Complimentary personal accident & passenger protection options",
+                    "24/7 emergency roadside assistance & flexible payment plans",
+                    "Family medical extensions & claim-free loyalty rewards"
+                ]
+            },
+            {
+                "icon": "Wrench",
+                "badge": "10% – 25% Off Parts • 5% – 20% Off Labor",
+                "title": "Spare Parts, Tires, Batteries & Garage Program",
+                "text": "Lower your biggest operational expense with guaranteed member discounts at official spare parts suppliers, tire centers and mechanical garages across Tanzania.",
+                "bullets": [
+                    "10%–25% OFF motorcycle, car, truck & bus spare parts",
+                    "10%–25% OFF tires, batteries, engine lubricants & filters",
+                    "5%–20% OFF routine servicing, engine, brake & suspension repairs",
+                    "Priority service bays to minimize vehicle downtime"
+                ]
+            },
+            {
+                "icon": "Truck",
+                "badge": "Commercial & Fleet Operators",
+                "title": "Fleet Discount & Maintenance Program",
+                "text": "Built for transport companies, delivery businesses, logistics providers, bus operators and motorcycle fleet owners seeking predictable maintenance and lower operating costs.",
+                "bullets": [
+                    "Volume-based pricing & bulk spare-parts discounts",
+                    "Priority service booking & dedicated account management",
+                    "Customized preventive maintenance & inspection packages",
+                    "Preferential commercial fleet insurance rates"
+                ]
+            },
+            {
+                "icon": "Banknote",
+                "badge": "Financial Inclusion & Wellness",
+                "title": "Financial Access, Fuel & Family Prosperity",
+                "text": "Connect with fuel cashback offers, financial wellness initiatives, asset financing partners and savings-linked protection built around daily mobility earnings.",
+                "bullets": [
+                    "Fuel & lubricant cashback at participating stations",
+                    "Education protection & family welfare packages",
+                    "Tier-based member rewards for safe, claim-free operators",
+                    "Professional development & business growth support"
+                ]
+            }
+        ]
+    }
+}

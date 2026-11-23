@@ -2,32 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Partner;
+use App\Models\PartnerApplication;
+use App\Models\PartnerApplicationStatusHistory;
+use App\Models\PartnerAuditLog;
+use App\Models\PartnerCategory;
 use App\Models\User;
 use App\Support\LoginProfile;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use Throwable;
 
 class AuthController extends Controller
 {
-    /**
-     * Show the login page (for Super Admin & Partners).
-     */
     public function showLogin(): Response
     {
-        return Inertia::render('Website/Login');
+        return Inertia::render('Website/Login', ['status' => session('status')]);
     }
 
-    /**
-     * Handle an incoming authentication request for Super Admin or Partner.
-     */
     public function login(Request $request): SymfonyResponse
     {
         $credentials = $request->validate([
@@ -35,231 +38,161 @@ class AuthController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-        $email = strtolower(trim($credentials['email']));
-        $password = $credentials['password'];
-        $remember = $request->boolean('remember');
-
-        // 1. Try authenticating against the database
-        try {
-            if (Schema::hasTable('users')) {
-                $hasRole = Schema::hasColumn('users', 'role');
-
-                // Auto-provision the default Super Admin if not yet seeded in DB
-                if ($email === 'jux@ravu.com' && ! User::where('email', 'jux@ravu.com')->exists()) {
-                    $attrs = [
-                        'name' => 'Jux (Super Admin)',
-                        'email' => 'jux@ravu.com',
-                        'password' => Hash::make('password'),
-                        'email_verified_at' => now(),
-                    ];
-                    if ($hasRole) {
-                        $attrs['role'] = 'super_admin';
-                    }
-                    User::create($attrs);
-                }
-
-                // Auto-provision the default Partner (chid@total.com) if not yet seeded in DB
-                if (in_array($email, ['chid@total.com', 'partner@ravu.com'], true) && ! User::where('email', $email)->exists()) {
-                    $attrs = [
-                        'name' => 'Chid (TotalEnergies Partner)',
-                        'email' => $email,
-                        'password' => Hash::make('password'),
-                        'email_verified_at' => now(),
-                    ];
-                    if ($hasRole) {
-                        $attrs['role'] = 'partner';
-                    }
-                    User::create($attrs);
-                }
-
-                if (Auth::attempt(['email' => $email, 'password' => $password], $remember)) {
-                    $request->session()->regenerate();
-
-                    /** @var User $user */
-                    $user = Auth::user();
-                    $role = $user->isSuperAdmin() ? 'super_admin' : ($user->role ?? 'partner');
-
-                    // Only Super Admin and Partner can log in on the web platform
-                    if (! in_array($role, ['super_admin', 'partner'], true)) {
-                        Auth::logout();
-                        throw ValidationException::withMessages([
-                            'email' => 'Web portal access is restricted to RAVU Partners and Super Admins. Riders use the RAVU mobile app.',
-                        ]);
-                    }
-
-                    $request->session()->put('authenticated_user', [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'email' => $user->email,
-                        'role' => $role,
-                    ]);
-
-                    LoginProfile::capture($request, $user, 'password');
-
-                    $targetUrl = LoginProfile::homeFor($role);
-
-                    return redirect()->to($targetUrl)->with('success', $role === 'super_admin'
-                        ? 'Welcome back, Super Admin!'
-                        : 'Welcome back to your Partner Dashboard!');
-                }
-            }
-        } catch (ValidationException $ve) {
-            throw $ve;
-        } catch (Throwable $e) {
-            // Database not running or not migrated yet — fall through to session/seeded fallback
+        $credentials['email'] = strtolower(trim($credentials['email']));
+        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+            throw ValidationException::withMessages(['email' => 'These credentials do not match our records.']);
         }
 
-        // 2. Fallback check for Super Admin (jux@ravu.com / password)
-        if ($email === 'jux@ravu.com' && $password === 'password') {
-            $request->session()->put('authenticated_user', [
-                'id' => 1,
-                'name' => 'Jux (Super Admin)',
-                'email' => 'jux@ravu.com',
-                'role' => 'super_admin',
-            ]);
-            LoginProfile::capture($request, $request->session()->get('authenticated_user'), 'password');
+        $request->session()->regenerate();
+        /** @var User $user */
+        $user = Auth::user();
+        $role = $user->portalRole();
 
-            return redirect()->to('/super-admin')->with('success', 'Welcome back, Super Admin!');
+        if (! in_array($role, ['partner', 'partner_reviewer', 'super_admin'], true)
+            || ($role === 'partner' && ! $user->partners()->exists())) {
+            Auth::logout();
+            throw ValidationException::withMessages(['email' => 'This account does not have RAVU Partner Portal access.']);
         }
 
-        // 3. Fallback check for Partner (chid@total.com / password)
-        if (in_array($email, ['chid@total.com', 'partner@ravu.com'], true) && $password === 'password') {
-            $request->session()->put('authenticated_user', [
-                'id' => 2,
-                'name' => 'Chid (TotalEnergies Partner)',
-                'email' => $email,
-                'role' => 'partner',
-                'category' => 'Fuel & Energy Station',
-                'phone' => '+255 754 200 100',
-            ]);
-            LoginProfile::capture($request, $request->session()->get('authenticated_user'), 'password');
+        LoginProfile::capture($request, $user, 'password');
 
-            return redirect()->to('/partner-dashboard')->with('success', 'Welcome back to your Partner Dashboard!');
-        }
-
-        // 4. Check session-registered partners (when DB is offline)
-        $registeredPartners = $request->session()->get('registered_partners', []);
-        if (isset($registeredPartners[$email]) && Hash::check($password, $registeredPartners[$email]['password'])) {
-            $partnerData = $registeredPartners[$email];
-            $request->session()->put('authenticated_user', [
-                'id' => $partnerData['id'] ?? rand(100, 999),
-                'name' => $partnerData['name'],
-                'email' => $partnerData['email'],
-                'role' => 'partner',
-                'category' => $partnerData['category'] ?? 'Business Partner',
-                'phone' => $partnerData['phone'] ?? '',
-            ]);
-            LoginProfile::capture($request, $request->session()->get('authenticated_user'), 'password');
-
-            return redirect()->to('/partner-dashboard')->with('success', 'Welcome back to your Partner Dashboard!');
-        }
-
-        throw ValidationException::withMessages([
-            'email' => 'Invalid email or password. Only registered RAVU Partners and Super Admins can sign in here.',
-        ]);
+        return redirect()->to(LoginProfile::homeFor($role))->with('success', 'Welcome back to the RAVU Partner Portal.');
     }
 
-    /**
-     * Handle Partner registration and redirect straight to Partner Dashboard.
-     */
-    public function register(Request $request): SymfonyResponse
+    public function register(Request $request): RedirectResponse
     {
         $validated = $request->validate([
+            'business_name' => ['nullable', 'string', 'max:255'],
+            'category_id' => ['nullable'],
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:50'],
-            'category' => ['nullable', 'string', 'max:100'],
-            'password' => ['required', 'string', 'min:6'],
+            'position' => ['nullable', 'string', 'max:120'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'phone' => ['required', 'string', 'max:50'],
+            'preferred_communication' => ['nullable', 'in:email,phone,whatsapp'],
+            'password' => ['required', 'confirmed', PasswordRule::min(6)],
+            'terms' => ['required', 'accepted'],
+            'privacy' => ['required', 'accepted'],
         ]);
 
-        $email = strtolower(trim($validated['email']));
-        $name = trim($validated['name']);
-        $phone = trim($validated['phone'] ?? '');
-        $category = trim($validated['category'] ?? 'Business Partner');
-
-        if ($email === 'jux@ravu.com') {
-            throw ValidationException::withMessages([
-                'email' => 'This email is reserved for the Super Admin account. Please sign in directly.',
+        $user = DB::transaction(function () use ($validated, $request) {
+            $now = now();
+            $user = User::create([
+                'name' => trim($validated['name']),
+                'position' => trim($validated['position'] ?? 'Partner Representative'),
+                'email' => strtolower(trim($validated['email'])),
+                'phone' => trim($validated['phone']),
+                'preferred_communication' => $validated['preferred_communication'] ?? 'whatsapp',
+                'password' => Hash::make($validated['password']),
+                'role' => 'partner',
+                'terms_accepted_at' => $now,
+                'privacy_accepted_at' => $now,
+                'terms_version' => config('partner.terms_version', 'v1'),
+                'privacy_version' => config('partner.privacy_version', 'v1'),
             ]);
-        }
 
-        $userRecord = null;
+            $registeredName = ! empty($validated['business_name'])
+                ? trim($validated['business_name'])
+                : trim($validated['name']);
 
-        try {
-            if (Schema::hasTable('users')) {
-                if (User::where('email', $email)->exists()) {
-                    throw ValidationException::withMessages([
-                        'email' => 'A partner account with this email already exists. Please sign in instead.',
-                    ]);
+            $categoryId = null;
+            if (! empty($validated['category_id']) && is_numeric($validated['category_id'])) {
+                $exists = PartnerCategory::whereKey($validated['category_id'])->exists();
+                if ($exists) {
+                    $categoryId = (int) $validated['category_id'];
                 }
-
-                $attrs = [
-                    'name' => $name,
-                    'email' => $email,
-                    'password' => Hash::make($validated['password']),
-                    'email_verified_at' => now(),
-                ];
-
-                if (Schema::hasColumn('users', 'role')) {
-                    $attrs['role'] = 'partner';
-                }
-
-                $userRecord = User::create($attrs);
-                Auth::login($userRecord, true);
-                $request->session()->regenerate();
             }
-        } catch (ValidationException $ve) {
-            throw $ve;
-        } catch (Throwable $e) {
-            // Fallback to session storage if MySQL is not migrated/running
-        }
 
-        $registeredPartners = $request->session()->get('registered_partners', []);
-        $registeredPartners[$email] = [
-            'id' => $userRecord?->id ?? rand(100, 999),
-            'name' => $name,
-            'email' => $email,
-            'phone' => $phone,
-            'category' => $category,
-            'password' => Hash::make($validated['password']),
-            'role' => 'partner',
-        ];
-        $request->session()->put('registered_partners', $registeredPartners);
+            $partner = Partner::create([
+                'registered_name' => $registeredName,
+                'trading_name' => $registeredName,
+                'partner_category_id' => $categoryId,
+                'status' => 'onboarding',
+            ]);
+            $partner->users()->attach($user->id, ['role' => 'owner']);
+            $application = PartnerApplication::create(['partner_id' => $partner->id, 'status' => 'draft']);
+            PartnerApplicationStatusHistory::create([
+                'partner_application_id' => $application->id,
+                'new_status' => 'draft',
+                'changed_by' => $user->id,
+                'comment' => 'Partner account created.',
+            ]);
+            PartnerAuditLog::create([
+                'partner_id' => $partner->id,
+                'user_id' => $user->id,
+                'action' => 'account_registered',
+                'subject_type' => PartnerApplication::class,
+                'subject_id' => $application->id,
+                'ip_address' => $request->ip(),
+            ]);
 
-        $request->session()->put('authenticated_user', [
-            'id' => $userRecord?->id ?? $registeredPartners[$email]['id'],
-            'name' => $name,
-            'email' => $email,
-            'phone' => $phone,
-            'category' => $category,
-            'role' => 'partner',
-        ]);
-        LoginProfile::capture($request, $userRecord ?? $request->session()->get('authenticated_user'), 'password');
+            return $user;
+        });
 
-        return redirect()->to('/partner-dashboard')->with('success', 'Partner account created! Welcome to your RAVU Partner Dashboard.');
+        event(new Registered($user));
+        Auth::login($user);
+        $request->session()->regenerate();
+        LoginProfile::capture($request, $user, 'password');
+
+        return redirect()->to('/partner-dashboard')->with('success', 'Partner account created! Welcome to your RAVU Partner Portal.');
     }
 
-    /**
-     * Log the user out of the application.
-     */
-    public function logout(Request $request): RedirectResponse
+    public function showForgotPassword(): Response
     {
-        try {
-            Auth::logout();
-        } catch (Throwable $e) {
-            // Ignore if DB session driver isn't active
+        return Inertia::render('Website/ForgotPassword', ['status' => session('status')]);
+    }
+
+    public function sendResetLink(Request $request): RedirectResponse
+    {
+        $request->validate(['email' => ['required', 'email']]);
+        $status = Password::sendResetLink(['email' => strtolower(trim($request->string('email')->toString()))]);
+
+        if ($status !== Password::RESET_LINK_SENT) {
+            throw ValidationException::withMessages(['email' => __($status)]);
         }
 
-        $request->session()->forget(['authenticated_user', 'super_admin_user']);
+        return back()->with('status', __($status));
+    }
 
-        // The remembered login profile cookie is intentionally kept so the
-        // next visit to /login can offer "Continue as …".
+    public function showResetPassword(Request $request, string $token): Response
+    {
+        return Inertia::render('Website/ResetPassword', [
+            'email' => $request->query('email'),
+            'token' => $token,
+        ]);
+    }
+
+    public function resetPassword(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'token' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'confirmed', PasswordRule::min(12)->letters()->numbers()],
+        ]);
+
+        $status = Password::reset($validated, function (User $user, string $password) {
+            $user->forceFill([
+                'password' => Hash::make($password),
+                'remember_token' => Str::random(60),
+            ])->save();
+            event(new PasswordReset($user));
+        });
+
+        if ($status !== Password::PASSWORD_RESET) {
+            throw ValidationException::withMessages(['email' => __($status)]);
+        }
+
+        return redirect()->route('login')->with('status', __($status));
+    }
+
+    public function logout(Request $request): RedirectResponse
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/login')->with('success', 'You have been signed out.');
     }
 
-    /**
-     * Forget the remembered login profile ("Not you?").
-     */
     public function forgetProfile(): RedirectResponse
     {
         LoginProfile::forget();

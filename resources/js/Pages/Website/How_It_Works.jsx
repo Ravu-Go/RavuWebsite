@@ -1,9 +1,3 @@
-import {
-    BadgeCheck,
-    Building2,
-    Smartphone,
-    UsersRound,
-} from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
 import {
@@ -13,93 +7,54 @@ import {
     Hero,
 } from "../../Components/sections";
 
-const FLOW_PILLARS = [
-    {
-        icon: Smartphone,
-        title: "1. Join via the app",
-        text: "Riders and drivers register directly in the RAVU mobile app.",
-    },
-    {
-        icon: BadgeCheck,
-        title: "2. Get verified ID",
-        text: "Receive your digital RAVU Member ID for instant recognition.",
-    },
-    {
-        icon: Building2,
-        title: "3. Unlock partner value",
-        text: "Access discounts, workshops and services across the network.",
-    },
-];
-
-const JOURNEY = [
-    {
-        title: "Discover RAVU",
-        text: "Understand the membership ecosystem and how riders, drivers and partners connect.",
-    },
-    {
-        title: "Register",
-        text: "Sign up in the mobile app or share your interest online to join the network.",
-    },
-    {
-        title: "Become a member",
-        text: "Complete verification and activate your digital RAVU Member ID.",
-    },
-    {
-        title: "Access the ecosystem",
-        text: "Explore partner fuel stations, repair workshops and financial services.",
-    },
-    {
-        title: "Participate",
-        text: "Build connections through local mobility hubs and community initiatives.",
-    },
-    {
-        title: "Grow with RAVU",
-        text: "Move forward with lower operating costs and a stronger support network.",
-    },
-];
+import { Headline, keyFor, useSiteContent } from "../../content";
+import { iconFor } from "../../content/icons";
 
 export default function HowItWorks() {
+    const { seo, hero, features, steps, sides } = useSiteContent("howItWorks");
+
     return (
-        <WebsiteLayout>
+        <WebsiteLayout seo={seo}>
             {/* ---------------------------------------------------------- HERO */}
             <Hero
-                eyebrow="HOW IT WORKS"
-                title="A simple path into a"
-                highlight="connected ecosystem."
-                text="RAVU brings members, riders, partners and community together through one clear journey — discover, join, connect and grow."
-                primary={{ label: "Explore Membership", href: "/membership" }}
-                secondary={{ label: "Partner With RAVU", href: "/partners" }}
+                eyebrow={hero.eyebrow}
+                title={hero.title}
+                highlight={hero.highlight}
+                text={hero.text}
+                primary={hero.primaryCta}
+                secondary={hero.secondaryCta}
             />
 
             {/* ------------------------------------------- 3 PILLARS STRIP */}
-            <FeatureStrip items={FLOW_PILLARS} />
+            <FeatureStrip items={features} />
 
             {/* --------------------------------------------------- THE JOURNEY */}
             <section className="bg-white py-16 sm:py-24">
                 <div className="mx-auto max-w-6xl px-5 sm:px-8">
                     <div className="mx-auto max-w-2xl text-center">
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                            STEP BY STEP
+                            {steps.eyebrow}
                         </p>
                         <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
-                            Discover. Join.{" "}
-                            <span className="text-[#1864E8]">
-                                Connect. Grow.
-                            </span>
+                            <Headline
+                                title={steps.title}
+                                highlight={steps.highlight}
+                                highlightClassName="text-[#1864E8]"
+                            />
                         </h2>
                         <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-                            Six clear steps, each building on the last.
+                            {steps.text}
                         </p>
                     </div>
 
                     <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        {JOURNEY.map((step, index) => (
+                        {steps.items.map((step, index) => (
                             <div
-                                key={step.title}
+                                key={keyFor(step, index)}
                                 className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs transition-all hover:border-slate-300 hover:shadow-md sm:p-7"
                             >
                                 <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#EBF3FE] text-xs font-black text-[#1864E8]">
-                                    0{index + 1}
+                                    {String(index + 1).padStart(2, "0")}
                                 </span>
                                 <h3 className="mt-5 text-base font-bold text-slate-950">
                                     {step.title}
@@ -118,46 +73,37 @@ export default function HowItWorks() {
                 <div className="mx-auto max-w-6xl px-5 sm:px-8">
                     <div className="mx-auto max-w-2xl text-center">
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                            TWO SIDES OF ONE NETWORK
+                            {sides.eyebrow}
                         </p>
                         <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
-                            Members at the centre.{" "}
-                            <span className="text-[#1864E8]">
-                                Partners all around.
-                            </span>
+                            <Headline
+                                title={sides.title}
+                                highlight={sides.highlight}
+                                highlightClassName="text-[#1864E8]"
+                            />
                         </h2>
                     </div>
 
                     <div className="mt-12 grid gap-6 lg:grid-cols-2">
-                        <div className="rounded-2xl border border-slate-200/80 bg-white p-7 shadow-2xs sm:p-8">
-                            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
-                                <UsersRound size={20} />
-                            </div>
-                            <h3 className="mt-5 text-xl font-bold text-slate-950">
-                                Members at the Centre
-                            </h3>
-                            <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
-                                RAVU starts with people and connects the
-                                services around them. Every part of the
-                                ecosystem exists to serve the rider, driver and
-                                commuter at the centre of it.
-                            </p>
-                        </div>
-
-                        <div className="rounded-2xl border border-slate-200/80 bg-white p-7 shadow-2xs sm:p-8">
-                            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
-                                <Building2 size={20} />
-                            </div>
-                            <h3 className="mt-5 text-xl font-bold text-slate-950">
-                                Partners in the Ecosystem
-                            </h3>
-                            <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
-                                Partners contribute relevant support, maintenance
-                                discounts, fuel offers and financial
-                                opportunities — making membership genuinely
-                                valuable every single day.
-                            </p>
-                        </div>
+                        {sides.cards.map((card, index) => {
+                            const Icon = iconFor(card.icon);
+                            return (
+                                <div
+                                    key={keyFor(card, index)}
+                                    className="rounded-2xl border border-slate-200/80 bg-white p-7 shadow-2xs sm:p-8"
+                                >
+                                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
+                                        <Icon size={20} />
+                                    </div>
+                                    <h3 className="mt-5 text-xl font-bold text-slate-950">
+                                        {card.title}
+                                    </h3>
+                                    <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
+                                        {card.text}
+                                    </p>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>

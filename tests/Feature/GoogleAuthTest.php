@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Partner;
+use App\Models\PartnerApplication;
 use App\Support\LoginProfile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
@@ -26,12 +28,21 @@ class GoogleAuthTest extends TestCase
 
     private function partner(array $attrs = []): User
     {
-        return User::create(array_merge([
+        $user = User::create(array_merge([
             'name' => 'Chid (TotalEnergies Partner)',
             'email' => 'chid@total.com',
             'password' => 'password',
             'role' => 'partner',
+            'email_verified_at' => now(),
         ], $attrs));
+        $user->forceFill(['email_verified_at' => now()])->save();
+        if ($user->role === 'partner') {
+            $partner = Partner::create(['registered_name' => 'TotalEnergies Limited']);
+            $partner->users()->attach($user->id, ['role' => 'owner']);
+            PartnerApplication::create(['partner_id' => $partner->id]);
+        }
+
+        return $user;
     }
 
     private function fakeGoogle(array $profile = [], int $tokenStatus = 200): void
@@ -148,26 +159,22 @@ class GoogleAuthTest extends TestCase
         $this->assertAuthenticatedAs($admin);
     }
 
-    public function test_ravu_limited_admin_is_sent_to_super_admin_dashboard(): void
+    public function test_unknown_ravu_limited_google_account_is_not_promoted_to_admin(): void
     {
         $this->fakeGoogle(['email' => 'ravu.limited@gmail.com', 'sub' => 'ravu-admin-sub']);
 
-        $this->googleCallback()->assertRedirect('/super-admin');
-        $this->assertAuthenticated();
-        $user = User::where('email', 'ravu.limited@gmail.com')->first();
-        $this->assertNotNull($user);
-        $this->assertSame('super_admin', $user->role);
+        $this->googleCallback()->assertRedirect('/login')->assertSessionHasErrors('email');
+        $this->assertGuest();
+        $this->assertDatabaseMissing('users', ['email' => 'ravu.limited@gmail.com']);
     }
 
-    public function test_new_user_is_auto_provisioned_as_partner(): void
+    public function test_new_google_user_must_register_before_signing_in(): void
     {
         $this->fakeGoogle(['email' => 'newpartner@gmail.com', 'sub' => 'new-sub', 'name' => 'New Partner']);
 
-        $this->googleCallback()->assertRedirect('/partner-dashboard');
-        $this->assertAuthenticated();
-        $user = User::where('email', 'newpartner@gmail.com')->first();
-        $this->assertNotNull($user);
-        $this->assertSame('partner', $user->role);
+        $this->googleCallback()->assertRedirect('/login')->assertSessionHasErrors('email');
+        $this->assertGuest();
+        $this->assertDatabaseMissing('users', ['email' => 'newpartner@gmail.com']);
     }
 
     public function test_unverified_google_email_is_refused(): void

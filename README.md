@@ -58,66 +58,82 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
+## Website content (Super Admin CMS)
+
+Every marketing page's copy, links and images live in `resources/content/*.json`
+(one file per page, plus `global.json` for the navigation, footer and shared
+sections). These files are the defaults **and** the schema for the editor:
+
+- Super admins edit content at `/super-admin` → *Website content*. Changes are
+  saved as a **draft**, can be **previewed** across the whole site, then
+  **published**. Every publish is kept in *Publishing history* and can be
+  loaded back into the draft.
+- Laravel stores drafts/published versions in `site_contents` and merges them
+  over the JSON defaults (`App\Services\SiteContentService`). Saved content is
+  validated against the JSON shape: unknown fields are dropped, links must be
+  `/path`, `#anchor`, `https://`, `mailto:` or `tel:`, and images must come from
+  the media library.
+- To make new copy editable, add the field to the page's JSON file and render it
+  from `useSiteContent("<page>")` — the editor picks it up automatically.
+- Uploaded images go to the `SITE_MEDIA_DISK` disk (default `public`; run
+  `php artisan storage:link`). Use an S3-compatible disk when the app server's
+  filesystem is not persistent.
+
+## Partner applications
+
+Businesses register and apply through the partner portal (`/register` →
+`/partner-dashboard`). Super admins see the review queue in the Super Admin
+dashboard; full review (documents, benefits, decisions) happens at
+`/partner-management`, which `partner_reviewer` staff can also use without
+access to website content.
+
 ## Cloudflare Deployment (Workers + Pages)
 
-This project is ready for **both** **Cloudflare Workers (with Static Assets)** and **Cloudflare Pages (with Pages Functions or Static SPA)** — with or without an external PHP server:
+Production runs **Laravel as the origin** with Cloudflare in front:
 
-1. **Standalone Edge Mode (Default — Zero PHP Origin Required)**:
-   `worker.js` / `workers/app.js` (Workers) and `functions/[[path]].js` (Pages Functions) run a native Cloudflare Edge Inertia + Auth engine (`cloudflare/edge-handler.js`) that renders initial SSR `data-page` HTML, serves Inertia JSON transitions (`X-Inertia: true`), and handles Partner & Super Admin authentication (`/login`, `/register`, `/logout`, `/login/forget-profile`, `/auth/google/*`) using HTTP-only cookies and optional Cloudflare D1 (`database/d1-schema.sql`).
-2. **Static-Only SPA Fallback Mode**:
-   `dist/index.html`, `dist/_redirects`, and `resources/js/cloudflare-spa-adapter.js` ensure that even a pure static upload of `dist/` to Cloudflare Pages works across all routes, `<Link>` navigations, and Partner/Admin portals.
-3. **Laravel Origin Proxy Mode (Optional)**:
-   If `BACKEND_URL` is configured as a Worker/Pages secret, dynamic requests are proxied to your Laravel PHP origin with automatic fallback to the Edge Inertia handler.
+1. **Laravel origin (required for accounts)**: set `BACKEND_URL` as a Worker
+   secret (`npx wrangler secret put BACKEND_URL`). The worker serves static
+   build assets from the edge and proxies every other request to Laravel —
+   including sign-in, registration, the partner portal, partner review and the
+   Super Admin CMS.
+2. **Edge fallback**: if `BACKEND_URL` is missing or the origin returns a 5xx,
+   `cloudflare/edge-handler.js` renders the public marketing pages from the
+   bundled default content. It performs **no authentication**: account areas
+   redirect to `/login`, and sign-in/registration show a "temporarily
+   unavailable" notice.
+3. **Static-only `dist/` upload**: `resources/js/cloudflare-spa-adapter.js`
+   gives the same read-only behaviour client-side. It only activates when the
+   page was served from the static `dist/index.html` shell and never intercepts
+   responses from a real server.
 
-### Files added
+### Files
 
 | File | Purpose |
 |---|---|
-| `wrangler.jsonc` | Cloudflare Workers config with `./dist` static assets binding & observability |
-| `worker.js` / `workers/app.js` | Cloudflare Worker entry point (static assets + Edge Inertia handler + optional `BACKEND_URL` proxy) |
+| `wrangler.jsonc` | Cloudflare Workers config with static assets binding & observability |
+| `worker.js` / `workers/app.js` | Worker entry point (static assets + `BACKEND_URL` proxy + edge fallback) |
 | `functions/[[path]].js` | Cloudflare Pages Functions catch-all entry point |
-| `cloudflare/edge-handler.js` | Native Cloudflare Edge Inertia router, HTML shell renderer, Auth/Session/OAuth & D1 support |
-| `cloudflare/build-meta.js` | Auto-generated Vite manifest metadata used by the Edge HTML renderer |
-| `scripts/build-cloudflare.mjs` | Post-build script that populates `dist/` (`index.html`, `_redirects`, `_headers`, `_routes.json`, `build/*`) |
-| `resources/js/cloudflare-spa-adapter.js` | Client-side Inertia fallback adapter for static-only hosting |
-| `database/d1-schema.sql` | Optional Cloudflare D1 SQLite schema for persistent `users` table |
-| `.dev.vars.example` | Template for local `wrangler dev` / `wrangler pages dev` environment variables |
+| `cloudflare/edge-handler.js` | Read-only edge fallback for public pages |
+| `cloudflare/build-meta.js` | Auto-generated Vite manifest metadata used by the edge HTML renderer |
+| `scripts/build-cloudflare.mjs` | Post-build script that populates `dist/` |
+| `resources/js/cloudflare-spa-adapter.js` | Client-side fallback for static-only hosting |
+| `.dev.vars.example` | Template for local `wrangler dev` / `wrangler pages dev` variables |
 
-### Option 1: Deploy to Cloudflare Workers
+### Deploy to Cloudflare Workers
 
 ```bash
-# Build Vite assets + dist/ bundle
 npm run build
-
-# Preview locally with Cloudflare workerd
-npm run workers:dev
-
-# Deploy to Cloudflare Workers
+npx wrangler secret put BACKEND_URL   # once: your Laravel origin URL
+npm run workers:dev                    # local preview with workerd
 npm run workers:deploy
 ```
 
-### Option 2: Deploy to Cloudflare Pages
+### Deploy to Cloudflare Pages
 
 - **Build command**: `npm run build`
 - **Build output directory**: `dist`
 
-Or deploy via Wrangler CLI:
-
 ```bash
-# Preview Cloudflare Pages locally (with Pages Functions)
 npm run pages:dev
-
-# Deploy to Cloudflare Pages
 npm run pages:deploy
-```
-
-### Optional: Cloudflare D1 Database or Laravel Origin
-
-```bash
-# Optional: Create & migrate a Cloudflare D1 database for persistent accounts
-npx wrangler d1 create ravu-db
-npx wrangler d1 execute ravu-db --file=database/d1-schema.sql
-
-# Optional: Point the Worker at an external Laravel PHP origin
-npx wrangler secret put BACKEND_URL
 ```

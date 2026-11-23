@@ -80,7 +80,7 @@ function Avatar({ profile }) {
     );
 }
 
-export default function Login({ flash, auth }) {
+export default function Login({ flash, auth, status }) {
     const remembered = auth?.rememberedProfile || null;
     const googleEnabled = Boolean(auth?.googleEnabled);
 
@@ -131,11 +131,13 @@ export default function Login({ flash, auth }) {
                     Object.keys(page.props.errors).length > 0;
                 if (!hasErrors && page?.component === "Website/Login") {
                     const role = page?.props?.auth?.user?.role;
-                    const isAdmin =
-                        role === "super_admin" ||
-                        data.email.trim().toLowerCase() === "jux@ravu.com";
+                    const isAdmin = role === "super_admin";
                     router.visit(
-                        isAdmin ? "/super-admin" : "/partner-dashboard",
+                        isAdmin
+                            ? "/super-admin"
+                            : role === "partner_reviewer"
+                              ? "/partner-management"
+                              : "/partner-dashboard",
                     );
                 }
             },
@@ -178,6 +180,7 @@ export default function Login({ flash, auth }) {
                                 ? "Pick up where you left off."
                                 : "Enter your email and password to sign in."}
                         </p>
+                        {status && <p role="status" className="mt-3 rounded-lg bg-blue-50 p-2.5 text-xs text-blue-800">{status}</p>}
                     </div>
 
                     {/* Remembered profile from the previous login */}
@@ -280,7 +283,7 @@ export default function Login({ flash, auth }) {
                                     Password
                                 </label>
                                 <Link
-                                    href="/support"
+                                    href="/password/forgot"
                                     className="text-[11px] font-semibold text-[#00289a] hover:underline"
                                 >
                                     Forgot password?

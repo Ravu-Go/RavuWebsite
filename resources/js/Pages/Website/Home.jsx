@@ -1,207 +1,45 @@
-import { ShieldCheck, Users, Zap } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
 import EcosystemSlideshow from "../../Components/EcosystemSlideshow";
 import ViewportVideo from "../../Components/ViewportVideo";
 import headerVideo from "../../../imgs/Header.mp4";
 import headerPoster from "../../../imgs/Header.jpg";
-import mapImg from "../../../imgs/welcom.png";
-import fleetMultiVehicleImg from "../../../imgs/ravu_fleet_multi_vehicle.jpg";
-import insuranceProtectionImg from "../../../imgs/ravu_insurance_protection.jpg";
-import sparePartsGarageImg from "../../../imgs/ravu_spare_parts_garage.jpg";
-import riderIdImg from "../../../imgs/ravuRiderID1.jpg";
-import mobilityHubImg from "../../../imgs/RAVU Mobility Hub in Tanzania.jpg";
-
-const HOME_SLIDES = [
-    {
-        id: "home-slide-ecosystem",
-        tabLabel: "Multi-Vehicle Ecosystem",
-        badge: "6 Vehicle & Member Categories",
-        caption: "Dar es Salaam & Nationwide",
-        eyebrow: "AGGREGATING TANZANIA'S MOBILITY MARKET",
-        title: "From boda boda & Bajaj to private cars, trucks, buses and fleets.",
-        description:
-            "RAVU connects motorcycle riders, Bajaj three-wheeler operators, private vehicle owners, commercial drivers, logistics trucks and passenger bus fleets into one structured ecosystem.",
-        bullets: [
-            "Motorcycles (boda boda & delivery) and Bajaj three-wheelers",
-            "Private family sedans, SUVs, pickups & household vehicles",
-            "Commercial taxis, ride-hailing, trucks, buses & corporate fleets",
-        ],
-        ctaLabel: "Explore Membership",
-        ctaHref: "/membership",
-        image: fleetMultiVehicleImg,
-        imageAlt:
-            "RAVU multi-vehicle ecosystem in Dar es Salaam showing motorcycles, Bajaj, SUV, delivery truck and bus",
-    },
-    {
-        id: "home-slide-insurance",
-        tabLabel: "Insurance (20%–30% OFF)",
-        badge: "20% – 30% Member Discount Target",
-        caption: "8 Protection Product Lines",
-        eyebrow: "EXCLUSIVE INSURANCE BENEFITS PROGRAM",
-        title: "Affordable insurance protection for your vehicle, family and business.",
-        description:
-            "Through strategic partnerships with leading insurers, verified RAVU members unlock exclusive discounted premiums and simplified enrollment across 8 protection lines.",
-        bullets: [
-            "Motorcycle, Bajaj, Private Motor Vehicle & Commercial Fleet cover",
-            "Personal Accident, Health & Medical, Family Life & SME protection",
-            "Reduced deductibles, priority claims & 24/7 roadside assistance",
-        ],
-        ctaLabel: "View Insurance Benefits",
-        ctaHref: "/benefits",
-        image: insuranceProtectionImg,
-        imageAlt:
-            "Tanzanian insurance advisor reviewing RAVU digital insurance policy with motorcycle rider and car owner",
-    },
-    {
-        id: "home-slide-maintenance",
-        tabLabel: "Spare Parts & Garages",
-        badge: "10%–25% Off Parts • 5%–20% Off Labor",
-        caption: "Official Service Network",
-        eyebrow: "SPARE PARTS, MAINTENANCE & GARAGE PROGRAM",
-        title: "Lower your biggest operating expense at trusted garages & parts shops.",
-        description:
-            "Keep your vehicle earning on the road with guaranteed discounts on genuine spare parts, tires, batteries, lubricants and priority mechanical servicing.",
-        bullets: [
-            "10%–25% OFF motorcycle, car, truck & bus spare parts, tires & batteries",
-            "5%–20% OFF routine maintenance, engine, brake & suspension repairs",
-            "Commercial Fleet Discount Program with bulk pricing & priority bays",
-        ],
-        ctaLabel: "Explore Partner Network",
-        ctaHref: "/partners",
-        image: sparePartsGarageImg,
-        imageAlt:
-            "RAVU partner mechanical garage and spare parts shop in Dar es Salaam",
-    },
-    {
-        id: "home-slide-id",
-        tabLabel: "Verified Member ID",
-        badge: "Instant Partner Verification",
-        caption: "Digital & Physical ID",
-        eyebrow: "ONE RECOGNISED IDENTITY",
-        title: "Present your RAVU Member ID to unlock instant savings.",
-        description:
-            "Every verified member receives an official RAVU Member ID recognized across participating insurance desks, spare parts retailers, tire centers, fuel stations and garages.",
-        bullets: [
-            "Instant verification through the RAVU Partner Portal",
-            "Transparent member pricing across all participating branches",
-            "Loyalty rewards for safe, claim-free and active members",
-        ],
-        ctaLabel: "How It Works",
-        ctaHref: "/how-it-works",
-        image: riderIdImg,
-        imageAlt: "Verified RAVU Rider Member ID card",
-    },
-    {
-        id: "home-slide-pilot",
-        tabLabel: "Dar es Salaam Pilot",
-        badge: "200 – 500 Initial Cohort • 4 – 6 Months",
-        caption: "Dar es Salaam Launch",
-        eyebrow: "STRUCTURED PHASED ROLLOUT",
-        title: "Launching in Dar es Salaam and scaling across Tanzania.",
-        description:
-            "Our 4–6 month Dar es Salaam pilot program connects 200–500 initial riders, drivers and vehicle owners directly with foundational insurance, spare parts and workshop partners.",
-        bullets: [
-            "Priority onboarding for Dar es Salaam riders, drivers & fleets",
-            "Direct referrals and marketing activations for foundational partners",
-            "Building Tanzania's most trusted mobility support network",
-        ],
-        ctaLabel: "Join Priority Cohort",
-        ctaHref: "/register",
-        image: mobilityHubImg,
-        imageAlt: "RAVU Mobility Hub in Dar es Salaam, Tanzania",
-    },
-];
-
-/**
- * Reusable official store buttons for App Store & Google Play
- */
-function StoreButtons({ className = "" }) {
-    return (
-        <div className={`flex flex-wrap items-center gap-3 ${className}`}>
-            {/* Apple App Store */}
-            <a
-                href="#app-store"
-                className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
-            >
-                <svg
-                    viewBox="0 0 384 512"
-                    className="h-5 w-5 fill-current shrink-0"
-                    aria-hidden="true"
-                >
-                    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 62.3 26 139.7c15.6 44.5 44 95.3 84.7 95.7 32 .3 42.4-21.7 82.2-21.7 39.4 0 50.8 21.7 84 21.7 41.5-.4 68.9-46.7 84.2-91.2 17.6-51.1 24.8-100.8 25.1-103.3-1.2-.6-70.3-26.9-71.5-45.7zm-61.9-158.4c17.5-21.6 29.5-51.5 26.2-81.9-25.3 1.1-56.5 17.2-74.6 38.6-16 18.8-30.2 49-26.4 78.4 28.3 2.2 57.3-13.5 74.8-35.1z" />
-                </svg>
-                <div className="text-left leading-none">
-                    <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
-                        Download on the
-                    </p>
-                    <p className="text-xs font-semibold tracking-tight text-white mt-0.5">
-                        App Store
-                    </p>
-                </div>
-            </a>
-
-            {/* Google Play Store */}
-            <a
-                href="#google-play"
-                className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
-            >
-                <svg
-                    viewBox="0 0 512 512"
-                    className="h-5 w-5 shrink-0"
-                    aria-hidden="true"
-                >
-                    <path
-                        fill="#00E676"
-                        d="M32.8 19.3L275.6 262.1 213.9 323.8 16.5 37.8c-1.3 2.1-2 4.6-2 7.2v422c0 2.6.7 5.1 2 7.2L32.8 19.3z"
-                    />
-                    <path
-                        fill="#FFD54F"
-                        d="M352.3 338.8l-76.7-76.7L32.8 19.3C35.9 14.7 41.2 12 47 12c3.4 0 6.7.9 9.6 2.6l328.6 189.7-32.9 134.5z"
-                    />
-                    <path
-                        fill="#FF3D00"
-                        d="M56.6 497.4C53.7 499.1 50.4 500 47 500c-5.8 0-11.1-2.7-14.2-7.3l242.8-242.8 76.7 76.7L56.6 497.4z"
-                    />
-                    <path
-                        fill="#00B0FF"
-                        d="M495.6 238.2L385.2 174.5l-32.9 32.9 32.9 134.5 32.9-19 77.5-44.7c10.3-6 16.6-17.1 16.6-29 0-11.9-6.3-23-16.6-29z"
-                    />
-                </svg>
-                <div className="text-left leading-none">
-                    <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
-                        GET IT ON
-                    </p>
-                    <p className="text-xs font-semibold tracking-tight text-white mt-0.5">
-                        Google Play
-                    </p>
-                </div>
-            </a>
-        </div>
-    );
-}
+import { StoreButtons } from "../../Components/sections";
+import {
+    Headline,
+    keyFor,
+    resolveMedia,
+    toSlides,
+    useSiteContent,
+} from "../../content";
+import { iconFor } from "../../content/icons";
 
 export default function Home() {
+    const { seo, hero, features, slideshow, appShowcase } =
+        useSiteContent("home");
+
     return (
-        <WebsiteLayout>
+        <WebsiteLayout seo={seo}>
             {/* ---------------------------------------------------------- HERO */}
             <section className="relative overflow-hidden bg-white pt-12 pb-10 sm:pt-16 sm:pb-14 lg:pt-20 lg:pb-16">
                 <div className="mx-auto max-w-7xl px-5 text-center sm:px-8">
                     {/* Eyebrow */}
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                        MOBILITY, CONNECTED
+                        {hero.eyebrow}
                     </p>
 
                     {/* Centered Headline */}
                     <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
-                        Move further{" "}
-                        <span className="text-[#1864E8]">together.</span>
+                        <Headline
+                            title={hero.title}
+                            highlight={hero.highlight}
+                            highlightClassName="text-[#1864E8]"
+                        />
                     </h1>
 
                     {/* Centered Subhead */}
                     <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
-                        A smarter way to get around. Ride, share and access more
-                        value all in one app, across Tanzania.
+                        {hero.text}
                     </p>
 
                     {/* Centered App Store Buttons */}
@@ -229,7 +67,7 @@ export default function Home() {
                             />
                         </div>
                         <p className="text-xs font-medium leading-tight text-slate-600">
-                            People moving together across Tanzania
+                            {hero.socialProof}
                         </p>
                     </div>
                 </div>
@@ -248,61 +86,45 @@ export default function Home() {
             <section className="border-t border-b border-slate-100 bg-white py-10 sm:py-14">
                 <div className="mx-auto max-w-6xl px-5 sm:px-8">
                     <div className="grid grid-cols-1 divide-y divide-slate-100 sm:grid-cols-3 sm:divide-y-0 sm:divide-x sm:divide-slate-200/80">
-                        {/* Feature 1 */}
-                        <div className="flex items-center gap-4 py-4 sm:py-0 sm:px-6 first:pl-0">
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
-                                <Zap size={20} className="fill-[#1864E8]" />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-bold text-slate-900">
-                                    Get moving
-                                </h3>
-                                <p className="mt-0.5 max-w-[210px] text-xs leading-relaxed text-slate-500">
-                                    Reliable rides, whenever you need them.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Feature 2 */}
-                        <div className="flex items-center gap-4 py-4 sm:py-0 sm:px-6">
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
-                                <Users size={20} />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-bold text-slate-900">
-                                    More value
-                                </h3>
-                                <p className="mt-0.5 max-w-[210px] text-xs leading-relaxed text-slate-500">
-                                    Exclusive member benefits and savings.
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Feature 3 */}
-                        <div className="flex items-center gap-4 py-4 sm:py-0 sm:px-6 last:pr-0">
-                            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
-                                <ShieldCheck size={20} />
-                            </div>
-                            <div>
-                                <h3 className="text-sm font-bold text-slate-900">
-                                    Feel safe
-                                </h3>
-                                <p className="mt-0.5 max-w-[210px] text-xs leading-relaxed text-slate-500">
-                                    Trusted drivers and a safer journey.
-                                </p>
-                            </div>
-                        </div>
+                        {features.map((feature, index) => {
+                            const Icon = iconFor(feature.icon);
+                            return (
+                                <div
+                                    key={keyFor(feature, index)}
+                                    className="flex items-center gap-4 py-4 sm:py-0 sm:px-6 first:pl-0 last:pr-0"
+                                >
+                                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#EBF3FE] text-[#1864E8]">
+                                        <Icon
+                                            size={20}
+                                            className={
+                                                feature.icon === "Zap"
+                                                    ? "fill-[#1864E8]"
+                                                    : undefined
+                                            }
+                                        />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-sm font-bold text-slate-900">
+                                            {feature.title}
+                                        </h3>
+                                        <p className="mt-0.5 max-w-[210px] text-xs leading-relaxed text-slate-500">
+                                            {feature.text}
+                                        </p>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </section>
 
             {/* ----------------------- INTERACTIVE ECOSYSTEM SLIDESHOW */}
             <EcosystemSlideshow
-                eyebrow="THE RAVU ECOSYSTEM IN MOTION"
-                title="Mobility, protection and savings"
-                highlight="connected in one network."
-                description="Swipe or click through how RAVU connects riders, Bajaj operators, private car owners, commercial fleets, insurers and garages across Tanzania."
-                slides={HOME_SLIDES}
+                eyebrow={slideshow.eyebrow}
+                title={slideshow.title}
+                highlight={slideshow.highlight}
+                description={slideshow.description}
+                slides={toSlides(slideshow.slides, "home-slide")}
             />
 
             {/* --------------------------------- THE RAVU APP (MAP SCREEN) */}
@@ -313,8 +135,8 @@ export default function Home() {
                         <div className="flex justify-center lg:col-span-6">
                             <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md">
                                 <img
-                                    src={mapImg}
-                                    alt="Ravu mobile app interface showing map and destination search"
+                                    src={resolveMedia(appShowcase.image)}
+                                    alt={appShowcase.imageAlt}
                                     loading="lazy"
                                     decoding="async"
                                     className="h-auto w-full select-none drop-shadow-xl"
@@ -325,19 +147,17 @@ export default function Home() {
                         {/* Text & Store Badges on the Right */}
                         <div className="lg:col-span-6">
                             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                                THE RAVU APP
+                                {appShowcase.eyebrow}
                             </p>
                             <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:text-5xl lg:leading-[1.1]">
-                                Your journey
-                                <br />
-                                <span className="text-[#1864E8]">
-                                    in one app.
-                                </span>
+                                <Headline
+                                    title={appShowcase.title}
+                                    highlight={appShowcase.highlight}
+                                    highlightClassName="text-[#1864E8]"
+                                />
                             </h2>
                             <p className="mt-5 max-w-md text-sm leading-relaxed text-slate-600 sm:text-base">
-                                Book rides, track your trip, access member
-                                benefits, find nearby services and more — all in
-                                one place.
+                                {appShowcase.text}
                             </p>
                             <div className="mt-8">
                                 <StoreButtons />

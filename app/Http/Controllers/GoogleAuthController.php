@@ -7,9 +7,7 @@ use App\Support\LoginProfile;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Throwable;
 
@@ -119,98 +117,34 @@ class GoogleAuthController extends Controller
             return $this->fail('Your Google account email is not verified.');
         }
 
-        $user = null;
-        $hasGoogleId = false;
+        $user = User::where('google_id', $googleId)->first()
+            ?? User::where('email', $email)->first();
 
-        try {
-            if (Schema::hasTable('users')) {
-                $hasGoogleId = Schema::hasColumn('users', 'google_id');
-
-                $user = ($hasGoogleId ? User::where('google_id', $googleId)->first() : null)
-                    ?? User::where('email', $email)->first();
-            }
-        } catch (Throwable $e) {
-            $user = null;
-        }
-
-        // If user does not exist yet, auto-provision as Super Admin (if authorized) or Partner
         if (! $user) {
-            $isAdminEmail = in_array($email, ['ravu.limited@gmail.com', 'jux@ravu.com'], true);
-            $role = $isAdminEmail ? 'super_admin' : 'partner';
-
-            try {
-                if (Schema::hasTable('users')) {
-                    $attrs = [
-                        'name' => $name,
-                        'email' => $email,
-                        'password' => Hash::make(Str::random(32)),
-                        'email_verified_at' => now(),
-                    ];
-                    if (Schema::hasColumn('users', 'role')) {
-                        $attrs['role'] = $role;
-                    }
-                    if ($hasGoogleId) {
-                        $attrs['google_id'] = $googleId;
-                    }
-                    if (Schema::hasColumn('users', 'avatar') && $avatar) {
-                        $attrs['avatar'] = $avatar;
-                    }
-                    $user = User::create($attrs);
-                }
-            } catch (Throwable $e) {
-                // If DB is offline, fall through to session user
-            }
-
-            if (! $user) {
-                $user = [
-                    'id' => rand(100, 999),
-                    'name' => $name,
-                    'email' => $email,
-                    'avatar' => $avatar,
-                    'role' => $role,
-                ];
-            }
+            return $this->fail('Create a RAVU Partner account first, then link Google from your account settings.');
         }
 
-        $role = $user instanceof User ? $user->portalRole() : ($user['role'] ?? 'partner');
-
-        if ($user instanceof User) {
-            $updates = [];
-            if ($hasGoogleId && ! $user->google_id) {
-                $updates['google_id'] = $googleId;
-            }
-            if (Schema::hasColumn('users', 'avatar') && $avatar && ! $user->avatar) {
-                $updates['avatar'] = $avatar;
-            }
-            if (! $user->email_verified_at) {
-                $updates['email_verified_at'] = now();
-            }
-            if ($updates) {
-                $user->forceFill($updates)->save();
-            }
-
-            Auth::login($user, true);
+        $role = $user->portalRole();
+        if (! in_array($role, ['partner', 'partner_reviewer', 'super_admin'], true)
+            || ($role === 'partner' && ! $user->partners()->exists())) {
+            return $this->fail('This Google account is not linked to a RAVU Partner Portal account.');
         }
+
+        $user->forceFill(array_filter([
+            'google_id' => $user->google_id ?: $googleId,
+            'avatar' => $user->avatar ?: $avatar,
+            'email_verified_at' => $user->email_verified_at ?: now(),
+        ]))->save();
+        Auth::login($user, true);
 
         $request->session()->regenerate();
-
-        $sessionPayload = [
-            'id' => $user instanceof User ? $user->id : $user['id'],
-            'name' => $user instanceof User ? $user->name : $user['name'],
-            'email' => $user instanceof User ? $user->email : $user['email'],
-            'avatar' => ($user instanceof User ? $user->avatar : $user['avatar']) ?? $avatar,
-            'role' => $role,
-        ];
-
-        $request->session()->put('authenticated_user', $sessionPayload);
-
         LoginProfile::capture($request, $user, 'google');
 
         $destination = LoginProfile::homeFor($role);
 
         return redirect()->to($destination)->with('success', $role === 'super_admin'
             ? 'Signed in with Google. Welcome back, Super Admin!'
-            : 'Signed in with Google. Welcome back to your Partner Dashboard!');
+            : 'Signed in with Google. Welcome back to your RAVU Partner Portal!');
     }
 
     private function redirectUri(?Request $request = null): string

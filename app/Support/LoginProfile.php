@@ -100,7 +100,11 @@ class LoginProfile
      */
     public static function homeFor(string $role): string
     {
-        return $role === 'super_admin' ? '/super-admin' : '/partner-dashboard';
+        return match ($role) {
+            'super_admin' => '/super-admin',
+            'partner_reviewer' => '/partner-management',
+            default => '/partner-dashboard',
+        };
     }
 
     private static function persist(Request $request, User $user, string $provider): void

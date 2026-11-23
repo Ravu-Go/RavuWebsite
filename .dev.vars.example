@@ -1,12 +1,7 @@
 # Local .dev.vars for `wrangler dev` / `wrangler pages dev`
-# Copy to .dev.vars if needed (git-ignored).
+# Copy to .dev.vars (git-ignored).
 #
-# By default, the Worker & Pages Functions run the built-in Cloudflare Edge
-# Inertia + Auth handler with zero external backend required.
-#
-# Optional: proxy dynamic requests to a remote Laravel PHP origin
-# BACKEND_URL=http://localhost:8000
-#
-# Optional: Google OAuth 2.0 credentials on the edge
-# GOOGLE_CLIENT_ID=
-# GOOGLE_CLIENT_SECRET=
+# The Laravel origin that serves sign-in, the partner portal and the Super
+# Admin CMS. Without it the worker only serves public pages from the bundled
+# default content.
+BACKEND_URL=http://localhost:8000

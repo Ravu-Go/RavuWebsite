@@ -3,62 +3,14 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, ChevronRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import RAVULogo from "./RAVULogo";
-
-/**
- * Desktop primary navbar links matching the modern layout:
- * Ride, Business, About, Support
- */
-const DESKTOP_NAV_LINKS = [
-    { label: "Ride", href: "/for-riders" },
-    { label: "Business", href: "/partners" },
-    { label: "Membership", href: "/membership" },
-    { label: "About", href: "/about-ravu" },
-    { label: "Support", href: "/support" },
-];
-
-/**
- * Full expanded navigation groups for the overlay/hamburger menu
- */
-const MENU_GROUPS = [
-    {
-        title: "Discover",
-        items: [
-            { label: "Home", href: "/" },
-            { label: "About RAVU", href: "/about-ravu" },
-            { label: "How It Works", href: "/how-it-works" },
-        ],
-    },
-    {
-        title: "Rider Membership",
-        items: [
-            { label: "For Riders", href: "/for-riders" },
-            { label: "Membership Plans", href: "/membership" },
-            { label: "Member Benefits", href: "/benefits" },
-        ],
-    },
-    {
-        title: "Partnerships",
-        items: [
-            { label: "Partner Overview", href: "/partners" },
-            { label: "Partner Portal", href: "/login" },
-        ],
-    },
-    {
-        title: "Account & Support",
-        items: [
-            { label: "Help & Support", href: "/support" },
-            { label: "Sign in", href: "/login" },
-            { label: "Register Interest", href: "/register" },
-            { label: "Super Admin CMS", href: "/super-admin" },
-        ],
-    },
-];
+import { keyFor, useSiteContent } from "../content";
 
 export default function Navigation({
     transparent = false,
     onDark = false,
 }) {
     const { url } = usePage();
+    const { navigation } = useSiteContent("global");
     const reduceMotion = useReducedMotion();
     const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -159,11 +111,11 @@ export default function Navigation({
 
                 {/* Desktop Center Links */}
                 <div className="hidden md:flex items-center gap-7 lg:gap-9">
-                    {DESKTOP_NAV_LINKS.map((link) => {
+                    {navigation.links.map((link, linkIndex) => {
                         const active = isActive(link.href);
                         return (
                             <Link
-                                key={link.label}
+                                key={keyFor(link, linkIndex)}
                                 href={link.href}
                                 prefetch="click"
                                 className={`relative py-1 text-sm font-semibold transition-colors ${
@@ -197,24 +149,24 @@ export default function Navigation({
                                 : "text-slate-700 hover:text-slate-950 hover:bg-slate-100"
                         }`}
                     >
-                        Sign in
+                        {navigation.signInLabel}
                     </Link>
 
                     <Link
-                        href="/for-riders"
+                        href={navigation.primaryCta.href}
                         prefetch="click"
                         className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-white shadow-xs hover:bg-slate-800 active:scale-[0.98] transition-all"
                     >
-                        <span>Get the RAVU App</span>
+                        <span>{navigation.primaryCta.label}</span>
                         <ArrowRight size={13} />
                     </Link>
 
                     <Link
-                        href="/partners"
+                        href={navigation.secondaryCta.href}
                         prefetch="click"
                         className="hidden xl:inline-flex items-center rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-semibold text-slate-700 hover:border-slate-400 hover:text-slate-950 transition-colors"
                     >
-                        Partner
+                        {navigation.secondaryCta.label}
                     </Link>
 
                     {toggleButton}
@@ -261,8 +213,8 @@ export default function Navigation({
                         <div className="max-h-[calc(100dvh-5rem)] overflow-y-auto px-5 pb-8 pt-6 sm:px-8">
                             <div className="mx-auto max-w-7xl">
                                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                                    {MENU_GROUPS.map((group) => (
-                                        <div key={group.title}>
+                                    {navigation.menuGroups.map((group, groupIndex) => (
+                                        <div key={keyFor(group, groupIndex)}>
                                             <p className="mb-2 px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
                                                 {group.title}
                                             </p>
@@ -272,7 +224,7 @@ export default function Navigation({
                                                         item.href,
                                                     );
                                                     return (
-                                                        <li key={item.label}>
+                                                        <li key={`${item.label}-${item.href}`}>
                                                             <Link
                                                                 href={item.href}
                                                                 prefetch="click"
@@ -316,19 +268,19 @@ export default function Navigation({
                                 {/* Mobile action buttons in drawer */}
                                 <div className="mt-8 flex flex-col gap-3 border-t border-slate-100 pt-6 sm:hidden">
                                     <Link
-                                        href="/for-riders"
+                                        href={navigation.primaryCta.href}
                                         onClick={() => setIsOpen(false)}
                                         className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-slate-950 px-4 text-sm font-bold text-white shadow-xs hover:bg-slate-800"
                                     >
-                                        <span>Get the RAVU App</span>
+                                        <span>{navigation.primaryCta.label}</span>
                                         <ArrowRight size={15} />
                                     </Link>
                                     <Link
-                                        href="/partners"
+                                        href={navigation.secondaryCta.href}
                                         onClick={() => setIsOpen(false)}
                                         className="flex min-h-11 items-center justify-center rounded-xl border border-slate-200 px-4 text-sm font-bold text-slate-900 hover:bg-slate-50"
                                     >
-                                        Partner With RAVU
+                                        {navigation.mobileSecondaryLabel}
                                     </Link>
                                 </div>
                             </div>

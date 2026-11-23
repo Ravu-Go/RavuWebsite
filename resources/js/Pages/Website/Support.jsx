@@ -1,12 +1,5 @@
 import { Link } from "@inertiajs/react";
-import {
-    ArrowRight,
-    Building2,
-    HelpCircle,
-    MessageSquare,
-    ShieldCheck,
-    Smartphone,
-} from "lucide-react";
+import { ArrowRight, MessageSquare } from "lucide-react";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import ViewportVideo from "../../Components/ViewportVideo";
 import CommunitySection from "../../Components/CommunitySection";
@@ -17,54 +10,13 @@ import {
 import supportVideo from "../../../imgs/Headset.mp4";
 import supportPoster from "../../../imgs/Headset-poster.jpg";
 
-const SUPPORT_CHANNELS = [
-    {
-        icon: Smartphone,
-        title: "Riders & Drivers",
-        text: "In-app guidance for registration, Member ID and daily operations.",
-    },
-    {
-        icon: Building2,
-        title: "Partner Support",
-        text: "Dedicated onboarding and Partner Portal assistance for businesses.",
-    },
-    {
-        icon: ShieldCheck,
-        title: "Account & Verification",
-        text: "Help with membership status, profile updates and security.",
-    },
-];
-
-const FAQ = [
-    {
-        question: "What is RAVU Ltd?",
-        answer: "RAVU Ltd (based in Dar es Salaam, Tanzania) is building a comprehensive membership-based mobility ecosystem that aggregates motorcycle (boda boda) riders, Bajaj operators, private vehicle owners, commercial drivers, truck & bus operators and fleet owners into one structured network — unlocking exclusive insurance protection, spare parts discounts and priority garage services.",
-    },
-    {
-        question: "Who can become a RAVU member?",
-        answer: "RAVU serves six core mobility categories: (A) Motorcycle & Boda Boda Riders, (B) Bajaj (Three-Wheeler) & Commercial Vehicle Operators, (C) Private Motor Vehicle Owners & Member Households, (D) Truck Owners & Logistics Companies, (E) Bus Owners & Passenger Transport Companies, and (F) Commercial & Corporate Fleet Owners.",
-    },
-    {
-        question: "What discounts do members receive on insurance?",
-        answer: "Through RAVU's Strategic Insurance Partnership Program, verified members access a targeted 20%–30% preferred discount on standard premiums across 8 product lines (Motorcycle, Bajaj, Private Motor Vehicle, Commercial Fleet, Personal Accident, Health & Medical, Life & Family Protection, and SME Business Protection), along with value-added perks such as reduced deductibles, priority claims processing, flexible payment plans, and roadside assistance.",
-    },
-    {
-        question: "What discounts do members receive on spare parts and garage services?",
-        answer: "Verified RAVU members receive 10%–25% OFF genuine spare parts, tires, batteries, lubricants, filters and accessories, plus 5%–20% OFF routine maintenance, engine servicing, suspension, brakes, electrical diagnostics and wheel alignment at participating garages. Commercial fleets also qualify for the RAVU Fleet Discount Program with volume-based bulk pricing and priority service bay booking.",
-    },
-    {
-        question: "How does the Dar es Salaam Strategic Pilot Program work?",
-        answer: "New insurance and service partnerships launch through a 4–6 month pilot in Dar es Salaam with an initial cohort of 200–500 active verified riders, drivers and vehicle owners. The pilot measures member utilization, discount effectiveness and service turnaround before scaling nationwide.",
-    },
-    {
-        question: "How can an organization partner with RAVU?",
-        answer: "Insurers, spare parts suppliers, mechanical garages, tire & battery centers, fuel stations and financial institutions can register directly via the Partner Registration page or contact Saleh Nyindo (Founder & CEO, RAVU Ltd, Dar es Salaam) at nyindo@posteo.de.",
-    },
-];
+import { Headline, useSiteContent } from "../../content";
 
 export default function Support() {
+    const { seo, hero, features, faq, assist } = useSiteContent("support");
+
     return (
-        <WebsiteLayout>
+        <WebsiteLayout seo={seo}>
             {/* ---------------------------------------------------------- HERO */}
             <section className="relative overflow-hidden bg-white">
                 <div className="relative flex items-center lg:min-h-[540px] xl:min-h-[580px]">
@@ -96,44 +48,39 @@ export default function Support() {
                         <div className="max-w-xl lg:max-w-[540px]">
                             {/* Solid Royal Blue Pill Badge */}
                             <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
-                                HELP &amp; SUPPORT
+                                {hero.eyebrow}
                             </span>
 
                             {/* Stacked Bold Headline */}
                             <h1 className="mt-5 text-4xl font-black leading-[1.06] tracking-tight text-[#050B17] sm:text-5xl lg:text-[3.35rem]">
-                                Straightforward answers.
-                                <br />
-                                Dedicated support.
-                                <br />
-                                Here to help you{" "}
-                                <span className="text-[#1864E8]">
-                                    move forward.
-                                </span>
+                                <Headline
+                                    title={hero.title}
+                                    highlight={hero.highlight}
+                                    highlightClassName="text-[#1864E8]"
+                                />
                             </h1>
 
                             {/* Body Copy */}
                             <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-600 sm:text-[17px]">
-                                Find clear guidance about RAVU membership, the
-                                mobile app, verified member benefits and
-                                business partnerships across Tanzania.
+                                {hero.text}
                             </p>
 
                             {/* Primary & Secondary Action Buttons */}
                             <div className="mt-7 flex flex-wrap items-center gap-3.5">
                                 <Link
-                                    href="/register"
+                                    href={hero.primaryCta.href}
                                     prefetch
                                     className="inline-flex items-center gap-2.5 rounded-xl bg-[#0B3B8C] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#00289a] active:scale-[0.98]"
                                 >
-                                    <span>Register Interest</span>
+                                    <span>{hero.primaryCta.label}</span>
                                     <ArrowRight size={16} />
                                 </Link>
                                 <Link
-                                    href="/login"
+                                    href={hero.secondaryCta.href}
                                     prefetch
                                     className="inline-flex items-center rounded-xl border border-slate-300 bg-white/95 px-6 py-3.5 text-sm font-bold text-slate-900 shadow-2xs transition-colors hover:border-slate-400 hover:bg-slate-50"
                                 >
-                                    Partner Portal Sign In
+                                    {hero.secondaryCta.label}
                                 </Link>
                             </div>
                         </div>
@@ -158,7 +105,7 @@ export default function Support() {
             </section>
 
             {/* ------------------------------------------- 3 CHANNELS STRIP */}
-            <FeatureStrip items={SUPPORT_CHANNELS} />
+            <FeatureStrip items={features} />
 
             {/* ---------------------------------------------------- FAQ SECTION */}
             <section className="bg-white py-16 sm:py-24">
@@ -166,17 +113,17 @@ export default function Support() {
                     <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
                         <div className="lg:col-span-5">
                             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                                FREQUENTLY ASKED QUESTIONS
+                                {faq.eyebrow}
                             </p>
                             <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
-                                Helpful{" "}
-                                <span className="text-[#1864E8]">
-                                    starting points.
-                                </span>
+                                <Headline
+                                    title={faq.title}
+                                    highlight={faq.highlight}
+                                    highlightClassName="text-[#1864E8]"
+                                />
                             </h2>
                             <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-                                Everything you need to know about how RAVU
-                                connects riders, members and partner businesses.
+                                {faq.text}
                             </p>
 
                             <div className="mt-8 rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6">
@@ -184,35 +131,33 @@ export default function Support() {
                                     <MessageSquare size={18} />
                                 </div>
                                 <h3 className="mt-4 text-base font-bold text-slate-950">
-                                    Need direct assistance?
+                                    {assist.title}
                                 </h3>
                                 <p className="mt-1.5 text-xs leading-relaxed text-slate-600 sm:text-sm">
-                                    Whether you are registering interest as a
-                                    member or onboarding as a business partner,
-                                    our team is ready to guide you.
+                                    {assist.text}
                                 </p>
                                 <div className="mt-5 flex flex-wrap gap-3">
                                     <Link
-                                        href="/register"
+                                        href={assist.primaryCta.href}
                                         prefetch
                                         className="inline-flex items-center gap-1.5 rounded-full bg-slate-950 px-4 py-2 text-xs font-bold text-white transition-all hover:bg-slate-800"
                                     >
-                                        <span>Register Interest</span>
+                                        <span>{assist.primaryCta.label}</span>
                                         <ArrowRight size={13} />
                                     </Link>
                                     <Link
-                                        href="/partners"
+                                        href={assist.secondaryCta.href}
                                         prefetch
                                         className="inline-flex items-center rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 transition-colors hover:border-slate-400 hover:text-slate-950"
                                     >
-                                        Explore Partnerships
+                                        {assist.secondaryCta.label}
                                     </Link>
                                 </div>
                             </div>
                         </div>
 
                         <div className="lg:col-span-7">
-                            <FAQAccordion items={FAQ} />
+                            <FAQAccordion items={faq.items} />
                         </div>
                     </div>
                 </div>
