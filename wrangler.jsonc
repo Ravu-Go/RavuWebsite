@@ -13,10 +13,9 @@
     },
     "placement": {
         "mode": "smart"
-    },
-    "vars": {
-        // Where the Laravel PHP backend lives (Laravel Cloud, Forge/VPS, container, ...)
-        // Prefer a secret instead:  npx wrangler secret put BACKEND_URL
-        "BACKEND_URL": "https://backend.example.com"
     }
+    // BACKEND_URL — the Laravel origin (Laravel Cloud, Forge/VPS, container…) that serves
+    // every dynamic request, including sign-in, the partner portal and the Super Admin CMS.
+    // Set it as a secret, never a placeholder:  npx wrangler secret put BACKEND_URL
+    // Without it the worker only serves public pages from bundled default content.
 }

@@ -1,7 +1,8 @@
 import { Link } from "@inertiajs/react";
 import { ArrowRight, Check, Minus, Plus, Smartphone } from "lucide-react";
 import { useState } from "react";
-import mapImg from "../../imgs/map.png";
+import { Headline, keyFor, resolveMedia, useSiteContent } from "../content";
+import { iconFor } from "../content/icons";
 
 /* ==========================================================================
    RAVU SHARED PAGE SECTIONS (Aligned with Home.jsx design language)
@@ -11,11 +12,12 @@ import mapImg from "../../imgs/map.png";
  * Reusable official store buttons for App Store & Google Play (matching Home.jsx)
  */
 export function StoreButtons({ className = "" }) {
+    const { appLinks } = useSiteContent("global");
     return (
         <div className={`flex flex-wrap items-center gap-3 ${className}`}>
             {/* Apple App Store */}
             <a
-                href="#app-store"
+                href={appLinks.appStoreUrl}
                 className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
                 <svg
@@ -37,7 +39,7 @@ export function StoreButtons({ className = "" }) {
 
             {/* Google Play Store */}
             <a
-                href="#google-play"
+                href={appLinks.googlePlayUrl}
                 className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
             >
                 <svg
@@ -111,12 +113,11 @@ export function Hero({
                             </p>
                         )}
                         <h1 className="mt-4 text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-[3.35rem]">
-                            {title}{" "}
-                            {highlight && (
-                                <span className="text-[#1864E8]">
-                                    {highlight}
-                                </span>
-                            )}
+                            <Headline
+                                title={title}
+                                highlight={highlight}
+                                highlightClassName="text-[#1864E8]"
+                            />
                         </h1>
                         {text && (
                             <p
@@ -184,11 +185,14 @@ export function FeatureStrip({ items = [] }) {
         <section className="border-t border-b border-slate-100 bg-white py-10 sm:py-14">
             <div className="mx-auto max-w-6xl px-5 sm:px-8">
                 <div className="grid grid-cols-1 divide-y divide-slate-100 sm:grid-cols-3 sm:divide-y-0 sm:divide-x sm:divide-slate-200/80">
-                    {items.map((item) => {
-                        const Icon = item.icon;
+                    {items.map((item, index) => {
+                        const Icon =
+                            typeof item.icon === "string"
+                                ? iconFor(item.icon)
+                                : item.icon;
                         return (
                             <div
-                                key={item.title}
+                                key={keyFor(item, index)}
                                 className="flex items-center gap-4 py-4 first:pt-0 last:pb-0 sm:px-6 sm:py-0 sm:first:pl-0 sm:last:pr-0"
                             >
                                 {Icon && (
@@ -213,64 +217,39 @@ export function FeatureStrip({ items = [] }) {
     );
 }
 
-const ECOSYSTEM = [
-    {
-        title: "Members",
-        text: "People who join RAVU and participate in the connected mobility community.",
-    },
-    {
-        title: "Riders & Drivers",
-        text: "The boda boda and transport operators whose work keeps cities and towns moving.",
-    },
-    {
-        title: "Businesses",
-        text: "Everyday merchants, fuel stations, and organisations serving active members.",
-    },
-    {
-        title: "Partners",
-        text: "Insurers, financial institutions, workshops, spare parts, and technology providers.",
-    },
-    {
-        title: "Services",
-        text: "Practical support, protection, and savings tailored around daily mobility.",
-    },
-    {
-        title: "Community",
-        text: "A connected network across Tanzania that grows stronger with every participant.",
-    },
-];
-
 /**
  * Clean Ecosystem overview section matching the Home.jsx slate + cobalt aesthetic.
  */
 export function EcosystemSection() {
+    const { ecosystem } = useSiteContent("global");
     return (
         <section className="border-t border-slate-100 bg-slate-50/60 py-16 sm:py-24">
             <div className="mx-auto max-w-6xl px-5 sm:px-8">
                 <div className="mx-auto max-w-2xl text-center">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                        THE RAVU ECOSYSTEM
+                        {ecosystem.eyebrow}
                     </p>
                     <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:leading-[1.1]">
-                        Connecting everyone{" "}
-                        <span className="text-[#1864E8]">around mobility.</span>
+                        <Headline
+                            title={ecosystem.title}
+                            highlight={ecosystem.highlight}
+                            highlightClassName="text-[#1864E8]"
+                        />
                     </h2>
                     <p className="mt-4 text-sm leading-relaxed text-slate-600 sm:text-base">
-                        The ecosystem works because each part strengthens the
-                        others — people, businesses, services and opportunity,
-                        connected in one network.
+                        {ecosystem.text}
                     </p>
                 </div>
 
                 <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                    {ECOSYSTEM.map((node, index) => (
+                    {ecosystem.items.map((node, index) => (
                         <div
-                            key={node.title}
+                            key={keyFor(node, index)}
                             className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-2xs transition-all hover:border-slate-300 hover:shadow-md"
                         >
                             <div className="flex items-center justify-between">
                                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[#EBF3FE] text-xs font-black text-[#1864E8]">
-                                    0{index + 1}
+                                    {String(index + 1).padStart(2, "0")}
                                 </span>
                                 <span className="h-1.5 w-1.5 rounded-full bg-[#1864E8]/40" />
                             </div>
@@ -292,6 +271,7 @@ export function EcosystemSection() {
  * Rider/driver app showcase matching the Home.jsx Map Phone showcase.
  */
 export function AppPromo() {
+    const { appPromo } = useSiteContent("global");
     return (
         <section
             id="app"
@@ -302,8 +282,8 @@ export function AppPromo() {
                     <div className="flex justify-center lg:col-span-6">
                         <div className="relative w-full max-w-xs sm:max-w-sm">
                             <img
-                                src={mapImg}
-                                alt="RAVU mobile app interface"
+                                src={resolveMedia(appPromo.image)}
+                                alt={appPromo.imageAlt}
                                 loading="lazy"
                                 decoding="async"
                                 className="h-auto w-full select-none drop-shadow-xl"
@@ -313,20 +293,17 @@ export function AppPromo() {
 
                     <div className="lg:col-span-6">
                         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                            THE RAVU MOBILE APP
+                            {appPromo.eyebrow}
                         </p>
                         <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:text-5xl lg:leading-[1.1]">
-                            Built for your
-                            <br />
-                            <span className="text-[#1864E8]">
-                                everyday journey.
-                            </span>
+                            <Headline
+                                title={appPromo.title}
+                                highlight={appPromo.highlight}
+                                highlightClassName="text-[#1864E8]"
+                            />
                         </h2>
                         <p className="mt-5 max-w-md text-sm leading-relaxed text-slate-600 sm:text-base">
-                            Riders and drivers join and use RAVU directly
-                            through the mobile app — registration, digital
-                            member ID, partner discounts, and daily tools in one
-                            place.
+                            {appPromo.text}
                         </p>
                         <div className="mt-8">
                             <StoreButtons />
@@ -349,7 +326,7 @@ export function FAQAccordion({ items, className = "" }) {
             {items.map((item, index) => {
                 const isOpen = open === index;
                 return (
-                    <div key={item.question}>
+                    <div key={keyFor(item, index)}>
                         <h3>
                             <button
                                 type="button"

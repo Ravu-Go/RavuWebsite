@@ -1,0 +1,123 @@
+{
+    "seo": {
+        "title": "For Riders & Drivers — RAVU App & Membership",
+        "description": "The RAVU app is the starting point for riders and drivers to access membership, support and partner benefits."
+    },
+    "hero": {
+        "eyebrow": "FOR RIDERS & DRIVERS",
+        "title": "A stronger ride.\nA stronger community.\nReal",
+        "highlight": "opportunities.",
+        "text": "RAVU begins with the boda boda and motorcycle communities whose work keeps people and places connected across Tanzania connecting you with membership benefits, practical support and opportunities to grow.",
+        "primaryCta": { "label": "Get the RAVU App", "href": "/for-riders#app" },
+        "secondaryCta": { "label": "Explore Member Benefits", "href": "/benefits" },
+        "image": "RAVU Riders Lively Street Conversation.jpg",
+        "imageAlt": "RAVU riders in branded vests having a lively street conversation"
+    },
+    "features": [
+        { "icon": "ShieldCheck", "title": "20%–30% Insurance Savings", "text": "Exclusive discounts on motorcycle, Bajaj, car, personal accident & family cover." },
+        { "icon": "Wrench", "title": "10%–25% Off Parts & Garages", "text": "Save on genuine spare parts, tires, batteries, lubricants and priority mechanical repairs." },
+        { "icon": "Handshake", "title": "All Vehicle Categories", "text": "Serving boda boda riders, Bajaj operators, taxi drivers, trucks, buses and fleets." }
+    ],
+    "slideshow": {
+        "eyebrow": "RIDER & DRIVER SHOWCASE",
+        "title": "Real protection and everyday savings",
+        "highlight": "for life on the road.",
+        "description": "See how RAVU supports boda boda riders, Bajaj operators, taxi drivers and fleet owners every day.",
+        "slides": [
+            {
+                "tabLabel": "Riders & Operators",
+                "badge": "Verified Mobility Community",
+                "caption": "Boda Boda • Bajaj • Taxis",
+                "eyebrow": "BUILT AROUND PEOPLE ON THE ROAD",
+                "title": "Move from operating alone to a recognized, protected network.",
+                "description": "RAVU aggregates individual riders and drivers into a trusted community with collective bargaining power, digital identity and professional development.",
+                "bullets": [
+                    "Digital RAVU Member ID right inside the mobile app",
+                    "Access to member awareness campaigns & safety programs",
+                    "Financial inclusion and asset growth opportunities"
+                ],
+                "ctaLabel": "Explore Membership",
+                "ctaHref": "/membership",
+                "image": "RAVU Riders Sharing a Moment.jpg",
+                "imageAlt": "RAVU riders sharing a moment in Dar es Salaam"
+            },
+            {
+                "tabLabel": "20%–30% Off Insurance",
+                "badge": "20% – 30% Member Discount Target",
+                "caption": "Rider, Passenger & Family Protection",
+                "eyebrow": "AFFORDABLE PROTECTION ON EVERY TRIP",
+                "title": "Protect yourself, your motorcycle or Bajaj, and your family.",
+                "description": "Get exclusive member discounts on comprehensive and third-party insurance, personal accident cover, passenger liability and family medical plans.",
+                "bullets": [
+                    "Simplified policy enrollment and flexible payment plans",
+                    "Reduced deductibles/excess & priority claims processing",
+                    "Emergency roadside assistance & claim-free loyalty rewards"
+                ],
+                "ctaLabel": "See Insurance Benefits",
+                "ctaHref": "/benefits",
+                "image": "ravu_insurance_protection.jpg",
+                "imageAlt": "RAVU rider reviewing discounted insurance policy"
+            },
+            {
+                "tabLabel": "10%–25% Off Parts & Garages",
+                "badge": "10%–25% Off Parts • 5%–20% Off Labor",
+                "caption": "Less Downtime, Higher Earnings",
+                "eyebrow": "LOWER DAILY OPERATING COSTS",
+                "title": "Genuine spare parts, tires, batteries and trusted mechanics.",
+                "description": "Every shilling saved on maintenance goes directly to your take-home income. Redeem guaranteed member discounts at official RAVU partner garages and parts shops.",
+                "bullets": [
+                    "10%–25% OFF genuine spare parts, tires, batteries & lubricants",
+                    "5%–20% OFF routine servicing, engine, brake & suspension work",
+                    "Priority service access so you get back on the road faster"
+                ],
+                "ctaLabel": "View Partner Network",
+                "ctaHref": "/partners",
+                "image": "ravu_spare_parts_garage.jpg",
+                "imageAlt": "RAVU mechanics servicing a member motorcycle and vehicle"
+            },
+            {
+                "tabLabel": "Grow to Fleets",
+                "badge": "From Single Rider to Fleet Owner",
+                "caption": "Career & Business Progression",
+                "eyebrow": "LONG-TERM PROSPERITY",
+                "title": "Grow from a single bike or Bajaj into a multi-vehicle operator.",
+                "description": "Whether you ride a boda boda, drive a Bajaj or taxi, own a family car, or manage a commercial delivery or bus fleet, RAVU grows alongside your ambitions.",
+                "bullets": [
+                    "Fleet Discount Program for multi-vehicle owners",
+                    "SME business protection & asset insurance packages",
+                    "Connected across 50+ cities and towns in Tanzania"
+                ],
+                "ctaLabel": "Register Now",
+                "ctaHref": "/register",
+                "image": "ravu_fleet_multi_vehicle.jpg",
+                "imageAlt": "Multi-vehicle mobility fleet in Dar es Salaam"
+            }
+        ]
+    },
+    "app": {
+        "eyebrow": "THE RAVU APP IS WHERE YOU JOIN",
+        "title": "Everything you need,",
+        "highlight": "right in your pocket.",
+        "text": "This website introduces RAVU — the membership, the ecosystem and the opportunity. The mobile app is where the operational experience happens: registration, membership access, partner discounts and the day-to-day tools built around your work.",
+        "primaryCta": { "label": "Explore Membership", "href": "/membership" },
+        "secondaryCta": { "label": "View Member Benefits", "href": "/benefits" },
+        "listTitle": "What to expect inside the app",
+        "items": [
+            "Verified digital RAVU Member ID inside the app for instant partner recognition.",
+            "20%–30% preferred member discount target on motorcycle, Bajaj, car & personal accident insurance.",
+            "10%–25% OFF genuine spare parts, tires, batteries & lubricants + 5%–20% OFF garage servicing.",
+            "Priority claims processing, emergency roadside assistance & claim-free loyalty rewards."
+        ]
+    },
+    "journey": {
+        "eyebrow": "YOUR JOURNEY",
+        "title": "Join. Connect.",
+        "highlight": "Participate. Grow.",
+        "steps": [
+            { "title": "Download the app", "text": "The RAVU mobile app is the starting point for every rider and driver." },
+            { "title": "Register in the app", "text": "Complete your profile directly inside the operational mobile experience." },
+            { "title": "Access your membership", "text": "Unlock your digital RAVU ID, partner benefits and support services." },
+            { "title": "Participate and grow", "text": "Build connections and move forward with the wider mobility ecosystem." }
+        ]
+    }
+}

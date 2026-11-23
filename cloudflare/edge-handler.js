@@ -1,10 +1,34 @@
 import { BUILD_META } from "./build-meta.js";
 
-const SESSION_COOKIE = "ravu_session";
-const PROFILE_COOKIE = "ravu_last_profile";
-const PARTNERS_COOKIE = "ravu_registered_partners";
-const OAUTH_STATE_COOKIE = "ravu_google_oauth_state";
-const THIRTY_DAYS_SECONDS = 60 * 60 * 24 * 30;
+/**
+ * Cloudflare edge fallback — used only when the Laravel backend
+ * (BACKEND_URL) is not configured or not reachable.
+ *
+ * Public marketing pages are rendered from the bundled default content so the
+ * site stays up. Anything that needs an account (sign-in, registration, the
+ * partner portal, partner review and the Super Admin CMS) is never handled
+ * here: authentication lives exclusively in Laravel. Visitors are sent to the
+ * sign-in page with a "temporarily unavailable" notice instead.
+ */
+
+const UNAVAILABLE =
+    "Sign-in and partner registration are temporarily unavailable. Please try again shortly.";
+
+// Cookies set by the former edge demo-auth implementation; cleared on sight.
+const LEGACY_COOKIES = ["ravu_session", "ravu_registered_partners", "ravu_google_oauth_state"];
+
+const ACCOUNT_PREFIXES = [
+    "/super-admin",
+    "/admin",
+    "/partner-dashboard",
+    "/partner-portal",
+    "/partner-management",
+    "/partner/",
+    "/auth/",
+    "/email/",
+    "/password/",
+    "/logout",
+];
 
 const ROUTE_MAP = {
     "/": {
@@ -67,124 +91,24 @@ const ROUTE_MAP = {
         description:
             "Create your RAVU Partner Portal account to connect your business with verified riders and drivers across Tanzania.",
     },
-    "/super-admin": {
-        component: "Website/SuperAdminDashboard",
-        title: "Super Admin CMS — RAVU",
-        description: "RAVU Super Admin Content Management System.",
-        defaultUser: {
-            id: 1,
-            name: "Jux (Super Admin)",
-            email: "jux@ravu.com",
-            role: "super_admin",
-        },
-    },
-    "/admin": {
-        component: "Website/SuperAdminDashboard",
-        title: "Super Admin CMS — RAVU",
-        description: "RAVU Super Admin Content Management System.",
-        defaultUser: {
-            id: 1,
-            name: "Jux (Super Admin)",
-            email: "jux@ravu.com",
-            role: "super_admin",
-        },
-    },
-    "/partner-dashboard": {
-        component: "Website/PartnerDashboard",
-        title: "Partner Dashboard — RAVU",
-        description: "RAVU Business Partner Portal & Member Verification.",
-        defaultUser: {
-            id: 2,
-            name: "Chid (TotalEnergies Partner)",
-            email: "chid@total.com",
-            role: "partner",
-            category: "Fuel & Energy Station",
-            phone: "+255 754 200 100",
-        },
-    },
-    "/partner-portal": {
-        component: "Website/PartnerDashboard",
-        title: "Partner Dashboard — RAVU",
-        description: "RAVU Business Partner Portal & Member Verification.",
-        defaultUser: {
-            id: 2,
-            name: "Chid (TotalEnergies Partner)",
-            email: "chid@total.com",
-            role: "partner",
-            category: "Fuel & Energy Station",
-            phone: "+255 754 200 100",
-        },
-    },
 };
 
 function parseCookies(cookieHeader) {
     const out = {};
-    if (!cookieHeader) return out;
-    for (const part of cookieHeader.split(";")) {
-        const idx = part.indexOf("=");
-        if (idx === -1) continue;
-        const key = part.slice(0, idx).trim();
-        const rawVal = part.slice(idx + 1).trim();
-        try {
-            out[key] = decodeURIComponent(rawVal);
-        } catch {
-            out[key] = rawVal;
-        }
+    for (const part of String(cookieHeader || "").split(";")) {
+        const index = part.indexOf("=");
+        if (index === -1) continue;
+        const key = part.slice(0, index).trim();
+        if (key) out[key] = part.slice(index + 1).trim();
     }
     return out;
 }
 
-function readJsonCookie(cookies, name) {
-    const raw = cookies[name];
-    if (!raw) return null;
-    try {
-        return JSON.parse(raw);
-    } catch {
-        try {
-            return JSON.parse(atob(raw));
-        } catch {
-            return null;
-        }
-    }
-}
-
-function serializeCookie(name, value, options = {}) {
-    const encoded = encodeURIComponent(
-        typeof value === "string" ? value : JSON.stringify(value),
+function expireLegacyCookies(cookies, isSecure) {
+    return LEGACY_COOKIES.filter((name) => name in cookies).map(
+        (name) =>
+            `${name}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax${isSecure ? "; Secure" : ""}`,
     );
-    const parts = [`${name}=${encoded}`];
-    parts.push(`Path=${options.path || "/"}`);
-    if (options.maxAge !== undefined) {
-        parts.push(`Max-Age=${options.maxAge}`);
-    }
-    if (options.httpOnly !== false) {
-        parts.push("HttpOnly");
-    }
-    parts.push(`SameSite=${options.sameSite || "Lax"}`);
-    if (options.secure) {
-        parts.push("Secure");
-    }
-    return parts.join("; ");
-}
-
-function expireCookie(name, secure = false) {
-    return serializeCookie(name, "", {
-        maxAge: 0,
-        httpOnly: true,
-        secure,
-    });
-}
-
-function buildRememberedProfile(user, provider = "password") {
-    if (!user || !user.email) return null;
-    return {
-        name: String(user.name || ""),
-        email: String(user.email),
-        avatar: user.avatar || null,
-        role: user.role || "partner",
-        provider: provider === "google" ? "google" : "password",
-        last_login_at: new Date().toISOString(),
-    };
 }
 
 function escapeHtml(value) {
@@ -274,660 +198,61 @@ function createInertiaOrHtmlResponse(
     return new Response(renderHtmlDocument(page, meta), { status, headers });
 }
 
-async function parseRequestBody(request) {
-    const contentType = (request.headers.get("content-type") || "").toLowerCase();
-    try {
-        if (contentType.includes("application/json")) {
-            return (await request.json()) || {};
-        }
-        if (
-            contentType.includes("application/x-www-form-urlencoded") ||
-            contentType.includes("multipart/form-data")
-        ) {
-            const formData = await request.formData();
-            const obj = {};
-            for (const [k, v] of formData.entries()) {
-                obj[k] = v;
-            }
-            return obj;
-        }
-        const text = await request.text();
-        return text ? JSON.parse(text) : {};
-    } catch {
-        return {};
-    }
-}
-
-async function sha256Hex(input) {
-    const bytes = new TextEncoder().encode(String(input));
-    const digest = await crypto.subtle.digest("SHA-256", bytes);
-    return Array.from(new Uint8Array(digest))
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
-}
-
-function buildSharedProps(cookies, env, overrides = {}) {
-    const sessionUser = readJsonCookie(cookies, SESSION_COOKIE);
-    const rememberedProfile = readJsonCookie(cookies, PROFILE_COOKIE);
-    const googleEnabled = Boolean(
-        env?.GOOGLE_CLIENT_ID && env?.GOOGLE_CLIENT_SECRET,
+function isAccountPath(pathname) {
+    return ACCOUNT_PREFIXES.some(
+        (prefix) => pathname === prefix.replace(/\/$/, "") || pathname.startsWith(prefix.endsWith("/") ? prefix : `${prefix}/`),
     );
+}
 
+function sharedProps({ errors = {}, flashError = null } = {}) {
     return {
-        errors: overrides.errors || {},
-        auth: {
-            user:
-                overrides.user !== undefined
-                    ? overrides.user
-                    : sessionUser || null,
-            rememberedProfile:
-                overrides.rememberedProfile !== undefined
-                    ? overrides.rememberedProfile
-                    : rememberedProfile || null,
-            googleEnabled,
-        },
-        flash: {
-            success: overrides.flashSuccess || null,
-            error: overrides.flashError || null,
-        },
+        errors,
+        auth: { user: null, rememberedProfile: null, googleEnabled: false },
+        flash: { success: null, error: flashError },
+        categories: [],
+        policyLinks: { terms: "#terms", privacy: "#privacy" },
     };
 }
 
-async function findD1UserByEmail(env, email) {
-    if (!env?.DB) return null;
-    try {
-        const row = await env.DB.prepare(
-            "SELECT id, name, email, password, role, category, phone, avatar FROM users WHERE lower(email) = ? LIMIT 1",
-        )
-            .bind(email)
-            .first();
-        return row || null;
-    } catch {
-        return null;
-    }
-}
-
-async function insertD1User(env, user) {
-    if (!env?.DB) return null;
-    try {
-        const now = new Date().toISOString();
-        const result = await env.DB.prepare(
-            "INSERT INTO users (name, email, password, role, category, phone, avatar, email_verified_at, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-        )
-            .bind(
-                user.name,
-                user.email,
-                user.passwordHash,
-                user.role || "partner",
-                user.category || "Business Partner",
-                user.phone || "",
-                user.avatar || null,
-                now,
-                now,
-                now,
-            )
-            .run();
-        return result?.meta?.last_row_id || null;
-    } catch {
-        return null;
-    }
-}
-
-async function handleLogin(request, env, cookies, isSecure) {
-    const body = await parseRequestBody(request);
-    const email = String(body.email || "")
-        .trim()
-        .toLowerCase();
-    const password = String(body.password || "");
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email || !emailRegex.test(email)) {
-        return createInertiaOrHtmlResponse(request, {
-            component: "Website/Login",
-            url: "/login",
-            meta: ROUTE_MAP["/login"],
-            props: buildSharedProps(cookies, env, {
-                errors: { email: "Please enter a valid email address." },
-            }),
-        });
-    }
-
-    if (!password) {
-        return createInertiaOrHtmlResponse(request, {
-            component: "Website/Login",
-            url: "/login",
-            meta: ROUTE_MAP["/login"],
-            props: buildSharedProps(cookies, env, {
-                errors: { password: "The password field is required." },
-            }),
-        });
-    }
-
-    const passwordHash = await sha256Hex(password);
-    let authenticatedUser = null;
-
-    // 1. Check optional Cloudflare D1 database if bound
-    const dbUser = await findD1UserByEmail(env, email);
-    if (
-        dbUser &&
-        (dbUser.password === passwordHash || dbUser.password === password)
-    ) {
-        const role =
-            dbUser.role ||
-            (email === "jux@ravu.com" ? "super_admin" : "partner");
-        if (!["super_admin", "partner"].includes(role)) {
-            return createInertiaOrHtmlResponse(request, {
-                component: "Website/Login",
-                url: "/login",
-                meta: ROUTE_MAP["/login"],
-                props: buildSharedProps(cookies, env, {
-                    errors: {
-                        email: "Web portal access is restricted to RAVU Partners and Super Admins. Riders use the RAVU mobile app.",
-                    },
-                }),
-            });
-        }
-        authenticatedUser = {
-            id: dbUser.id,
-            name: dbUser.name,
-            email: dbUser.email,
-            role,
-            category: dbUser.category || "Business Partner",
-            phone: dbUser.phone || "",
-            avatar: dbUser.avatar || null,
-        };
-    }
-
-    // 2. Built-in Super Admin account (jux@ravu.com / password)
-    if (!authenticatedUser && email === "jux@ravu.com" && password === "password") {
-        authenticatedUser = {
-            id: 1,
-            name: "Jux (Super Admin)",
-            email: "jux@ravu.com",
-            role: "super_admin",
-        };
-    }
-
-    // 3. Built-in Partner accounts (chid@total.com or partner@ravu.com / password)
-    if (
-        !authenticatedUser &&
-        ["chid@total.com", "partner@ravu.com"].includes(email) &&
-        password === "password"
-    ) {
-        authenticatedUser = {
-            id: 2,
-            name: "Chid (TotalEnergies Partner)",
-            email,
-            role: "partner",
-            category: "Fuel & Energy Station",
-            phone: "+255 754 200 100",
-        };
-    }
-
-    // 4. Cookie-registered partners fallback
-    if (!authenticatedUser) {
-        const registeredPartners =
-            readJsonCookie(cookies, PARTNERS_COOKIE) || {};
-        const partnerRecord = registeredPartners[email];
-        if (
-            partnerRecord &&
-            (partnerRecord.passwordHash === passwordHash ||
-                partnerRecord.password === password)
-        ) {
-            authenticatedUser = {
-                id: partnerRecord.id || 101,
-                name: partnerRecord.name,
-                email: partnerRecord.email,
-                role: "partner",
-                category: partnerRecord.category || "Business Partner",
-                phone: partnerRecord.phone || "",
-            };
-        }
-    }
-
-    if (!authenticatedUser) {
-        return createInertiaOrHtmlResponse(request, {
-            component: "Website/Login",
-            url: "/login",
-            meta: ROUTE_MAP["/login"],
-            props: buildSharedProps(cookies, env, {
-                errors: {
-                    email: "Invalid email or password. Only registered RAVU Partners and Super Admins can sign in here.",
-                },
-            }),
-        });
-    }
-
-    const rememberedProfile = buildRememberedProfile(
-        authenticatedUser,
-        "password",
-    );
-    const setCookies = [
-        serializeCookie(SESSION_COOKIE, authenticatedUser, {
-            maxAge: THIRTY_DAYS_SECONDS,
-            httpOnly: true,
-            secure: isSecure,
-        }),
-        serializeCookie(PROFILE_COOKIE, rememberedProfile, {
-            maxAge: THIRTY_DAYS_SECONDS,
-            httpOnly: true,
-            secure: isSecure,
-        }),
-    ];
-
-    const isSuperAdmin = authenticatedUser.role === "super_admin";
-    const targetUrl = isSuperAdmin ? "/super-admin" : "/partner-dashboard";
-    const targetComponent = isSuperAdmin
-        ? "Website/SuperAdminDashboard"
-        : "Website/PartnerDashboard";
-
-    return createInertiaOrHtmlResponse(request, {
-        component: targetComponent,
-        url: targetUrl,
-        meta: ROUTE_MAP[targetUrl],
-        cookies: setCookies,
-        props: buildSharedProps(cookies, env, {
-            user: authenticatedUser,
-            rememberedProfile,
-            flashSuccess: isSuperAdmin
-                ? "Welcome back, Super Admin!"
-                : "Welcome back to your Partner Dashboard!",
-        }),
-    });
-}
-
-async function handleRegister(request, env, cookies, isSecure) {
-    const body = await parseRequestBody(request);
-    const name = String(body.name || "").trim();
-    const email = String(body.email || "")
-        .trim()
-        .toLowerCase();
-    const phone = String(body.phone || "").trim();
-    const category =
-        String(body.category || "").trim() || "Fuel & Energy Station";
-    const password = String(body.password || "");
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!name) {
-        return createInertiaOrHtmlResponse(request, {
-            component: "Website/Register",
-            url: "/register",
-            meta: ROUTE_MAP["/register"],
-            props: buildSharedProps(cookies, env, {
-                errors: { name: "Please enter your organization name." },
-            }),
-        });
-    }
-    if (!email || !emailRegex.test(email)) {
-        return createInertiaOrHtmlResponse(request, {
-            component: "Website/Register",
-            url: "/register",
-            meta: ROUTE_MAP["/register"],
-            props: buildSharedProps(cookies, env, {
-                errors: { email: "Please enter a valid business email." },
-            }),
-        });
-    }
-    if (email === "jux@ravu.com") {
-        return createInertiaOrHtmlResponse(request, {
-            component: "Website/Register",
-            url: "/register",
-            meta: ROUTE_MAP["/register"],
-            props: buildSharedProps(cookies, env, {
-                errors: {
-                    email: "This email is reserved for the Super Admin account. Please sign in directly.",
-                },
-            }),
-        });
-    }
-    if (password.length < 6) {
-        return createInertiaOrHtmlResponse(request, {
-            component: "Website/Register",
-            url: "/register",
-            meta: ROUTE_MAP["/register"],
-            props: buildSharedProps(cookies, env, {
-                errors: {
-                    password: "The password must be at least 6 characters.",
-                },
-            }),
-        });
-    }
-
-    const existingDbUser = await findD1UserByEmail(env, email);
-    if (existingDbUser) {
-        return createInertiaOrHtmlResponse(request, {
-            component: "Website/Register",
-            url: "/register",
-            meta: ROUTE_MAP["/register"],
-            props: buildSharedProps(cookies, env, {
-                errors: {
-                    email: "A partner account with this email already exists. Please sign in instead.",
-                },
-            }),
-        });
-    }
-
-    const passwordHash = await sha256Hex(password);
-    const dbId = await insertD1User(env, {
-        name,
-        email,
-        phone,
-        category,
-        passwordHash,
-        role: "partner",
-    });
-
-    const userId = dbId || Math.floor(100 + Math.random() * 900);
-    const registeredPartners = readJsonCookie(cookies, PARTNERS_COOKIE) || {};
-    registeredPartners[email] = {
-        id: userId,
-        name,
-        email,
-        phone,
-        category,
-        passwordHash,
-        role: "partner",
-    };
-
-    const authenticatedUser = {
-        id: userId,
-        name,
-        email,
-        phone,
-        category,
-        role: "partner",
-    };
-
-    const rememberedProfile = buildRememberedProfile(
-        authenticatedUser,
-        "password",
-    );
-
-    const setCookies = [
-        serializeCookie(PARTNERS_COOKIE, registeredPartners, {
-            maxAge: THIRTY_DAYS_SECONDS,
-            httpOnly: true,
-            secure: isSecure,
-        }),
-        serializeCookie(SESSION_COOKIE, authenticatedUser, {
-            maxAge: THIRTY_DAYS_SECONDS,
-            httpOnly: true,
-            secure: isSecure,
-        }),
-        serializeCookie(PROFILE_COOKIE, rememberedProfile, {
-            maxAge: THIRTY_DAYS_SECONDS,
-            httpOnly: true,
-            secure: isSecure,
-        }),
-    ];
-
-    return createInertiaOrHtmlResponse(request, {
-        component: "Website/PartnerDashboard",
-        url: "/partner-dashboard",
-        meta: ROUTE_MAP["/partner-dashboard"],
-        cookies: setCookies,
-        props: buildSharedProps(cookies, env, {
-            user: authenticatedUser,
-            rememberedProfile,
-            flashSuccess:
-                "Partner account created! Welcome to your RAVU Partner Dashboard.",
-        }),
-    });
-}
-
-function handleLogout(request, env, cookies, isSecure) {
-    const setCookies = [expireCookie(SESSION_COOKIE, isSecure)];
-    return createInertiaOrHtmlResponse(request, {
-        component: "Website/Login",
-        url: "/login",
-        meta: ROUTE_MAP["/login"],
-        cookies: setCookies,
-        props: buildSharedProps(cookies, env, {
-            user: null,
-            flashSuccess: "You have been signed out.",
-        }),
-    });
-}
-
-function handleForgetProfile(request, env, cookies, isSecure) {
-    const setCookies = [expireCookie(PROFILE_COOKIE, isSecure)];
-    return createInertiaOrHtmlResponse(request, {
-        component: "Website/Login",
-        url: "/login",
-        meta: ROUTE_MAP["/login"],
-        cookies: setCookies,
-        props: buildSharedProps(cookies, env, {
-            rememberedProfile: null,
-        }),
-    });
-}
-
-function handleGoogleRedirect(request, env, cookies, isSecure) {
-    const url = new URL(request.url);
-    const clientId = env?.GOOGLE_CLIENT_ID;
-    const clientSecret = env?.GOOGLE_CLIENT_SECRET;
-
-    if (!clientId || !clientSecret) {
-        return createInertiaOrHtmlResponse(request, {
-            component: "Website/Login",
-            url: "/login",
-            meta: ROUTE_MAP["/login"],
-            props: buildSharedProps(cookies, env, {
-                errors: {
-                    email: "Google sign-in is not configured yet. Please use your email and password.",
-                },
-            }),
-        });
-    }
-
-    const stateBytes = new Uint8Array(20);
-    crypto.getRandomValues(stateBytes);
-    const state = Array.from(stateBytes)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
-
-    const redirectUri =
-        env?.GOOGLE_REDIRECT_URI || `${url.origin}/auth/google/callback`;
-    const remembered = readJsonCookie(cookies, PROFILE_COOKIE);
-    const hint = url.searchParams.get("login_hint") || remembered?.email;
-
-    const params = new URLSearchParams({
-        client_id: clientId,
-        redirect_uri: redirectUri,
-        response_type: "code",
-        scope: "openid email profile",
-        state,
-        access_type: "online",
-        include_granted_scopes: "true",
-    });
-
-    if (hint && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(hint)) {
-        params.set("login_hint", hint);
-    } else {
-        params.set("prompt", "select_account");
-    }
-
-    const headers = new Headers({
-        Location: `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`,
-    });
-    headers.append(
-        "Set-Cookie",
-        serializeCookie(OAUTH_STATE_COOKIE, state, {
-            maxAge: 600,
-            httpOnly: true,
-            secure: isSecure,
-        }),
-    );
-
-    return new Response(null, { status: 302, headers });
-}
-
-async function handleGoogleCallback(request, env, cookies, isSecure) {
-    const url = new URL(request.url);
-    const expectedState = cookies[OAUTH_STATE_COOKIE];
-    const returnedState = url.searchParams.get("state");
-    const code = url.searchParams.get("code");
-    const error = url.searchParams.get("error");
-
-    const fail = (message) =>
-        createInertiaOrHtmlResponse(request, {
-            component: "Website/Login",
-            url: "/login",
-            meta: ROUTE_MAP["/login"],
-            cookies: [expireCookie(OAUTH_STATE_COOKIE, isSecure)],
-            props: buildSharedProps(cookies, env, {
-                errors: { email: message },
-            }),
-        });
-
-    if (error) {
-        return fail(
-            error === "access_denied"
-                ? "Google sign-in was cancelled."
-                : "Google sign-in failed. Please try again.",
-        );
-    }
-    if (!expectedState || expectedState !== returnedState || !code) {
-        return fail("Your Google sign-in session expired. Please try again.");
-    }
-
-    const redirectUri =
-        env?.GOOGLE_REDIRECT_URI || `${url.origin}/auth/google/callback`;
-
-    try {
-        const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
-            },
-            body: new URLSearchParams({
-                code,
-                client_id: env.GOOGLE_CLIENT_ID,
-                client_secret: env.GOOGLE_CLIENT_SECRET,
-                redirect_uri: redirectUri,
-                grant_type: "authorization_code",
-            }),
-        });
-
-        const tokenData = await tokenRes.json();
-        if (!tokenRes.ok || !tokenData.access_token) {
-            return fail("Could not verify your Google account. Please try again.");
-        }
-
-        const profileRes = await fetch(
-            "https://openidconnect.googleapis.com/v1/userinfo",
-            {
-                headers: {
-                    Authorization: `Bearer ${tokenData.access_token}`,
-                },
-            },
-        );
-        const profile = await profileRes.json();
-        if (!profileRes.ok || !profile.email || !profile.email_verified) {
-            return fail("Your Google account email is not verified.");
-        }
-
-        const email = String(profile.email).toLowerCase();
-        const name = String(profile.name || email);
-        const avatar = profile.picture || null;
-        const isAdminEmail = ["ravu.limited@gmail.com", "jux@ravu.com"].includes(
-            email,
-        );
-        const role = isAdminEmail ? "super_admin" : "partner";
-
-        const authenticatedUser = {
-            id: Math.floor(100 + Math.random() * 900),
-            name,
-            email,
-            avatar,
-            role,
-        };
-        const rememberedProfile = buildRememberedProfile(
-            authenticatedUser,
-            "google",
-        );
-
-        const targetUrl =
-            role === "super_admin" ? "/super-admin" : "/partner-dashboard";
-        const headers = new Headers({ Location: targetUrl });
-        headers.append(
-            "Set-Cookie",
-            expireCookie(OAUTH_STATE_COOKIE, isSecure),
-        );
-        headers.append(
-            "Set-Cookie",
-            serializeCookie(SESSION_COOKIE, authenticatedUser, {
-                maxAge: THIRTY_DAYS_SECONDS,
-                httpOnly: true,
-                secure: isSecure,
-            }),
-        );
-        headers.append(
-            "Set-Cookie",
-            serializeCookie(PROFILE_COOKIE, rememberedProfile, {
-                maxAge: THIRTY_DAYS_SECONDS,
-                httpOnly: true,
-                secure: isSecure,
-            }),
-        );
-
-        return new Response(null, { status: 302, headers });
-    } catch {
-        return fail(
-            "Unable to reach Google right now. Please use your email and password.",
-        );
-    }
-}
-
-export async function handleEdgeRequest(request, env = {}) {
+export async function handleEdgeRequest(request) {
     const url = new URL(request.url);
     const method = request.method.toUpperCase();
     const isSecure = url.protocol === "https:";
-    const cookies = parseCookies(request.headers.get("Cookie") || "");
+    const cookies = expireLegacyCookies(
+        parseCookies(request.headers.get("Cookie") || ""),
+        isSecure,
+    );
 
-    // Normalize trailing slash except for "/"
     const pathname =
-        url.pathname.length > 1
-            ? url.pathname.replace(/\/+$/, "")
-            : url.pathname;
-    const fullUrl = pathname + url.search;
+        url.pathname.length > 1 ? url.pathname.replace(/\/+$/, "") : url.pathname;
 
-    if (method === "POST") {
-        if (pathname === "/login") {
-            return handleLogin(request, env, cookies, isSecure);
-        }
-        if (pathname === "/register") {
-            return handleRegister(request, env, cookies, isSecure);
-        }
-        if (pathname === "/logout") {
-            return handleLogout(request, env, cookies, isSecure);
-        }
-        if (pathname === "/login/forget-profile") {
-            return handleForgetProfile(request, env, cookies, isSecure);
-        }
-    }
-
-    if (method === "GET" || method === "HEAD") {
-        if (pathname === "/auth/google/redirect") {
-            return handleGoogleRedirect(request, env, cookies, isSecure);
-        }
-        if (pathname === "/auth/google/callback") {
-            return handleGoogleCallback(request, env, cookies, isSecure);
-        }
-
-        const route = ROUTE_MAP[pathname] || ROUTE_MAP["/"];
-        const sessionUser = readJsonCookie(cookies, SESSION_COOKIE);
-        const resolvedUser = sessionUser || route.defaultUser || null;
-
+    // Form submissions need the backend; answer with a friendly error on the form's page.
+    if (method !== "GET" && method !== "HEAD") {
+        const key = pathname === "/register" ? "/register" : "/login";
         return createInertiaOrHtmlResponse(request, {
-            component: route.component,
-            url: ROUTE_MAP[pathname] ? fullUrl : "/",
-            meta: route,
-            props: buildSharedProps(cookies, env, {
-                user: resolvedUser,
-            }),
+            component: ROUTE_MAP[key].component,
+            url: key,
+            meta: ROUTE_MAP[key],
+            props: sharedProps({ errors: { email: UNAVAILABLE } }),
+            cookies,
         });
     }
 
-    return new Response("Method Not Allowed", { status: 405 });
+    if (isAccountPath(pathname)) {
+        const headers = new Headers({ Location: "/login" });
+        for (const c of cookies) headers.append("Set-Cookie", c);
+        return new Response(null, { status: 302, headers });
+    }
+
+    const route = ROUTE_MAP[pathname];
+    const isAuthPage = pathname === "/login" || pathname === "/register";
+
+    return createInertiaOrHtmlResponse(request, {
+        component: (route || ROUTE_MAP["/"]).component,
+        url: route ? pathname + url.search : "/",
+        meta: route || ROUTE_MAP["/"],
+        props: sharedProps({ flashError: isAuthPage ? UNAVAILABLE : null }),
+        status: route ? 200 : 404,
+        cookies,
+    });
 }

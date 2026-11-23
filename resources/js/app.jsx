@@ -13,7 +13,7 @@ ensureInitialInertiaPage();
 const pages = import.meta.glob('./Pages/**/*.jsx');
 
 createInertiaApp({
-  title: (title) => `${title} ravu`,
+  title: (title) => title || 'RAVU',
   resolve: (name) => {
     const lazyPage = pages[`./Pages/${name}.jsx`];
     if (!lazyPage) {

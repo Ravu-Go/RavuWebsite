@@ -1,0 +1,284 @@
+{
+    "brand": {
+        "siteName": "Ravu",
+        "footerQuote": "Building a trusted ecosystem that delivers mobility, opportunity, protection, and prosperity for every rider.",
+        "companyLine": "RAVU Ltd • Dar es Salaam, Tanzania",
+        "contactEmail": "nyindo@posteo.de",
+        "copyright": "RAVU. All rights reserved."
+    },
+    "appLinks": {
+        "appStoreUrl": "#app-store",
+        "googlePlayUrl": "#google-play"
+    },
+    "navigation": {
+        "signInLabel": "Sign in",
+        "primaryCta": {
+            "label": "Get the RAVU App",
+            "href": "/for-riders"
+        },
+        "secondaryCta": {
+            "label": "Partner",
+            "href": "/partners"
+        },
+        "mobileSecondaryLabel": "Partner With RAVU",
+        "links": [
+            {
+                "label": "Ride",
+                "href": "/for-riders"
+            },
+            {
+                "label": "Business",
+                "href": "/partners"
+            },
+            {
+                "label": "Membership",
+                "href": "/membership"
+            },
+            {
+                "label": "About",
+                "href": "/about-ravu"
+            },
+            {
+                "label": "Support",
+                "href": "/support"
+            }
+        ],
+        "menuGroups": [
+            {
+                "title": "Discover",
+                "items": [
+                    {
+                        "label": "Home",
+                        "href": "/"
+                    },
+                    {
+                        "label": "About RAVU",
+                        "href": "/about-ravu"
+                    },
+                    {
+                        "label": "How It Works",
+                        "href": "/how-it-works"
+                    }
+                ]
+            },
+            {
+                "title": "Rider Membership",
+                "items": [
+                    {
+                        "label": "For Riders",
+                        "href": "/for-riders"
+                    },
+                    {
+                        "label": "Membership Plans",
+                        "href": "/membership"
+                    },
+                    {
+                        "label": "Member Benefits",
+                        "href": "/benefits"
+                    }
+                ]
+            },
+            {
+                "title": "Partnerships",
+                "items": [
+                    {
+                        "label": "Partner Overview",
+                        "href": "/partners"
+                    },
+                    {
+                        "label": "Partner Portal",
+                        "href": "/login"
+                    }
+                ]
+            },
+            {
+                "title": "Account & Support",
+                "items": [
+                    {
+                        "label": "Help & Support",
+                        "href": "/support"
+                    },
+                    {
+                        "label": "Sign in",
+                        "href": "/login"
+                    },
+                    {
+                        "label": "Register Interest",
+                        "href": "/register"
+                    }
+                ]
+            }
+        ]
+    },
+    "footer": {
+        "columns": [
+            {
+                "title": "Explore",
+                "links": [
+                    {
+                        "label": "About RAVU",
+                        "href": "/about-ravu"
+                    },
+                    {
+                        "label": "For Riders",
+                        "href": "/for-riders"
+                    },
+                    {
+                        "label": "Membership",
+                        "href": "/membership"
+                    },
+                    {
+                        "label": "Benefits",
+                        "href": "/benefits"
+                    },
+                    {
+                        "label": "How it works",
+                        "href": "/how-it-works"
+                    },
+                    {
+                        "label": "Get the RAVU App",
+                        "href": "/for-riders"
+                    }
+                ]
+            },
+            {
+                "title": "Business",
+                "links": [
+                    {
+                        "label": "Partners",
+                        "href": "/partners"
+                    },
+                    {
+                        "label": "Drive with RAVU",
+                        "href": "/for-riders"
+                    },
+                    {
+                        "label": "Business Solutions",
+                        "href": "/partners"
+                    }
+                ]
+            },
+            {
+                "title": "Support",
+                "links": [
+                    {
+                        "label": "Help Centre",
+                        "href": "/support"
+                    },
+                    {
+                        "label": "Contact Us",
+                        "href": "/support"
+                    },
+                    {
+                        "label": "Safety",
+                        "href": "/about-ravu"
+                    },
+                    {
+                        "label": "FAQs",
+                        "href": "/support"
+                    }
+                ]
+            }
+        ],
+        "socials": [
+            {
+                "platform": "Instagram",
+                "url": "https://instagram.com"
+            },
+            {
+                "platform": "X",
+                "url": "https://x.com"
+            },
+            {
+                "platform": "Facebook",
+                "url": "https://facebook.com"
+            },
+            {
+                "platform": "LinkedIn",
+                "url": "https://linkedin.com"
+            },
+            {
+                "platform": "YouTube",
+                "url": "https://youtube.com"
+            }
+        ],
+        "legalLinks": [
+            {
+                "label": "Terms",
+                "href": "/support"
+            },
+            {
+                "label": "Privacy",
+                "href": "/support"
+            },
+            {
+                "label": "Cookies",
+                "href": "/support"
+            }
+        ]
+    },
+    "community": {
+        "eyebrow": "A GROWING COMMUNITY",
+        "title": "More people.\nStronger communities.",
+        "text": "RAVU connects riders, drivers, businesses and communities to create more value and opportunities across Tanzania.",
+        "image": "Footer.jpg",
+        "stats": [
+            {
+                "value": "100K+",
+                "label": "Active Riders"
+            },
+            {
+                "value": "10K+",
+                "label": "Drivers & Operators"
+            },
+            {
+                "value": "50+",
+                "label": "Cities & Towns"
+            },
+            {
+                "value": "100+",
+                "label": "Business Partners"
+            }
+        ]
+    },
+    "ecosystem": {
+        "eyebrow": "THE RAVU ECOSYSTEM",
+        "title": "Connecting everyone",
+        "highlight": "around mobility.",
+        "text": "The ecosystem works because each part strengthens the others — people, businesses, services and opportunity, connected in one network.",
+        "items": [
+            {
+                "title": "Members",
+                "text": "People who join RAVU and participate in the connected mobility community."
+            },
+            {
+                "title": "Riders & Drivers",
+                "text": "The boda boda and transport operators whose work keeps cities and towns moving."
+            },
+            {
+                "title": "Businesses",
+                "text": "Everyday merchants, fuel stations, and organisations serving active members."
+            },
+            {
+                "title": "Partners",
+                "text": "Insurers, financial institutions, workshops, spare parts, and technology providers."
+            },
+            {
+                "title": "Services",
+                "text": "Practical support, protection, and savings tailored around daily mobility."
+            },
+            {
+                "title": "Community",
+                "text": "A connected network across Tanzania that grows stronger with every participant."
+            }
+        ]
+    },
+    "appPromo": {
+        "eyebrow": "THE RAVU MOBILE APP",
+        "title": "Built for your\n",
+        "highlight": "everyday journey.",
+        "text": "Riders and drivers join and use RAVU directly through the mobile app — registration, digital member ID, partner discounts, and daily tools in one place.",
+        "image": "welcom.png",
+        "imageAlt": "RAVU mobile app interface"
+    }
+}
