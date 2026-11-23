@@ -552,7 +552,7 @@ export default function PartnerDashboard({ auth, flash }) {
                ========================================================= */}
             <div className="flex flex-1 flex-col min-w-0 w-full">
                 {/* Top Action Bar */}
-                <header className="sticky top-0 z-30 flex h-18 w-full items-center justify-between gap-4 border-b border-slate-200/80 bg-white/95 px-5 backdrop-blur-md sm:px-8 lg:px-10">
+                <header className="sticky top-0 z-30 flex h-18 w-full items-center justify-between gap-4 border-b border-slate-200/80 bg-white px-5 backdrop-blur-xs sm:px-8 lg:px-10">
                     <div className="flex items-center gap-3">
                         <button
                             type="button"

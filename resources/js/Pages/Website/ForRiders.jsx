@@ -15,8 +15,8 @@ import {
     FeatureStrip,
     StoreButtons,
 } from "../../Components/sections";
-import ridersConversationImg from "../../../imgs/RAVU Riders Lively Street Conversation.png";
-import ridersSharingMomentImg from "../../../imgs/RAVU Riders Sharing a Moment.png";
+import ridersConversationImg from "../../../imgs/RAVU Riders Lively Street Conversation.jpg";
+import ridersSharingMomentImg from "../../../imgs/RAVU Riders Sharing a Moment.jpg";
 import insuranceProtectionImg from "../../../imgs/ravu_insurance_protection.jpg";
 import sparePartsGarageImg from "../../../imgs/ravu_spare_parts_garage.jpg";
 import fleetMultiVehicleImg from "../../../imgs/ravu_fleet_multi_vehicle.jpg";

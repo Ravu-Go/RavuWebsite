@@ -58,7 +58,7 @@ import footerBg from "../../../imgs/Footer.jpg";
 import fundRepairShopImg from "../../../imgs/fundRepairShop.jpg";
 import headerImg from "../../../imgs/Header.jpg";
 import logoImg from "../../../imgs/Logo.png";
-import mapImg from "../../../imgs/map.png";
+import mapImg from "../../../imgs/map.jpg";
 import memberPlusPartnersImg from "../../../imgs/memberPlusPartners.jpg";
 import ravuRiderIdImg from "../../../imgs/ravuRiderID.jpg";
 import riderImg from "../../../imgs/rider.jpg";
@@ -1071,7 +1071,7 @@ export default function SuperAdminDashboard({ auth, flash }) {
                ========================================================= */}
             <div className="flex flex-1 flex-col min-w-0">
                 {/* Top Action Bar */}
-                <header className="sticky top-0 z-30 flex h-18 items-center justify-between gap-4 border-b border-slate-200/80 bg-white/95 px-5 backdrop-blur-md sm:px-8">
+                <header className="sticky top-0 z-30 flex h-18 items-center justify-between gap-4 border-b border-slate-200/80 bg-white/95 px-5 backdrop-blur-xs sm:px-8">
                     <div className="flex items-center gap-3">
                         <button
                             type="button"

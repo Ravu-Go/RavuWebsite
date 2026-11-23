@@ -5,12 +5,12 @@ import EcosystemSlideshow from "../../Components/EcosystemSlideshow";
 import ViewportVideo from "../../Components/ViewportVideo";
 import headerVideo from "../../../imgs/Header.mp4";
 import headerPoster from "../../../imgs/Header.jpg";
-import mapImg from "../../../imgs/map.png";
+import mapImg from "../../../imgs/welcom.png";
 import fleetMultiVehicleImg from "../../../imgs/ravu_fleet_multi_vehicle.jpg";
 import insuranceProtectionImg from "../../../imgs/ravu_insurance_protection.jpg";
 import sparePartsGarageImg from "../../../imgs/ravu_spare_parts_garage.jpg";
-import riderIdImg from "../../../imgs/ravuRiderID1.png";
-import mobilityHubImg from "../../../imgs/RAVU Mobility Hub in Tanzania.png";
+import riderIdImg from "../../../imgs/ravuRiderID1.jpg";
+import mobilityHubImg from "../../../imgs/RAVU Mobility Hub in Tanzania.jpg";
 
 const HOME_SLIDES = [
     {

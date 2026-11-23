@@ -29,16 +29,18 @@ export default function CommunitySection({
                     aria-hidden="true"
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover object-bottom sm:object-[80%_bottom] lg:object-right-bottom brightness-105 contrast-[1.08] saturate-[1.12]"
+                    className="h-full w-full object-cover object-bottom sm:object-[80%_bottom] lg:object-right-bottom"
                 />
 
                 {/* Left scrim: darkens only the area behind the text, keeping the city lights and blue ribbons crystal clear */}
                 <div className="absolute inset-y-0 left-0 w-full sm:w-4/5 lg:w-3/5 bg-gradient-to-r from-[#061023] via-[#061023]/90 to-transparent" />
 
                 {/* Ambient royal blue glow echoing the neon ribbons */}
+                {/* Radial glow (no filter: blur — filter:blur() over a large
+                    area forces expensive repaints on every scroll frame). */}
                 <div
                     aria-hidden="true"
-                    className="absolute -right-12 top-1/4 h-96 w-96 rounded-full bg-[#00289a]/35 blur-3xl pointer-events-none"
+                    className="absolute -right-12 top-1/4 h-[560px] w-[560px] pointer-events-none bg-[radial-gradient(circle,rgba(0,40,154,0.35)_0%,rgba(0,40,154,0.12)_45%,transparent_70%)]"
                 />
 
                 {/* Top edge subtle blend */}
@@ -56,17 +58,20 @@ export default function CommunitySection({
                         <span>{eyebrow}</span>
                     </span>
 
-                    <h2 className="mt-5 text-3xl font-black leading-[1.08] tracking-tight text-white sm:text-4xl lg:text-5xl drop-shadow-sm">
+                    <h2 className="mt-5 text-3xl font-black leading-[1.08] tracking-tight text-white sm:text-4xl lg:text-5xl">
                         {title}
                     </h2>
 
-                    <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300 sm:text-base drop-shadow-xs">
+                    <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300 sm:text-base">
                         {text}
                     </p>
                 </div>
 
                 {/* High-visibility Glassmorphic Stats Strip */}
-                <div className="mt-14 sm:mt-16 rounded-2xl border border-white/10 bg-[#050B17]/70 p-6 backdrop-blur-md shadow-2xl shadow-black/40 sm:p-8">
+                {/* Opaque glass look without backdrop-filter: backdrop-blur()
+                    over the skyline image recomposites every scroll frame and
+                    was the main source of scroll jank on this section. */}
+                <div className="mt-14 sm:mt-16 rounded-2xl border border-white/10 bg-[#0B1220]/90 p-6 shadow-2xl shadow-black/40 sm:p-8">
                     <div className="grid grid-cols-2 gap-8 divide-y divide-white/10 sm:grid-cols-4 sm:gap-6 sm:divide-y-0 sm:divide-x sm:divide-white/10">
                         <div className="sm:pr-6">
                             <p className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">

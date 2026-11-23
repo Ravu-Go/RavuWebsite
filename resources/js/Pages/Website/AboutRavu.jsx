@@ -20,7 +20,7 @@ import {
     EcosystemSection,
     FeatureStrip,
 } from "../../Components/sections";
-import serviceHubImg from "../../../imgs/RAVU Riders at the Service Hub.png";
+import serviceHubImg from "../../../imgs/RAVU Riders at the Service Hub.jpg";
 
 const VALUES = [
     {

@@ -113,7 +113,7 @@ export default function Navigation({
         ? "border-slate-200 bg-white shadow-md"
         : overMedia
           ? "border-transparent bg-transparent"
-          : "border-slate-100 bg-white/95 shadow-xs backdrop-blur-md";
+          : "border-slate-100 bg-white/95 shadow-xs";
 
     const toggleButton = (
         <button

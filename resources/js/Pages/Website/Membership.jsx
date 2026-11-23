@@ -16,11 +16,11 @@ import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
 import EcosystemSlideshow from "../../Components/EcosystemSlideshow";
 import { FeatureStrip } from "../../Components/sections";
-import riderIdImage from "../../../imgs/ravuRiderID1.png";
+import riderIdImage from "../../../imgs/ravuRiderID1.jpg";
 import fleetMultiVehicleImg from "../../../imgs/ravu_fleet_multi_vehicle.jpg";
 import insuranceProtectionImg from "../../../imgs/ravu_insurance_protection.jpg";
 import sparePartsGarageImg from "../../../imgs/ravu_spare_parts_garage.jpg";
-import mobilityHubImg from "../../../imgs/RAVU Mobility Hub in Tanzania.png";
+import mobilityHubImg from "../../../imgs/RAVU Mobility Hub in Tanzania.jpg";
 
 const MEMBERSHIP_SLIDES = [
     {

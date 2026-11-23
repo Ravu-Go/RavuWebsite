@@ -1,7 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { ArrowRight, Check, Minus, Plus, Smartphone } from "lucide-react";
 import { useState } from "react";
-import mapImg from "../../imgs/map.png";
+import welcomeImg from "../../imgs/welcom.png";
 
 /* ==========================================================================
    RAVU SHARED PAGE SECTIONS (Aligned with Home.jsx design language)
@@ -302,7 +302,7 @@ export function AppPromo() {
                     <div className="flex justify-center lg:col-span-6">
                         <div className="relative w-full max-w-xs sm:max-w-sm">
                             <img
-                                src={mapImg}
+                                src={welcomeImg}
                                 alt="RAVU mobile app interface"
                                 loading="lazy"
                                 decoding="async"

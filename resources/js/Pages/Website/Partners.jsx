@@ -31,11 +31,11 @@ import CommunitySection from "../../Components/CommunitySection";
 import EcosystemSlideshow from "../../Components/EcosystemSlideshow";
 import { FeatureStrip } from "../../Components/sections";
 import partnerHeroImg from "../../../imgs/memberPlusPartners.jpg";
-import workshopImg from "../../../imgs/fundRepairShop-.png";
+import workshopImg from "../../../imgs/fundRepairShop-.jpg";
 import fleetMultiVehicleImg from "../../../imgs/ravu_fleet_multi_vehicle.jpg";
 import insuranceProtectionImg from "../../../imgs/ravu_insurance_protection.jpg";
 import sparePartsGarageImg from "../../../imgs/ravu_spare_parts_garage.jpg";
-import communityEcosystemImg from "../../../imgs/RAVU Community Mobility Ecosystem.png";
+import communityEcosystemImg from "../../../imgs/RAVU Community Mobility Ecosystem.jpg";
 
 const PARTNER_SLIDES = [
     {
@@ -627,7 +627,7 @@ export default function Partners() {
                                     </div>
 
                                     <div className="lg:col-span-5">
-                                        <div className="rounded-2xl border border-white/15 bg-white/[0.06] p-6 backdrop-blur-xs">
+                                        <div className="rounded-2xl border border-white/15 bg-white/[0.08] p-6">
                                             <p className="text-xs font-bold uppercase tracking-wider text-sky-300">
                                                 Preferred Member Discount Target
                                             </p>
