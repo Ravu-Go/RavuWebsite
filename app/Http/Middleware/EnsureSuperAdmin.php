@@ -11,6 +11,7 @@ class EnsureSuperAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->user()?->isSuperAdmin()) {
+            \App\Models\ActivityLog::record('access', 'access_denied', ['path' => '/'.ltrim($request->path(), '/'), 'area' => 'Super admin console', 'method' => $request->method()]);
             abort(403, 'Super administrator access is required.');
         }
 

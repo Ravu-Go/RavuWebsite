@@ -65,6 +65,34 @@
      --radius-card: 0.875rem;
 
      --ease-ravu: cubic-bezier(0.22, 1, 0.36, 1);
+
+     /* Admin console: content settles in softly when a section opens.
+        "backwards" (not "both"): nothing is left applied once the animation ends,
+        because a lingering transform would trap position:fixed dialogs inside it. */
+     --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+     --animate-pop: pop 0.18s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+
+     @keyframes rise {
+         from {
+             opacity: 0;
+             transform: translateY(6px);
+         }
+         to {
+             opacity: 1;
+             transform: none;
+         }
+     }
+
+     @keyframes pop {
+         from {
+             opacity: 0;
+             transform: translateY(-4px) scale(0.98);
+         }
+         to {
+             opacity: 1;
+             transform: none;
+         }
+     }
 }
 /* ==== Base ==== */
 @layer base {

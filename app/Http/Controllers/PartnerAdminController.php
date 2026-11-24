@@ -60,6 +60,7 @@ class PartnerAdminController extends Controller
     public function show(Request $request, PartnerApplication $application): Response
     {
         $application->load(['partner.category', 'partner.users', 'partner.locations', 'partner.documents.requirement', 'partner.benefits', 'statusHistory.actor']);
+        \App\Models\ActivityLog::record('access', 'application_viewed', ['status' => $application->status], $application, partnerId: $application->partner_id);
 
         return Inertia::render('Website/PartnerManagement', [
             'applications' => PartnerApplication::query()->with(['partner.category', 'partner.users', 'partner.locations', 'partner.documents.requirement', 'partner.benefits', 'statusHistory.actor'])
@@ -185,6 +186,7 @@ class PartnerAdminController extends Controller
     public function downloadDocument(Request $request, PartnerDocument $document): StreamedResponse
     {
         abort_unless(Storage::disk('local')->exists($document->storage_path), 404);
+        \App\Models\ActivityLog::record('access', 'document_downloaded', ['filename' => $document->original_filename, 'document_type' => $document->document_type], $document, partnerId: $document->partner_id);
 
         return Storage::disk('local')->download($document->storage_path, $document->original_filename, ['Content-Type' => $document->mime_type]);
     }
@@ -229,7 +231,8 @@ class PartnerAdminController extends Controller
     {
         abort_unless($request->user()->isSuperAdmin(), 403);
         $data = $request->validate(['name' => ['required', 'string', 'max:120'], 'slug' => ['required', 'alpha_dash', 'max:120', 'unique:partner_categories,slug'], 'description' => ['nullable', 'string', 'max:1000']]);
-        PartnerCategory::create($data + ['is_active' => true]);
+        $category = PartnerCategory::create($data + ['is_active' => true]);
+        \App\Models\ActivityLog::record('settings', 'category_created', ['name' => $category->name], $category);
 
         return back()->with('success', 'Business category added.');
     }
@@ -239,6 +242,7 @@ class PartnerAdminController extends Controller
         abort_unless($request->user()->isSuperAdmin(), 403);
         $data = $request->validate(['name' => ['required', 'string', 'max:120'], 'slug' => ['required', 'alpha_dash', 'max:120', 'unique:partner_categories,slug,'.$category->id], 'description' => ['nullable', 'string', 'max:1000'], 'is_active' => ['required', 'boolean']]);
         $category->update($data);
+        \App\Models\ActivityLog::record('settings', 'category_updated', ['name' => $category->name], $category);
 
         return back()->with('success', 'Business category updated.');
     }
@@ -255,7 +259,8 @@ class PartnerAdminController extends Controller
             'requires_expiry_date' => ['required', 'boolean'],
         ]);
         abort_if(DocumentRequirement::where('partner_category_id', $data['partner_category_id'] ?? null)->where('document_type', $data['document_type'])->exists(), 422, 'This document requirement already exists for that scope.');
-        DocumentRequirement::create($data + ['is_active' => true]);
+        $requirement = DocumentRequirement::create($data + ['is_active' => true]);
+        \App\Models\ActivityLog::record('settings', 'requirement_created', ['label' => $requirement->label], $requirement);
 
         return back()->with('success', 'Document requirement added.');
     }
@@ -271,6 +276,7 @@ class PartnerAdminController extends Controller
             'is_active' => ['required', 'boolean'],
         ]);
         $requirement->update($data);
+        \App\Models\ActivityLog::record('settings', 'requirement_updated', ['label' => $requirement->label], $requirement);
 
         return back()->with('success', 'Document requirement updated.');
     }

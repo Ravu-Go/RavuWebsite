@@ -177,7 +177,13 @@ class PartnerOnboardingController extends Controller
             'phone' => ['required', 'string', 'max:50'],
             'preferred_communication' => ['required', 'in:email,phone,whatsapp'],
         ]);
-        $request->user()->update($data);
+        $user = $request->user();
+        $user->fill($data);
+        $changed = array_keys($user->getDirty());
+        $user->save();
+        if ($changed) {
+            \App\Models\ActivityLog::record('partner', 'partner_contact_updated', ['changed' => $changed], $user, partnerId: $user->partners()->value('partners.id'));
+        }
 
         return back()->with('success', 'Account contact details updated.');
     }
@@ -291,6 +297,7 @@ class PartnerOnboardingController extends Controller
         $partner = $request->user()->primaryPartner();
         abort_unless($partner && $document->partner_id === $partner->id, 404);
         abort_unless(Storage::disk('local')->exists($document->storage_path), 404);
+        \App\Models\ActivityLog::record('access', 'document_downloaded', ['filename' => $document->original_filename, 'document_type' => $document->document_type], $document, partnerId: $partner->id);
 
         return Storage::disk('local')->download($document->storage_path, $document->original_filename, ['Content-Type' => $document->mime_type]);
     }

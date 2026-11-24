@@ -35,6 +35,14 @@ class GoogleAuthController extends Controller
             ]);
         }
 
+        // Google only accepts callback URLs registered in Google Cloud Console, so the whole
+        // sign-in runs on the one canonical host. Someone who opened the site on another host
+        // (127.0.0.1 vs localhost, www vs bare domain) is moved there first, so the session
+        // holding the OAuth state lives on the same host Google sends them back to.
+        if ($canonical = $this->canonicalUrlFor($request)) {
+            return redirect()->away($canonical);
+        }
+
         $state = Str::random(40);
         $request->session()->put('google_oauth_state', $state);
 
@@ -114,20 +122,20 @@ class GoogleAuthController extends Controller
         $avatar = $profile->json('picture');
 
         if (! $googleId || ! $email || ! $profile->json('email_verified')) {
-            return $this->fail('Your Google account email is not verified.');
+            return $this->fail('Your Google account email is not verified.', $email);
         }
 
         $user = User::where('google_id', $googleId)->first()
             ?? User::where('email', $email)->first();
 
         if (! $user) {
-            return $this->fail('Create a RAVU Partner account first, then link Google from your account settings.');
+            return $this->fail('Create a RAVU Partner account first, then link Google from your account settings.', $email);
         }
 
         $role = $user->portalRole();
         if (! in_array($role, ['partner', 'partner_reviewer', 'super_admin'], true)
             || ($role === 'partner' && ! $user->partners()->exists())) {
-            return $this->fail('This Google account is not linked to a RAVU Partner Portal account.');
+            return $this->fail('This Google account is not linked to a RAVU Partner Portal account.', $email, $user, 'sign_in_denied');
         }
 
         $user->forceFill(array_filter([
@@ -147,6 +155,11 @@ class GoogleAuthController extends Controller
             : 'Signed in with Google. Welcome back to your RAVU Partner Portal!');
     }
 
+    /**
+     * The exact callback URL sent to Google: GOOGLE_REDIRECT_URI if it is absolute,
+     * otherwise that path on APP_URL. Never derived from the incoming request, so it
+     * always matches what is registered in Google Cloud Console.
+     */
     private function redirectUri(?Request $request = null): string
     {
         $uri = (string) config('services.google.redirect');
@@ -155,13 +168,29 @@ class GoogleAuthController extends Controller
             return $uri;
         }
 
-        $request = $request ?: request();
-
-        return $request ? $request->root().'/'.ltrim($uri, '/') : url($uri);
+        return rtrim((string) config('app.url'), '/').'/'.ltrim($uri, '/');
     }
 
-    private function fail(string $message): RedirectResponse
+    /** The same URL on the callback's host, when the request arrived on a different host. */
+    private function canonicalUrlFor(Request $request): ?string
     {
+        $callback = parse_url($this->redirectUri($request));
+        if (empty($callback['host'])) {
+            return null;
+        }
+
+        $host = $callback['host'].(isset($callback['port']) ? ':'.$callback['port'] : '');
+        if (strcasecmp($host, $request->getHttpHost()) === 0) {
+            return null;
+        }
+
+        return ($callback['scheme'] ?? 'https').'://'.$host.$request->getRequestUri();
+    }
+
+    private function fail(string $message, ?string $email = null, ?User $user = null, string $action = 'sign_in_failed'): RedirectResponse
+    {
+        \App\Models\ActivityLog::record('auth', $action, ['method' => 'google', 'email' => $email, 'reason' => $message], user: $user);
+
         return redirect('/login')->withErrors(['email' => $message]);
     }
 }

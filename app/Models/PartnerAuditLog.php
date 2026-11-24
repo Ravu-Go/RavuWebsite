@@ -14,6 +14,24 @@ class PartnerAuditLog extends Model
         return ['details' => 'array'];
     }
 
+    /** Every partner event also lands in the portal-wide activity log. */
+    protected static function booted(): void
+    {
+        static::created(function (self $log) {
+            ActivityLog::create([
+                'user_id' => $log->user_id,
+                'partner_id' => $log->partner_id,
+                'category' => 'partner',
+                'action' => $log->action,
+                'subject_type' => $log->subject_type,
+                'subject_id' => $log->subject_id,
+                'details' => $log->details,
+                'ip_address' => $log->ip_address,
+                'user_agent' => request()?->userAgent() ? substr(request()->userAgent(), 0, 250) : null,
+            ]);
+        });
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

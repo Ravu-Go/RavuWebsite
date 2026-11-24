@@ -69,6 +69,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'privacy_accepted_at' => 'datetime',
             'last_login_at' => 'datetime',
             'password' => 'hashed',
+            'password_change_required' => 'boolean',
         ];
     }
 }

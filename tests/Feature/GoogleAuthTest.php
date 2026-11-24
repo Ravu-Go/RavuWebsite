@@ -23,6 +23,7 @@ class GoogleAuthTest extends TestCase
             'services.google.client_id' => 'test-client-id.apps.googleusercontent.com',
             'services.google.client_secret' => 'test-secret',
             'services.google.redirect' => '/auth/google/callback',
+            'app.url' => 'http://127.0.0.1:8000',
         ]);
     }
 
@@ -93,12 +94,27 @@ class GoogleAuthTest extends TestCase
         $this->assertSame(40, strlen($q['state']));
     }
 
-    public function test_redirect_follows_localhost_host(): void
+    public function test_sign_in_started_on_another_host_moves_to_app_url_first(): void
     {
+        config(['app.url' => 'http://localhost:8000']);
+
+        // Opened on 127.0.0.1: hop to the APP_URL host before talking to Google…
+        $this->get('http://127.0.0.1:8000/auth/google/redirect?login_hint=chid%40total.com')
+            ->assertRedirect('http://localhost:8000/auth/google/redirect?login_hint=chid%40total.com');
+
+        // …where the callback sent to Google is the registered APP_URL one.
         $location = $this->get('http://localhost:8000/auth/google/redirect')->headers->get('Location');
         parse_str(parse_url($location, PHP_URL_QUERY), $q);
-
         $this->assertSame('http://localhost:8000/auth/google/callback', $q['redirect_uri']);
+    }
+
+    public function test_an_absolute_redirect_uri_is_used_exactly(): void
+    {
+        config(['services.google.redirect' => 'https://ravu.co.tz/auth/google/callback', 'app.url' => 'https://ravu.co.tz']);
+
+        $location = $this->get('https://ravu.co.tz/auth/google/redirect')->headers->get('Location');
+        parse_str(parse_url($location, PHP_URL_QUERY), $q);
+        $this->assertSame('https://ravu.co.tz/auth/google/callback', $q['redirect_uri']);
     }
 
     public function test_redirect_uses_remembered_profile_as_login_hint(): void
