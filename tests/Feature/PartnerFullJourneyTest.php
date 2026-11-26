@@ -42,7 +42,7 @@ class PartnerFullJourneyTest extends TestCase
         // 2. Submit partner registration
         $registrationData = [
             'business_name' => 'Kijitonyama Auto Garage & Spares Ltd',
-            'category_id' => $category->id,
+            'category_id' => (string) $category->id, // the form always sends text (an id or a typed category name)
             'name' => 'Juma Rashidi',
             'position' => 'Managing Director',
             'email' => 'juma@kijitonyama-garage.tz',
