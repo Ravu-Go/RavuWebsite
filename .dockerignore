@@ -1,0 +1,16 @@
+# Build context for Dokploy / Nixpacks. Dependencies and assets are installed and
+# built inside the image, so local copies (possibly for another OS) must not leak in.
+.git
+node_modules
+vendor
+public/build
+public/hot
+dist
+.wrangler
+.dev.vars
+tests
+storage/logs/*
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+*.log
