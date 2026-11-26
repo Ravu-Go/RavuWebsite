@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Partner;
 use App\Models\PartnerApplication;
 use App\Models\PartnerApplicationStatusHistory;
@@ -9,6 +10,7 @@ use App\Models\PartnerAuditLog;
 use App\Models\PartnerCategory;
 use App\Models\User;
 use App\Support\LoginProfile;
+use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -39,21 +41,26 @@ class AuthController extends Controller
         ]);
 
         $credentials['email'] = strtolower(trim($credentials['email']));
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+
+        // Check the password first, then portal access, and only then start a session, so an
+        // account without access is recorded as "denied" rather than a sign-in followed by a sign-out.
+        if (! Auth::validate($credentials)) {
+            event(new Failed('web', Auth::getLastAttempted(), $credentials));
             throw ValidationException::withMessages(['email' => 'These credentials do not match our records.']);
         }
 
-        $request->session()->regenerate();
         /** @var User $user */
-        $user = Auth::user();
+        $user = Auth::getLastAttempted();
         $role = $user->portalRole();
 
         if (! in_array($role, ['partner', 'partner_reviewer', 'super_admin'], true)
             || ($role === 'partner' && ! $user->partners()->exists())) {
-            Auth::logout();
+            ActivityLog::record('auth', 'sign_in_denied', ['email' => $user->email, 'reason' => 'No partner portal access'], user: $user);
             throw ValidationException::withMessages(['email' => 'This account does not have RAVU Partner Portal access.']);
         }
 
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
         LoginProfile::capture($request, $user, 'password');
 
         return redirect()->to(LoginProfile::homeFor($role))->with('success', 'Welcome back to the RAVU Partner Portal.');
@@ -63,7 +70,7 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'business_name' => ['nullable', 'string', 'max:255'],
-            'category_id' => ['nullable'],
+            'category_id' => ['nullable', 'string', 'max:120'],
             'name' => ['required', 'string', 'max:255'],
             'position' => ['nullable', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
@@ -95,11 +102,28 @@ class AuthController extends Controller
                 : trim($validated['name']);
 
             $categoryId = null;
-            if (! empty($validated['category_id']) && is_numeric($validated['category_id'])) {
-                $exists = PartnerCategory::whereKey($validated['category_id'])->exists();
-                if ($exists) {
-                    $categoryId = (int) $validated['category_id'];
+            $categoryName = trim((string) ($validated['category_id'] ?? ''));
+            if ($categoryName !== '') {
+                $category = ctype_digit($categoryName)
+                    ? PartnerCategory::find((int) $categoryName)
+                    : null;
+
+                if (! $category) {
+                    $category = PartnerCategory::whereRaw('LOWER(name) = ?', [Str::lower($categoryName)])->first();
                 }
+
+                if (! $category) {
+                    $baseSlug = Str::slug($categoryName) ?: 'business';
+                    $slug = $baseSlug;
+                    $suffix = 2;
+                    while (PartnerCategory::where('slug', $slug)->exists()) {
+                        $slug = $baseSlug.'-'.$suffix++;
+                    }
+
+                    $category = PartnerCategory::create(['name' => $categoryName, 'slug' => $slug]);
+                }
+
+                $categoryId = $category->id;
             }
 
             $partner = Partner::create([
@@ -144,7 +168,12 @@ class AuthController extends Controller
     public function sendResetLink(Request $request): RedirectResponse
     {
         $request->validate(['email' => ['required', 'email']]);
-        $status = Password::sendResetLink(['email' => strtolower(trim($request->string('email')->toString()))]);
+        $email = strtolower(trim($request->string('email')->toString()));
+        $status = Password::sendResetLink(['email' => $email]);
+        ActivityLog::record('auth', 'password_reset_requested', [
+            'email' => $email,
+            'outcome' => $status === Password::RESET_LINK_SENT ? 'Link sent' : __($status),
+        ], user: User::firstWhere('email', $email));
 
         if ($status !== Password::RESET_LINK_SENT) {
             throw ValidationException::withMessages(['email' => __($status)]);

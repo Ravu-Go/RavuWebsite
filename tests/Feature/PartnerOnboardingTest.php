@@ -57,6 +57,31 @@ class PartnerOnboardingTest extends TestCase
         $this->assertDatabaseMissing('users', ['email' => 'second@example.test']);
     }
 
+    public function test_registration_saves_a_custom_business_category(): void
+    {
+        Notification::fake();
+        $categoryName = 'Mobile Money & Digital Payments';
+
+        $response = $this->post('/register', [
+            'business_name' => 'Digital Payments Ltd',
+            'category_id' => $categoryName,
+            'name' => 'Amina Owner',
+            'position' => 'Director',
+            'email' => 'digital@example.test',
+            'phone' => '+255700000003',
+            'preferred_communication' => 'whatsapp',
+            'password' => 'SecurePassword123',
+            'password_confirmation' => 'SecurePassword123',
+            'terms' => '1',
+            'privacy' => '1',
+        ]);
+
+        $response->assertRedirect('/partner-dashboard');
+        $category = PartnerCategory::where('name', $categoryName)->firstOrFail();
+        $partner = User::where('email', 'digital@example.test')->firstOrFail()->primaryPartner();
+        $this->assertSame($category->id, $partner->partner_category_id);
+    }
+
     public function test_partner_routes_require_authentication_verification_and_partner_membership(): void
     {
         $this->get('/partner-dashboard')->assertRedirect('/login');

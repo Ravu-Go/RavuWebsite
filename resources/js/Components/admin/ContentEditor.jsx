@@ -10,9 +10,10 @@ import {
     Upload,
     X,
 } from "lucide-react";
-import { useMemo, useRef, useState } from "react";
+import { memo, useCallback, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import toast from "react-hot-toast";
-import { BUNDLED_MEDIA, resolveMedia } from "../../content";
+import { BUNDLED_MEDIA, thumbFor } from "../../content";
 import { ICON_NAMES, iconFor } from "../../content/icons";
 
 /* ==========================================================================
@@ -140,10 +141,13 @@ export default function ContentEditor({
 }) {
     const [picker, setPicker] = useState(null); // { path }
 
-    const update = (path, next) => onChange(setIn(value, path, next));
+    // Functional updates keep these callbacks stable, so memoised fields that did
+    // not change skip re-rendering on every keystroke.
+    const update = useCallback((path, next) => onChange((prev) => setIn(prev, path, next)), [onChange]);
+    const openPicker = useCallback((path) => setPicker({ path }), []);
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-3">
             {Object.keys(schema).map((key) => (
                 <Section
                     key={key}
@@ -156,10 +160,9 @@ export default function ContentEditor({
                         path={[key]}
                         value={value?.[key]}
                         schema={schema[key]}
-                        parent={value}
                         onChange={update}
                         errors={errors}
-                        openPicker={(path) => setPicker({ path })}
+                        openPicker={openPicker}
                         bare
                     />
                 </Section>
@@ -187,29 +190,44 @@ function countErrors(errors, prefix) {
 function Section({ title, children, defaultOpen = false, errorCount = 0 }) {
     const [open, setOpen] = useState(defaultOpen || errorCount > 0);
     return (
-        <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
+        <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_1px_2px_rgba(16,24,40,0.04)]">
             <button
                 type="button"
                 onClick={() => setOpen(!open)}
-                className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left hover:bg-slate-50"
+                className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition hover:bg-slate-50/70"
                 aria-expanded={open}
             >
-                <span className="flex items-center gap-2 text-sm font-bold text-slate-900">
-                    {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                <span className="flex items-center gap-2.5 text-[14px] font-semibold tracking-tight text-slate-900">
+                    <span className={`flex h-6 w-6 items-center justify-center rounded-md border transition ${open ? "border-[#00289a]/20 bg-[#00289a]/[0.06] text-[#00289a]" : "border-slate-200 bg-slate-50 text-slate-500"}`}>
+                        {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                    </span>
                     {title}
                 </span>
                 {errorCount > 0 && (
-                    <span className="rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-700">
+                    <span className="rounded-full bg-rose-50 px-2 py-0.5 text-[11px] font-semibold text-rose-700 ring-1 ring-inset ring-rose-600/15">
                         {errorCount} to fix
                     </span>
                 )}
             </button>
-            {open && <div className="border-t border-slate-100 px-5 py-5">{children}</div>}
+            {open && <div className="border-t border-slate-100 px-4 py-4">{children}</div>}
         </section>
     );
 }
 
-function Field({ name, path, value, schema, parent, onChange, errors, openPicker, bare = false }) {
+const sameField = (a, b) =>
+    a.value === b.value &&
+    a.schema === b.schema &&
+    a.name === b.name &&
+    a.errors === b.errors &&
+    a.bare === b.bare &&
+    a.hasHighlight === b.hasHighlight &&
+    a.onChange === b.onChange &&
+    a.openPicker === b.openPicker &&
+    a.path.join(".") === b.path.join(".");
+
+const Field = memo(function Field({ name, path, value, schema, hasHighlight = false, onChange, errors, openPicker, bare = false }) {
+    // Decide input vs. textarea once, so a field never swaps element (and loses focus) mid-typing.
+    const [startedLong] = useState(() => typeof value === "string" && (value.length > 90 || value.includes("\n")));
     const errorKey = `content.${path.join(".")}`;
     const error = errors[errorKey];
 
@@ -230,7 +248,7 @@ function Field({ name, path, value, schema, parent, onChange, errors, openPicker
                                 path={[...path, key]}
                                 value={value?.[key]}
                                 schema={child}
-                                parent={value}
+                                hasHighlight={isObject(value) && "highlight" in value}
                                 onChange={onChange}
                                 errors={errors}
                                 openPicker={openPicker}
@@ -242,8 +260,8 @@ function Field({ name, path, value, schema, parent, onChange, errors, openPicker
         );
         if (bare) return body;
         return (
-            <fieldset className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                <legend className="px-1 text-xs font-bold uppercase tracking-wider text-slate-500">
+            <fieldset className="rounded-xl border border-slate-200/80 bg-slate-50/50 p-4">
+                <legend className="px-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
                     {humanize(name)}
                 </legend>
                 {body}
@@ -269,8 +287,8 @@ function Field({ name, path, value, schema, parent, onChange, errors, openPicker
     const label = humanize(name);
     const fieldId = `f-${path.join("-")}`;
     const common =
-        "w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 " +
-        (error ? "border-red-400" : "border-slate-300");
+        "w-full rounded-lg border bg-white px-3 py-2 text-sm text-slate-900 shadow-[0_1px_2px_rgba(16,24,40,0.04)] outline-none transition focus:border-[#00289a] focus:ring-4 focus:ring-[#00289a]/10 " +
+        (error ? "border-rose-400" : "border-slate-200");
 
     let input;
     if (name === "icon") {
@@ -290,11 +308,11 @@ function Field({ name, path, value, schema, parent, onChange, errors, openPicker
             </div>
         );
     } else if (name === "image") {
-        const src = resolveMedia(value);
+        const src = thumbFor(value);
         input = (
             <div className="flex items-center gap-3">
                 <div className="flex h-16 w-24 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
-                    {src ? <img src={src} alt="" className="h-full w-full object-cover" /> : <ImageIcon size={20} className="text-slate-400" />}
+                    {src ? <img src={src} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" /> : <ImageIcon size={20} className="text-slate-400" />}
                 </div>
                 <div className="min-w-0 flex-1">
                     <p className="truncate text-xs text-slate-500">{value || "No image selected"}</p>
@@ -321,17 +339,17 @@ function Field({ name, path, value, schema, parent, onChange, errors, openPicker
         const str = value ?? "";
         const multiline =
             LONG_TEXT_KEYS.has(name) ||
-            str.includes("\n") ||
+            startedLong ||
             String(schema).includes("\n") ||
-            str.length > 90 ||
-            (name === "title" && parent && "highlight" in parent);
+            String(schema).length > 90 ||
+            (name === "title" && hasHighlight);
         input = multiline ? (
             <textarea
                 id={fieldId}
                 value={str}
                 onChange={(e) => onChange(path, e.target.value)}
-                rows={LONG_TEXT_KEYS.has(name) || str.length > 160 ? 4 : 2}
-                className={common}
+                rows={LONG_TEXT_KEYS.has(name) ? 3 : 2}
+                className={`${common} field-sizing-content min-h-[4.5rem] resize-y`}
             />
         ) : (
             <input id={fieldId} type="text" value={str} onChange={(e) => onChange(path, e.target.value)} className={common} />
@@ -339,7 +357,7 @@ function Field({ name, path, value, schema, parent, onChange, errors, openPicker
     }
 
     const hint =
-        name === "title" && parent && "highlight" in parent
+        name === "title" && hasHighlight
             ? "Press Enter for a line break. The highlighted words follow the title."
             : /href$|url$/i.test(name)
               ? "Use /page for site pages, or a full https:// link."
@@ -348,7 +366,7 @@ function Field({ name, path, value, schema, parent, onChange, errors, openPicker
     return (
         <div>
             {typeof schema !== "boolean" && (
-                <label htmlFor={fieldId} className="mb-1 block text-xs font-semibold text-slate-600">
+                <label htmlFor={fieldId} className="mb-1.5 block text-[12.5px] font-medium text-slate-600">
                     {label}
                 </label>
             )}
@@ -357,7 +375,7 @@ function Field({ name, path, value, schema, parent, onChange, errors, openPicker
             {error && <p className="mt-1 text-xs font-semibold text-red-600">{error}</p>}
         </div>
     );
-}
+}, sameField);
 
 function ListField({ name, path, value, template, onChange, errors, openPicker, bare }) {
     const isObjectList = isObject(template);
@@ -443,7 +461,6 @@ function ListField({ name, path, value, template, onChange, errors, openPicker, 
                                         path={itemPath}
                                         value={item}
                                         schema={template}
-                                        parent={value}
                                         onChange={onChange}
                                         errors={errors}
                                         openPicker={openPicker}
@@ -530,13 +547,13 @@ export function MediaUploadButton({ mediaMaxKb = 5120, className = "" }) {
 function MediaPicker({ media, mediaMaxKb, onPick, onClose }) {
     const [query, setQuery] = useState("");
     const bundled = useMemo(
-        () => Object.entries(BUNDLED_MEDIA).map(([name, src]) => ({ value: name, src, name })),
+        () => Object.entries(BUNDLED_MEDIA).map(([name]) => ({ value: name, src: thumbFor(name), name })),
         [],
     );
     const uploaded = media.map((m) => ({ value: m.url, src: m.url, name: m.name }));
     const filter = (list) => list.filter((m) => m.name.toLowerCase().includes(query.toLowerCase()));
 
-    return (
+    return createPortal(
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/50 p-4" role="dialog" aria-modal="true" aria-label="Choose an image">
             <div className="flex max-h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4">
@@ -560,7 +577,8 @@ function MediaPicker({ media, mediaMaxKb, onPick, onClose }) {
                     <MediaGrid items={filter(bundled)} onPick={onPick} />
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body,
     );
 }
 
@@ -575,7 +593,7 @@ function MediaGrid({ items, onPick }) {
                     onClick={() => onPick(item.value)}
                     className="group overflow-hidden rounded-xl border border-slate-200 text-left hover:border-blue-500 hover:ring-2 hover:ring-blue-100"
                 >
-                    <img src={item.src} alt="" loading="lazy" className="aspect-[4/3] w-full bg-slate-100 object-cover" />
+                    <img src={item.src} alt="" loading="lazy" decoding="async" className="aspect-[4/3] w-full bg-slate-100 object-cover" />
                     <p className="truncate px-2 py-1.5 text-[11px] font-medium text-slate-600">{item.name}</p>
                 </button>
             ))}

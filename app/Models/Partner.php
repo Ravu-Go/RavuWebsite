@@ -14,7 +14,7 @@ class Partner extends Model
 
     protected function casts(): array
     {
-        return ['social_links' => 'array', 'year_established' => 'integer'];
+        return ['social_links' => 'array', 'year_established' => 'integer', 'is_demo' => 'boolean'];
     }
 
     public function category(): BelongsTo
@@ -45,5 +45,32 @@ class Partner extends Model
     public function benefits(): HasMany
     {
         return $this->hasMany(ProposedPartnerBenefit::class);
+    }
+
+    public function redemptions(): HasMany
+    {
+        return $this->hasMany(PartnerRedemption::class);
+    }
+
+    public function payouts(): HasMany
+    {
+        return $this->hasMany(PartnerPayout::class);
+    }
+
+    /** The member offer RAVU approved and that is valid today (what the verifier applies). */
+    public function activeBenefit(): ?ProposedPartnerBenefit
+    {
+        return $this->benefits()
+            ->where('status', 'approved')
+            ->where(fn ($q) => $q->whereNull('starts_at')->orWhere('starts_at', '<=', today()))
+            ->where(fn ($q) => $q->whereNull('expires_at')->orWhere('expires_at', '>=', today()))
+            ->latest('approved_at')->latest('id')
+            ->first();
+    }
+
+    /** Approved partners can verify members and record redemptions. */
+    public function canServeMembers(): bool
+    {
+        return $this->status === 'active' && $this->application?->status === 'approved';
     }
 }

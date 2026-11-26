@@ -95,9 +95,12 @@ export function ensureInitialInertiaPage() {
     const el = document.getElementById("app");
     if (!el) return;
 
+    // inertia-laravel v3 renders the page into <script data-page="app" type="application/json">;
+    // the static Cloudflare shell still uses #app[data-page]. Read whichever is present.
+    const script = document.querySelector('script[data-page="app"][type="application/json"]');
     let parsed = null;
     try {
-        const raw = el.getAttribute("data-page");
+        const raw = el.getAttribute("data-page") || script?.textContent;
         parsed = raw ? JSON.parse(raw) : null;
     } catch {
         parsed = null;

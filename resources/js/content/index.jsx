@@ -98,6 +98,22 @@ export const BUNDLED_MEDIA = Object.fromEntries(
     ]),
 );
 
+// 480px previews of the built-in images, used by the admin media library and pickers
+// so they don't download every full-size photo. Regenerate after adding an image:
+//   sips -Z 480 -s format jpeg -s formatOptions 72 resources/imgs/<file>.jpg --out resources/imgs/thumbs/<file>.jpg
+const bundledThumbs = import.meta.glob("../../imgs/thumbs/*", {
+    eager: true,
+    import: "default",
+});
+const BUNDLED_THUMBS = Object.fromEntries(
+    Object.entries(bundledThumbs).map(([path, url]) => [path.split("/").pop(), url]),
+);
+
+/** A small preview URL for a media value; falls back to the full image. */
+export function thumbFor(value) {
+    return BUNDLED_THUMBS[value] || resolveMedia(value);
+}
+
 /**
  * Turn a stored media value into a URL. Values are either a bundled filename
  * ("rider.jpg"), an uploaded file path ("/storage/site-media/x.jpg") or an

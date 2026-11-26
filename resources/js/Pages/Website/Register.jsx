@@ -1,20 +1,6 @@
 import { Link, router, useForm } from "@inertiajs/react";
-import {
-    ArrowRight,
-    Building2,
-    CheckCircle2,
-    Eye,
-    EyeOff,
-    HelpCircle,
-    Lock,
-    Mail,
-    Phone,
-    Shield,
-    Sparkles,
-    Tag,
-    Wrench,
-} from "lucide-react";
-import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import logoImg from "../../../imgs/Logo.png";
@@ -30,9 +16,26 @@ const DEFAULT_CATEGORIES = [
     { id: 10, name: "Other Commercial Services" },
 ];
 
+const REGISTRATION_STEPS = [
+    { title: "Business", fields: ["business_name", "category_id"] },
+    { title: "Contact", fields: ["name", "position", "email", "phone"] },
+    { title: "Account", fields: ["password", "password_confirmation", "terms", "privacy"] },
+];
+
 export default function Register({ categories = [], policyLinks = {} }) {
     const [visible, setVisible] = useState(false);
+    const [activeStep, setActiveStep] = useState(0);
+    const stepPanelRef = useRef(null);
+    const stepHeadingRef = useRef(null);
+    const previousStepRef = useRef(activeStep);
     const availableCategories = categories.length > 0 ? categories : DEFAULT_CATEGORIES;
+
+    useEffect(() => {
+        if (previousStepRef.current !== activeStep) {
+            stepHeadingRef.current?.focus();
+            previousStepRef.current = activeStep;
+        }
+    }, [activeStep]);
 
     const { data, setData, post, processing, errors } = useForm({
         business_name: "",
@@ -47,6 +50,41 @@ export default function Register({ categories = [], policyLinks = {} }) {
         terms: true,
         privacy: true,
     });
+
+    const validateCurrentStep = () => {
+        const fields = stepPanelRef.current?.querySelectorAll("input, select, textarea");
+        const invalidField = Array.from(fields || []).find(
+            (field) => !field.checkValidity(),
+        );
+
+        if (invalidField) {
+            invalidField.reportValidity();
+            return false;
+        }
+
+        return true;
+    };
+
+    const continueToNextStep = () => {
+        if (validateCurrentStep()) {
+            setActiveStep((currentStep) => Math.min(currentStep + 1, REGISTRATION_STEPS.length - 1));
+        }
+    };
+
+    const handleSubmit = (event) => {
+        if (activeStep < REGISTRATION_STEPS.length - 1) {
+            event.preventDefault();
+            continueToNextStep();
+            return;
+        }
+
+        if (!validateCurrentStep()) {
+            event.preventDefault();
+            return;
+        }
+
+        submit(event);
+    };
 
     const submit = (event) => {
         event.preventDefault();
@@ -63,6 +101,13 @@ export default function Register({ categories = [], policyLinks = {} }) {
                 }
             },
             onError: (errs) => {
+                const errorStep = REGISTRATION_STEPS.findIndex((step) =>
+                    step.fields.some((field) => errs?.[field]),
+                );
+                if (errorStep !== -1) {
+                    setActiveStep(errorStep);
+                }
+
                 const first = Object.values(errs || {})[0];
                 if (first) {
                     toast.error(first);
@@ -75,318 +120,302 @@ export default function Register({ categories = [], policyLinks = {} }) {
 
     return (
         <WebsiteLayout>
-            <section className="min-h-[calc(100vh-120px)] bg-slate-50 px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-                <div className="mx-auto grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5 lg:grid-cols-12">
-                    {/* Left Column / Brand Hero */}
-                    <aside className="relative flex flex-col justify-between overflow-hidden bg-[#050B17] p-8 text-white sm:p-10 lg:col-span-5">
-                        <div
-                            aria-hidden="true"
-                            className="pointer-events-none absolute inset-0 opacity-40"
-                            style={{
-                                backgroundImage:
-                                    "radial-gradient(circle at 10% 5%, #1864E8 0%, transparent 60%)",
-                            }}
+            <section className="min-h-[calc(100vh-120px)] bg-slate-50 px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+                <div className="mx-auto w-full max-w-3xl rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10">
+                    <div className="text-center">
+                        <img
+                            src={logoImg}
+                            alt="RAVU"
+                            className="mx-auto h-12 w-12 rounded-full object-cover"
                         />
+                        <h1 className="mt-4 text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
+                            Create your Partner Account
+                        </h1>
+                        <p className="mt-1 text-sm text-slate-500">
+                            Register your business to join the RAVU partner network.
+                        </p>
+                    </div>
 
-                        <div className="relative">
-                            <Link href="/" className="inline-flex items-center gap-2.5">
-                                <img
-                                    src={logoImg}
-                                    alt="RAVU"
-                                    className="h-10 w-10 rounded-full object-cover ring-2 ring-white/20"
+                    <div className="mt-8">
+                        <div className="mb-6">
+                            <div className="mb-2 flex items-center justify-between text-xs font-semibold text-slate-500">
+                                <span>Step {activeStep + 1} of {REGISTRATION_STEPS.length}</span>
+                                <span>{REGISTRATION_STEPS[activeStep].title}</span>
+                            </div>
+                            <div
+                                role="progressbar"
+                                aria-label={`Registration progress: ${REGISTRATION_STEPS[activeStep].title}`}
+                                aria-valuemin={1}
+                                aria-valuemax={REGISTRATION_STEPS.length}
+                                aria-valuenow={activeStep + 1}
+                                className="h-2 overflow-hidden rounded-full bg-slate-100"
+                            >
+                                <div
+                                    className="h-full rounded-full bg-[#1864E8] transition-[width]"
+                                    style={{ width: `${((activeStep + 1) / REGISTRATION_STEPS.length) * 100}%` }}
                                 />
-                                <span className="text-xl font-black tracking-tight">RAVU</span>
-                            </Link>
-
-                            <div className="mt-8 inline-flex items-center gap-2 rounded-full border border-sky-400/30 bg-sky-500/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-sky-300">
-                                <Building2 size={14} /> Partner Network
                             </div>
-
-                            <h1 className="mt-3 text-2xl font-black leading-tight sm:text-3xl">
-                                Connect your business with RAVU members.
-                            </h1>
-
-                            <p className="mt-3 text-xs leading-relaxed text-slate-300 sm:text-sm">
-                                Register your business to start accepting thousands of verified riders, drivers, and fleet operators looking for trusted spare parts, garages, fuel, and services across Tanzania.
-                            </p>
-
-                            <div className="mt-7 space-y-3.5 border-t border-white/10 pt-6">
-                                <div className="flex items-start gap-3">
-                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-sky-500/20 text-sky-400">
-                                        <Tag size={15} />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs font-bold text-white">Offer Member Discounts</p>
-                                        <p className="text-[11px] text-slate-300">Set custom member discounts (e.g. 5%–20%) to drive high-volume repeat mobility traffic.</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-3">
-                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-400">
-                                        <Shield size={15} />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs font-bold text-white">Attach TIN & Business License</p>
-                                        <p className="text-[11px] text-slate-300">Complete verification privately inside your portal at your own pace.</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-3">
-                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-indigo-500/20 text-indigo-400">
-                                        <Sparkles size={15} />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs font-bold text-white">Direct App Listing</p>
-                                        <p className="text-[11px] text-slate-300">Your workshop or store will be featured directly on the RAVU Rider & Driver mobile app.</p>
-                                    </div>
-                                </div>
-                            </div>
+                            <ol className="mt-3 grid grid-cols-3 gap-2 text-center text-xs">
+                                {REGISTRATION_STEPS.map((step, index) => (
+                                    <li
+                                        key={step.title}
+                                        aria-current={index === activeStep ? "step" : undefined}
+                                        className={index === activeStep ? "font-semibold text-[#1864E8]" : "text-slate-400"}
+                                    >
+                                        {step.title}
+                                    </li>
+                                ))}
+                            </ol>
                         </div>
 
-                        <div className="relative mt-8 rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                            <p className="text-xs text-slate-300">
-                                Already registered as a RAVU Partner?{" "}
-                                <Link
-                                    href="/login"
-                                    className="font-black text-sky-400 underline hover:text-sky-300"
-                                >
-                                    Sign in here
-                                </Link>
-                            </p>
-                        </div>
-                    </aside>
+                        <form onSubmit={handleSubmit} noValidate className="grid gap-y-4">
+                            <section
+                                ref={stepPanelRef}
+                                aria-labelledby="registration-step-heading"
+                                className="grid gap-x-6 gap-y-4 sm:col-span-2 sm:grid-cols-2"
+                            >
+                                <div className="sm:col-span-2">
+                                    <h2
+                                        id="registration-step-heading"
+                                        ref={stepHeadingRef}
+                                        tabIndex={-1}
+                                        className="text-lg font-bold text-slate-900"
+                                    >
+                                        {activeStep === 0 && "Tell us about your business"}
+                                        {activeStep === 1 && "How can we contact you?"}
+                                        {activeStep === 2 && "Secure your account"}
+                                    </h2>
+                                    <p className="mt-1 text-sm text-slate-500">
+                                        {activeStep === 0 && "Start with your business name and category."}
+                                        {activeStep === 1 && "Enter the details of your main contact person."}
+                                        {activeStep === 2 && "Set a password and accept our policies to finish."}
+                                    </p>
+                                </div>
 
-                    {/* Right Column / Registration Form */}
-                    <div className="p-6 sm:p-10 lg:col-span-7">
-                        <div>
-                            <span className="text-xs font-black uppercase tracking-wider text-[#1864E8]">
-                                Fast & Easy Registration
-                            </span>
-                            <h2 className="mt-1 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">
-                                Create your Partner Account
-                            </h2>
-                            <p className="mt-1.5 text-xs text-slate-600 sm:text-sm">
-                                Register now to access your Partner Portal where you can upload verification documents, set your business location, and specify member discounts.
-                            </p>
-                        </div>
-
-                        {Object.keys(errors).length > 0 && (
-                            <div className="mt-5 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-xs font-medium text-rose-800">
-                                <p className="font-bold">Please check the following details:</p>
-                                <ul className="mt-1.5 list-disc space-y-1 pl-4">
-                                    {Object.values(errors).map((error, index) => (
-                                        <li key={index}>{error}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
-
-                        <form onSubmit={submit} className="mt-6 space-y-4">
-                            {/* Business Info Section */}
-                            <div className="rounded-2xl border border-slate-200 bg-slate-50/50 p-4">
-                                <p className="text-xs font-black uppercase tracking-wider text-slate-700">
-                                    1. Your Business Details
-                                </p>
-                                <div className="mt-3 grid gap-3.5 sm:grid-cols-2">
-                                    <Field label="Business / Company Name" error={errors.business_name} className="sm:col-span-2">
-                                        <div className="relative">
-                                            <Building2 className={iconClass} size={16} />
+                                {activeStep === 0 && (
+                                    <>
+                                        <Field label="Business / Company Name" error={errors.business_name} className="sm:col-span-2">
                                             <input
                                                 type="text"
-                                                placeholder="e.g. Dar City Spare Parts & Garage Ltd"
+                                                autoComplete="organization"
+                                                placeholder="Business name"
                                                 value={data.business_name}
                                                 onChange={(e) => setData("business_name", e.target.value)}
-                                                className={`${inputClass} pl-10`}
+                                                className={inputClass}
                                                 required
                                             />
-                                        </div>
-                                    </Field>
+                                        </Field>
 
-                                    <Field label="Business Category" error={errors.category_id} className="sm:col-span-2">
-                                        <select
-                                            value={data.category_id}
-                                            onChange={(e) => setData("category_id", e.target.value)}
-                                            className={inputClass}
-                                            required
-                                        >
-                                            <option value="">Select your business type…</option>
-                                            {availableCategories.map((cat) => (
-                                                <option key={cat.id} value={cat.id}>
-                                                    {cat.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </Field>
-                                </div>
-                            </div>
+                                        <Field label="Business Category" error={errors.category_id} className="sm:col-span-2">
+                                            <input
+                                                type="text"
+                                                list="business-category-options"
+                                                autoComplete="off"
+                                                placeholder="Choose a category or type your own"
+                                                value={
+                                                    availableCategories.find(
+                                                        (category) => String(category.id) === String(data.category_id),
+                                                    )?.name || data.category_id
+                                                }
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    const selectedCategory = availableCategories.find(
+                                                        (category) => category.name.toLowerCase() === value.trim().toLowerCase(),
+                                                    );
+                                                    setData("category_id", selectedCategory ? String(selectedCategory.id) : value);
+                                                }}
+                                                className={inputClass}
+                                                required
+                                            />
+                                            <datalist id="business-category-options">
+                                                {availableCategories.map((category) => (
+                                                    <option key={category.id} value={category.name} />
+                                                ))}
+                                            </datalist>
+                                            <span className="mt-1 block text-xs text-slate-500">
+                                                Choose a suggestion or type your business category.
+                                            </span>
+                                        </Field>
+                                    </>
+                                )}
 
-                            {/* Contact Person Section */}
-                            <div className="rounded-2xl border border-slate-200 bg-slate-50/50 p-4">
-                                <p className="text-xs font-black uppercase tracking-wider text-slate-700">
-                                    2. Representative Contact Details
-                                </p>
-                                <div className="mt-3 grid gap-3.5 sm:grid-cols-2">
-                                    <Field label="Contact Person Full Name" error={errors.name}>
-                                        <input
-                                            type="text"
-                                            autoComplete="name"
-                                            placeholder="e.g. Saleh Juma"
-                                            value={data.name}
-                                            onChange={(e) => setData("name", e.target.value)}
-                                            className={inputClass}
-                                            required
-                                        />
-                                    </Field>
+                                {activeStep === 1 && (
+                                    <>
+                                        <Field label="Contact Person Full Name" error={errors.name}>
+                                            <input
+                                                type="text"
+                                                autoComplete="name"
+                                                placeholder="Full name"
+                                                value={data.name}
+                                                onChange={(e) => setData("name", e.target.value)}
+                                                className={inputClass}
+                                                required
+                                            />
+                                        </Field>
 
-                                    <Field label="Position / Role" error={errors.position}>
-                                        <input
-                                            type="text"
-                                            placeholder="e.g. Managing Director / Owner"
-                                            value={data.position}
-                                            onChange={(e) => setData("position", e.target.value)}
-                                            className={inputClass}
-                                            required
-                                        />
-                                    </Field>
+                                        <Field label="Position / Role" error={errors.position}>
+                                            <input
+                                                type="text"
+                                                autoComplete="organization-title"
+                                                placeholder="e.g. Owner"
+                                                value={data.position}
+                                                onChange={(e) => setData("position", e.target.value)}
+                                                className={inputClass}
+                                                required
+                                            />
+                                        </Field>
 
-                                    <Field label="Business Email" error={errors.email}>
-                                        <div className="relative">
-                                            <Mail className={iconClass} size={16} />
+                                        <Field label="Business Email" error={errors.email} className="sm:col-span-2">
                                             <input
                                                 type="email"
                                                 autoComplete="email"
-                                                placeholder="sales@company.co.tz"
+                                                placeholder="you@company.co.tz"
                                                 value={data.email}
                                                 onChange={(e) => setData("email", e.target.value)}
-                                                className={`${inputClass} pl-10`}
+                                                className={inputClass}
                                                 required
                                             />
-                                        </div>
-                                    </Field>
+                                        </Field>
 
-                                    <Field label="Phone / WhatsApp Number" error={errors.phone}>
-                                        <div className="relative">
-                                            <Phone className={iconClass} size={16} />
+                                        <Field label="Phone / WhatsApp Number" error={errors.phone} className="sm:col-span-2">
                                             <input
                                                 type="tel"
                                                 autoComplete="tel"
                                                 placeholder="+255 7XX XXX XXX"
                                                 value={data.phone}
                                                 onChange={(e) => setData("phone", e.target.value)}
-                                                className={`${inputClass} pl-10`}
+                                                className={inputClass}
                                                 required
                                             />
-                                        </div>
-                                    </Field>
-                                </div>
-                            </div>
+                                        </Field>
+                                    </>
+                                )}
 
-                            {/* Password Section */}
-                            <div className="rounded-2xl border border-slate-200 bg-slate-50/50 p-4">
-                                <p className="text-xs font-black uppercase tracking-wider text-slate-700">
-                                    3. Portal Security
-                                </p>
-                                <div className="mt-3 grid gap-3.5 sm:grid-cols-2">
-                                    <Field label="Password" error={errors.password}>
-                                        <div className="relative">
-                                            <Lock className={iconClass} size={16} />
+                                {activeStep === 2 && (
+                                    <>
+                                        <Field label="Password" error={errors.password} className="sm:col-span-2">
+                                            <div className="relative">
+                                                <input
+                                                    type={visible ? "text" : "password"}
+                                                    autoComplete="new-password"
+                                                    placeholder="Minimum 8 characters"
+                                                    value={data.password}
+                                                    onChange={(e) => setData("password", e.target.value)}
+                                                    className={`${inputClass} pr-10`}
+                                                    required
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setVisible((value) => !value)}
+                                                    aria-label={visible ? "Hide password" : "Show password"}
+                                                    className="absolute inset-y-0 right-3 my-auto h-fit text-slate-400 hover:text-slate-600"
+                                                >
+                                                    {visible ? <EyeOff size={16} /> : <Eye size={16} />}
+                                                </button>
+                                            </div>
+                                        </Field>
+
+                                        <Field label="Confirm Password" error={errors.password_confirmation} className="sm:col-span-2">
                                             <input
                                                 type={visible ? "text" : "password"}
                                                 autoComplete="new-password"
-                                                placeholder="Minimum 8 characters"
-                                                value={data.password}
-                                                onChange={(e) => setData("password", e.target.value)}
-                                                className={`${inputClass} pl-10 pr-10`}
+                                                placeholder="Repeat password"
+                                                value={data.password_confirmation}
+                                                onChange={(e) => setData("password_confirmation", e.target.value)}
+                                                className={inputClass}
                                                 required
                                             />
-                                            <button
-                                                type="button"
-                                                onClick={() => setVisible((value) => !value)}
-                                                aria-label={visible ? "Hide password" : "Show password"}
-                                                className="absolute inset-y-0 right-3 text-slate-400 hover:text-slate-600"
-                                            >
-                                                {visible ? <EyeOff size={16} /> : <Eye size={16} />}
-                                            </button>
+                                        </Field>
+
+                                        <div className="sm:col-span-2">
+                                            <label className="flex cursor-pointer items-start gap-2.5 text-xs text-slate-600">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={data.terms}
+                                                    onChange={(e) =>
+                                                        setData((prev) => ({
+                                                            ...prev,
+                                                            terms: e.target.checked,
+                                                            privacy: e.target.checked,
+                                                        }))
+                                                    }
+                                                    className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer rounded accent-[#1864E8]"
+                                                    required
+                                                />
+                                                <span>
+                                                    I agree to the{" "}
+                                                    {policyLinks.terms ? (
+                                                        <a
+                                                            href={policyLinks.terms}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            className="font-semibold text-[#1864E8] underline"
+                                                        >
+                                                            Terms
+                                                        </a>
+                                                    ) : (
+                                                        <strong className="text-[#1864E8]">Terms</strong>
+                                                    )}{" "}
+                                                    and{" "}
+                                                    {policyLinks.privacy ? (
+                                                        <a
+                                                            href={policyLinks.privacy}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                            className="font-semibold text-[#1864E8] underline"
+                                                        >
+                                                            Privacy Policy
+                                                        </a>
+                                                    ) : (
+                                                        <strong className="text-[#1864E8]">Privacy Policy</strong>
+                                                    )}
+                                                    .
+                                                </span>
+                                            </label>
+                                            {errors.terms && <span className="mt-1 block text-xs text-rose-600">{errors.terms}</span>}
+                                            {errors.privacy && <span className="mt-1 block text-xs text-rose-600">{errors.privacy}</span>}
                                         </div>
-                                    </Field>
+                                    </>
+                                )}
+                            </section>
 
-                                    <Field label="Confirm Password" error={errors.password_confirmation}>
-                                        <input
-                                            type={visible ? "text" : "password"}
-                                            autoComplete="new-password"
-                                            placeholder="Repeat password"
-                                            value={data.password_confirmation}
-                                            onChange={(e) => setData("password_confirmation", e.target.value)}
-                                            className={inputClass}
-                                            required
-                                        />
-                                    </Field>
-                                </div>
+                            <div className="mt-2 flex gap-3">
+                                {activeStep > 0 && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setActiveStep((currentStep) => currentStep - 1)}
+                                        className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+                                    >
+                                        Back
+                                    </button>
+                                )}
+                                {activeStep < REGISTRATION_STEPS.length - 1 ? (
+                                    <button
+                                        type="button"
+                                        onClick={continueToNextStep}
+                                        className="ml-auto w-full rounded-xl bg-[#1864E8] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0b4bc4] sm:w-auto"
+                                    >
+                                        Continue
+                                    </button>
+                                ) : (
+                                    <button
+                                        type="submit"
+                                        disabled={processing}
+                                        className="ml-auto w-full rounded-xl bg-[#1864E8] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#0b4bc4] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+                                    >
+                                        {processing ? "Creating Account…" : "Create Account"}
+                                    </button>
+                                )}
                             </div>
-
-                            {/* Terms Agreement */}
-                            <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 text-xs text-slate-700">
-                                <label className="flex items-start gap-2.5 cursor-pointer">
-                                    <input
-                                        type="checkbox"
-                                        checked={data.terms}
-                                        onChange={(e) =>
-                                            setData((prev) => ({
-                                                ...prev,
-                                                terms: e.target.checked,
-                                                privacy: e.target.checked,
-                                            }))
-                                        }
-                                        className="mt-0.5 h-4 w-4 rounded accent-[#1864E8]"
-                                        required
-                                    />
-                                    <span>
-                                        I agree to the{" "}
-                                        {policyLinks.terms ? (
-                                            <a
-                                                href={policyLinks.terms}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="font-bold text-[#1864E8] underline"
-                                            >
-                                                RAVU Partner Terms
-                                            </a>
-                                        ) : (
-                                            <strong className="text-[#1864E8]">RAVU Partner Terms</strong>
-                                        )}{" "}
-                                        and{" "}
-                                        {policyLinks.privacy ? (
-                                            <a
-                                                href={policyLinks.privacy}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="font-bold text-[#1864E8] underline"
-                                            >
-                                                Privacy Guidelines
-                                            </a>
-                                        ) : (
-                                            <strong className="text-[#1864E8]">Privacy Guidelines</strong>
-                                        )}
-                                        .
-                                    </span>
-                                </label>
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={processing}
-                                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#1864E8] px-5 py-3.5 text-sm font-black text-white shadow-md shadow-[#1864E8]/20 transition-all hover:bg-[#00289a] disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                {processing ? "Creating Account…" : "Create Partner Account & Open Portal"}
-                                <ArrowRight size={16} />
-                            </button>
                         </form>
-
-                        <div className="mt-5 flex items-center justify-center gap-2 text-center text-xs text-slate-500">
-                            <CheckCircle2 size={14} className="text-emerald-600" />
-                            <span>Instant portal access — attach TIN, license, location, and discounts next.</span>
-                        </div>
                     </div>
+
+                    <p className="mt-6 text-center text-xs text-slate-500">
+                        Already registered?{" "}
+                        <Link href="/login" className="font-semibold text-[#1864E8] hover:underline">
+                            Sign in
+                        </Link>
+                    </p>
                 </div>
             </section>
         </WebsiteLayout>
@@ -394,18 +423,15 @@ export default function Register({ categories = [], policyLinks = {} }) {
 }
 
 const inputClass =
-    "mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-[#1864E8] focus:bg-white focus:ring-2 focus:ring-[#1864E8]/15";
-const iconClass = "absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400";
+    "mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-[#1864E8] focus:ring-2 focus:ring-[#1864E8]/15";
 
 function Field({ label, error, className = "", children }) {
     return (
-        <label className={`block text-[11px] font-bold uppercase tracking-wider text-slate-700 ${className}`}>
-            {label}
+        <label className={`block ${className}`}>
+            <span className="text-xs font-semibold text-slate-700">{label}</span>
             {children}
             {error && (
-                <span className="mt-1 block text-xs font-semibold normal-case text-rose-600">
-                    {error}
-                </span>
+                <span className="mt-1 block text-xs text-rose-600">{error}</span>
             )}
         </label>
     );

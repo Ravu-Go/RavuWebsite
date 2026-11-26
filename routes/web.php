@@ -1,12 +1,18 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\MembershipPlanController;
+use App\Http\Controllers\MobileAppController;
 use App\Http\Controllers\PartnerAdminController;
+use App\Http\Controllers\PartnerMemberController;
+use App\Http\Controllers\PartnerPayoutController;
 use App\Http\Controllers\PartnerOnboardingController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Middleware\EnsurePartnerPortalUser;
 use App\Http\Middleware\EnsurePartnerReviewer;
+use App\Http\Middleware\EnsurePasswordChanged;
 use App\Http\Middleware\EnsureSuperAdmin;
 use App\Notifications\PartnerPortalNotification;
 use App\Services\SiteContentService;
@@ -70,6 +76,7 @@ Route::middleware('auth')->group(function () {
         }
 
         $request->user()->sendEmailVerificationNotification();
+        \App\Models\ActivityLog::record('auth', 'verification_email_sent');
 
         return back()->with('status', 'A new verification link has been sent to your email address.');
     })->middleware('throttle:6,1')->name('verification.send');
@@ -89,9 +96,15 @@ Route::middleware(['auth', EnsurePartnerPortalUser::class])->group(function () {
     Route::get('/partner/documents/{document}', [PartnerOnboardingController::class, 'downloadDocument'])->name('partner.documents.download');
     Route::post('/partner/onboarding/submit', [PartnerOnboardingController::class, 'submit'])->name('partner.onboarding.submit');
     Route::post('/partner/notifications/{notification}/read', [PartnerOnboardingController::class, 'markNotificationRead'])->name('partner.notifications.read');
+
+    // Serving members (approved partners only — enforced in the controller).
+    Route::post('/partner/members/verify', [PartnerMemberController::class, 'verify'])->middleware('throttle:60,1')->name('partner.members.verify');
+    Route::post('/partner/redemptions', [PartnerMemberController::class, 'store'])->middleware('throttle:30,1')->name('partner.redemptions.store');
+    Route::post('/partner/redemptions/{redemption}/void', [PartnerMemberController::class, 'void'])->middleware('throttle:20,1')->name('partner.redemptions.void');
+    Route::get('/partner/redemptions/export', [PartnerMemberController::class, 'export'])->name('partner.redemptions.export');
 });
 
-Route::middleware(['auth', 'verified', EnsurePartnerReviewer::class])->prefix('partner-management')->name('partner-management.')->group(function () {
+Route::middleware(['auth', 'verified', EnsurePartnerReviewer::class, EnsurePasswordChanged::class])->prefix('partner-management')->name('partner-management.')->group(function () {
     Route::get('/', [PartnerAdminController::class, 'index'])->name('index');
     Route::get('/applications/{application}', [PartnerAdminController::class, 'show'])->name('applications.show');
     Route::post('/applications/{application}/under-review', [PartnerAdminController::class, 'underReview'])->name('applications.under-review');
@@ -114,7 +127,13 @@ Route::middleware(['auth', 'verified', EnsureSuperAdmin::class])->group(function
     Route::get('/super-admin', [SuperAdminController::class, 'index'])->name('super-admin');
     Route::redirect('/admin', '/super-admin')->name('admin');
 
-    Route::prefix('super-admin')->name('super-admin.')->group(function () use ($contentKeys) {
+    // Account settings stay reachable while a one-time password is still in use.
+    Route::patch('/super-admin/account', [AccountController::class, 'updateProfile'])->name('super-admin.account.update');
+    Route::put('/super-admin/account/password', [AccountController::class, 'updatePassword'])
+        ->middleware('throttle:6,1')
+        ->name('super-admin.account.password');
+
+    Route::prefix('super-admin')->name('super-admin.')->middleware(EnsurePasswordChanged::class)->group(function () use ($contentKeys) {
         Route::put('/content/{key}', [SuperAdminController::class, 'saveDraft'])->whereIn('key', $contentKeys)->name('content.draft');
         Route::post('/content/{key}/publish', [SuperAdminController::class, 'publish'])->whereIn('key', $contentKeys)->name('content.publish');
         Route::delete('/content/{key}/draft', [SuperAdminController::class, 'discardDraft'])->whereIn('key', $contentKeys)->name('content.discard');
@@ -122,6 +141,36 @@ Route::middleware(['auth', 'verified', EnsureSuperAdmin::class])->group(function
         Route::get('/preview/{key}', [SuperAdminController::class, 'startPreview'])->whereIn('key', $contentKeys)->name('preview.start');
         Route::get('/preview-exit', [SuperAdminController::class, 'stopPreview'])->name('preview.stop');
         Route::post('/media', [SuperAdminController::class, 'uploadMedia'])->name('media.store');
+        Route::get('/activity/export', [SuperAdminController::class, 'exportActivity'])->name('activity.export');
+
+        Route::prefix('payouts')->name('payouts.')->controller(PartnerPayoutController::class)->group(function () {
+            Route::post('/{period}/approve', 'approve')->where('period', '\\d{4}-\\d{2}')->name('approve');
+            Route::post('/{payout}/paid', 'markPaid')->whereNumber('payout')->name('paid');
+            Route::get('/{period}/export', 'export')->where('period', '\\d{4}-\\d{2}')->name('export');
+        });
+
+        Route::prefix('plans')->name('plans.')->controller(MembershipPlanController::class)->group(function () {
+            Route::post('/', 'store')->name('store');
+            Route::put('/{plan}', 'update')->name('update');
+            Route::post('/{plan}/price', 'changePrice')->name('price');
+            Route::post('/{plan}/publish', 'publish')->name('publish');
+            Route::post('/{plan}/retire', 'retire')->name('retire');
+            Route::post('/{plan}/reactivate', 'reactivate')->name('reactivate');
+            Route::post('/{plan}/move', 'move')->name('move');
+            Route::delete('/{plan}', 'destroy')->name('destroy');
+        });
+
+        Route::prefix('mobile')->name('mobile.')->controller(MobileAppController::class)->group(function () {
+            Route::put('/versions', 'updateVersions')->name('versions');
+            Route::put('/maintenance', 'updateMaintenance')->name('maintenance');
+            Route::put('/support', 'updateSupport')->name('support');
+            Route::post('/announcements', 'storeAnnouncement')->name('announcements.store');
+            Route::put('/announcements/{announcement}', 'updateAnnouncement')->name('announcements.update');
+            Route::delete('/announcements/{announcement}', 'destroyAnnouncement')->name('announcements.destroy');
+            Route::post('/features', 'storeFeature')->name('features.store');
+            Route::put('/features/{feature}', 'updateFeature')->name('features.update');
+            Route::delete('/features/{feature}', 'destroyFeature')->name('features.destroy');
+        });
         Route::delete('/media/{media}', [SuperAdminController::class, 'deleteMedia'])->name('media.destroy');
     });
 });
