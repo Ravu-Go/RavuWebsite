@@ -113,7 +113,7 @@ export default function MemberVerifier({ serving, recent = [] }) {
                         <div>
                             <h2 className="text-lg font-black text-slate-950">Serve a RAVU member</h2>
                             <p className="mt-0.5 text-[13px] text-slate-600">
-                                Scan the QR code in the member’s RAVU app, or type their Member ID or phone number.
+                                Scan or type the member pass from the member’s RAVU app (RVU-…), or type their Member ID or phone number.
                                 {serving.offer && (
                                     <>
                                         {" "}Your offer: <strong className="text-slate-900">{serving.offer.label}</strong>.
@@ -132,7 +132,7 @@ export default function MemberVerifier({ serving, recent = [] }) {
                                 ref={inputRef}
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
-                                placeholder="RAVU-10432 or 0754 123 456"
+                                placeholder={serving.demo_members ? "RAVU-10432 or 0754 123 456" : "RVU-… pass, RAVU-00042 or 0754 123 456"}
                                 autoComplete="off"
                                 className="h-12 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-[15px] font-semibold text-slate-900 placeholder:font-normal placeholder:text-slate-400 focus:border-[#1864E8] focus:outline-none focus:ring-4 focus:ring-[#1864E8]/15"
                             />

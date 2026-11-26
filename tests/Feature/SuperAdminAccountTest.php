@@ -53,6 +53,21 @@ class SuperAdminAccountTest extends TestCase
         $this->assertSame(4, User::where('role', 'super_admin')->count());
     }
 
+    public function test_local_seeding_gives_every_admin_the_known_password(): void
+    {
+        User::factory()->create(['email' => 'james@ravu.com', 'role' => 'super_admin', 'password' => 'Forgotten123']);
+        $this->app['env'] = 'local';
+
+        $this->seed(SuperAdminSeeder::class);
+
+        foreach (self::EMAILS as $email) {
+            $user = User::firstWhere('email', $email);
+            $this->assertTrue(Hash::check(SuperAdminSeeder::LOCAL_PASSWORD, $user->password), "{$email} has the wrong password");
+            $this->assertFalse($user->password_change_required);
+            $this->assertTrue($user->isSuperAdmin());
+        }
+    }
+
     public function test_admin_on_one_time_password_is_held_on_the_account_screen(): void
     {
         $this->admin(['password_change_required' => true]);

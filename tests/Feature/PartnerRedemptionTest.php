@@ -232,6 +232,29 @@ class PartnerRedemptionTest extends TestCase
         $this->actingAs($userA)->postJson("/partner/redemptions/{$other->id}/void", ['reason' => 'Not mine at all'])->assertNotFound();
     }
 
+    public function test_demo_partner_seeder_creates_the_jux_login_locally(): void
+    {
+        $this->app['env'] = 'local';
+
+        // No demo data yet: the seeder generates it, then creates the login.
+        $this->seed(\Database\Seeders\DemoPartnerSeeder::class);
+        $jux = User::firstWhere('email', 'jux@partner.com');
+        $this->assertTrue(\Illuminate\Support\Facades\Hash::check('password1234', $jux->password));
+        $this->assertTrue($jux->primaryPartner()->is_demo);
+        $redemptions = PartnerRedemption::count();
+
+        // Re-seeding resets a forgotten password and leaves the data alone.
+        $jux->forceFill(['password' => 'Forgotten999'])->save();
+        $this->seed(\Database\Seeders\DemoPartnerSeeder::class);
+        $this->assertTrue(\Illuminate\Support\Facades\Hash::check('password1234', $jux->fresh()->password));
+        $this->assertSame($redemptions, PartnerRedemption::count());
+        $this->assertSame(1, $jux->partners()->count());
+
+        $this->app['env'] = 'testing'; // back to the test environment (CSRF skipped) for the sign-in request
+        $this->post('/login', ['email' => 'jux@partner.com', 'password' => 'password1234'])->assertRedirect();
+        $this->assertAuthenticatedAs($jux);
+    }
+
     public function test_demo_command_generates_and_purges_sample_data(): void
     {
         [, $real] = $this->partner('Real Garage');

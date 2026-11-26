@@ -20,8 +20,15 @@ class SuperAdminSeeder extends Seeder
         ['name' => 'Evance', 'email' => 'evance@ravu.com'],
     ];
 
+    /** Password every admin gets on a local machine (APP_ENV=local) only. */
+    public const LOCAL_PASSWORD = 'password1234';
+
     /**
      * Seed the RAVU Super Admin accounts.
+     *
+     * Local development (APP_ENV=local): every admin, new or existing, gets the
+     * password "password1234" with no forced change, so re-seeding always gives
+     * a known way back in. Never applied in any other environment.
      *
      * New accounts get a random one-time password, printed once below, and must
      * choose their own password on first sign-in. Re-running the seeder never
@@ -31,6 +38,12 @@ class SuperAdminSeeder extends Seeder
      */
     public function run(): void
     {
+        if (app()->isLocal()) {
+            $this->seedLocal();
+
+            return;
+        }
+
         $issued = [];
 
         foreach (self::ADMINS as $admin) {
@@ -65,5 +78,22 @@ class SuperAdminSeeder extends Seeder
 
         $this->command?->info('Super admins seeded. Share each one-time password privately; it is shown only now.');
         $this->command?->table(['Email', 'One-time password'], $issued);
+    }
+
+    private function seedLocal(): void
+    {
+        foreach (self::ADMINS as $admin) {
+            $user = User::firstOrNew(['email' => $admin['email']]);
+            $user->forceFill([
+                'name' => $user->name ?: $admin['name'],
+                'password' => self::LOCAL_PASSWORD,
+                'role' => 'super_admin',
+                'email_verified_at' => $user->email_verified_at ?? now(),
+                'password_change_required' => false,
+            ])->save();
+        }
+
+        $this->command?->info('Local super admins ready — password for every account: '.self::LOCAL_PASSWORD);
+        $this->command?->table(['Email'], array_map(fn ($a) => [$a['email']], self::ADMINS));
     }
 }

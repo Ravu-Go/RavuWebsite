@@ -14,10 +14,10 @@ use App\Models\ProposedPartnerBenefit;
 use App\Models\User;
 use App\Services\Members\DemoMemberDirectory;
 use Carbon\CarbonImmutable;
+use Database\Seeders\DemoPartnerSeeder;
 use Database\Seeders\PartnerCategorySeeder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 /**
  * Sample partner activity for designing and reviewing the partner portal and the
@@ -32,10 +32,13 @@ use Illuminate\Support\Str;
  */
 class PartnerDemoData extends Command
 {
-    protected $signature = 'partners:demo {--months=18 : How many months of history to generate} {--purge : Remove all demo data and stop} {--login : Also create a demo partner login to view the portal with sample data} {--force : Allow running in production}';
+    protected $signature = 'partners:demo {--months=18 : How many months of history to generate} {--purge : Remove all demo data and stop} {--login : Also create a demo partner login to view the portal with sample data} {--password= : Password for the demo login (default: password1234; random in production)} {--force : Allow running in production}';
 
     /** Sign-in for the demo partner portal (created with --login, removed with --purge). */
-    public const DEMO_LOGIN = 'demo.partner@ravu.test';
+    public const DEMO_LOGIN = 'jux@partner.com';
+
+    /** Fixed so the demo login survives re-runs. Never used in production. */
+    public const DEMO_PASSWORD = 'password1234';
 
     protected $description = 'Create sample partners and member redemptions (dummy data) for the partner portal and Super Admin reports';
 
@@ -131,20 +134,14 @@ class PartnerDemoData extends Command
     /** A partner-portal account on the first demo partner, so the sample data can be viewed. */
     private function createDemoLogin(): void
     {
-        $partner = Partner::where('is_demo', true)->orderBy('id')->first();
-        $password = Str::password(14, symbols: false);
-        $user = User::forceCreate([
-            'name' => 'Demo Partner',
-            'email' => self::DEMO_LOGIN,
-            'password' => $password,
-            'role' => 'partner',
-            'position' => 'Owner (demo)',
-            'email_verified_at' => now(),
-        ]);
-        $partner->users()->attach($user, ['role' => 'owner']);
+        // A well-known password is fine locally; production gets a random one unless --password is given.
+        $password = (string) ($this->option('password') ?: (app()->isProduction()
+            ? 'Ravu-'.collect(range(1, 10))->map(fn () => '23456789abcdefghjkmnpqrstuvwxyz'[random_int(0, 30)])->implode('')
+            : self::DEMO_PASSWORD));
+        $partner = DemoPartnerSeeder::account($password)->primaryPartner();
 
         $this->newLine();
-        $this->info('Demo partner login (local only, recreated on every run):');
+        $this->info('Demo partner login (recreated on every run):');
         $this->line('  Partner:  '.$partner->trading_name);
         $this->line('  Email:    '.self::DEMO_LOGIN);
         $this->line('  Password: '.$password);

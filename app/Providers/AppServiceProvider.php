@@ -6,10 +6,14 @@ use App\Contracts\MemberDirectory;
 use App\Contracts\MembershipRevenueSource;
 use App\Models\ActivityLog;
 use App\Models\User;
-use App\Services\Membership\ApiMembershipRevenueSource;
-use App\Services\Membership\DemoMembershipRevenueSource;
 use App\Services\Members\ApiMemberDirectory;
+use App\Services\Members\DatabaseMemberDirectory;
 use App\Services\Members\DemoMemberDirectory;
+use App\Services\Membership\ApiMembershipRevenueSource;
+use App\Services\Membership\DatabaseMembershipRevenueSource;
+use App\Services\Membership\DemoMembershipRevenueSource;
+use App\Services\MembershipPlanService;
+use App\Services\RavuApp\AppDatabase;
 use App\Support\AuthActivitySubscriber;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -26,12 +30,17 @@ class AppServiceProvider extends ServiceProvider
     {
         // Membership revenue: sample payments until the memberships API is connected,
         // generated for the plans in the admin catalogue (or the config fallback).
+        $this->app->bind(AppDatabase::class, fn () => new AppDatabase((array) config('membership.database')));
+
         $this->app->bind(MembershipRevenueSource::class, function () {
+            if (config('membership.revenue_source') === 'database') {
+                return new DatabaseMembershipRevenueSource(app(AppDatabase::class));
+            }
             if (config('membership.revenue_source') === 'api') {
                 return new ApiMembershipRevenueSource((array) config('membership.api'));
             }
             try {
-                $plans = app(\App\Services\MembershipPlanService::class)->revenuePlans();
+                $plans = app(MembershipPlanService::class)->revenuePlans();
             } catch (\Throwable) {
                 $plans = []; // Plans table not migrated yet.
             }
@@ -40,9 +49,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         // Member lookups for the partner verifier: sample members until the mobile app API is live.
-        $this->app->bind(MemberDirectory::class, fn () => config('membership.member_source') === 'api'
-            ? new ApiMemberDirectory((array) config('membership.api'))
-            : new DemoMemberDirectory(app(MembershipRevenueSource::class)));
+        $this->app->bind(MemberDirectory::class, fn () => match (config('membership.member_source')) {
+            'database' => new DatabaseMemberDirectory(app(AppDatabase::class)),
+            'api' => new ApiMemberDirectory((array) config('membership.api')),
+            default => new DemoMemberDirectory(app(MembershipRevenueSource::class)),
+        });
     }
 
     /**
