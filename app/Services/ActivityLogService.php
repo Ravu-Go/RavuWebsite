@@ -64,11 +64,12 @@ class ActivityLogService
         if ($filters['q'] !== '') {
             $term = '%'.str_replace(['\\', '%', '_'], ['\\\\', '\\%', '\\_'], $filters['q']).'%';
             $query->where(function (Builder $q) use ($term) {
-                $q->where('action', 'like', $term)
-                    ->orWhere('ip_address', 'like', $term)
-                    ->orWhere('details', 'like', $term)
-                    ->orWhereHas('user', fn (Builder $u) => $u->where('name', 'like', $term)->orWhere('email', 'like', $term))
-                    ->orWhereHas('partner', fn (Builder $p) => $p->where('trading_name', 'like', $term)->orWhere('registered_name', 'like', $term));
+                // whereLike is case-insensitive on every database (ilike on PostgreSQL).
+                $q->whereLike('action', $term)
+                    ->orWhereLike('ip_address', $term)
+                    ->orWhereLike('details', $term)
+                    ->orWhereHas('user', fn (Builder $u) => $u->whereLike('name', $term)->orWhereLike('email', $term))
+                    ->orWhereHas('partner', fn (Builder $p) => $p->whereLike('trading_name', $term)->orWhereLike('registered_name', $term));
             });
         }
 

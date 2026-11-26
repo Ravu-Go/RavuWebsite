@@ -89,7 +89,8 @@ class MembershipPlanTest extends TestCase
         $this->assertSame(2, $plan->prices()->count());
 
         $log = ActivityLog::where('action', 'plan_price_changed')->orderBy('id')->first();
-        $this->assertSame(['name' => 'Rider Gold', 'from' => 40000, 'to' => 50000], array_intersect_key($log->details, array_flip(['name', 'from', 'to'])));
+        // assertEquals: MySQL's JSON type reorders object keys, so compare values, not key order.
+        $this->assertEquals(['name' => 'Rider Gold', 'from' => 40000, 'to' => 50000], array_intersect_key($log->details, array_flip(['name', 'from', 'to'])));
     }
 
     public function test_retiring_keeps_the_plan_for_existing_members_and_published_plans_cannot_be_deleted(): void
