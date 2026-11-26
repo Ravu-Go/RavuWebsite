@@ -2,11 +2,14 @@
 
 namespace App\Providers;
 
+use App\Contracts\MemberDirectory;
 use App\Contracts\MembershipRevenueSource;
 use App\Models\ActivityLog;
 use App\Models\User;
 use App\Services\Membership\ApiMembershipRevenueSource;
 use App\Services\Membership\DemoMembershipRevenueSource;
+use App\Services\Members\ApiMemberDirectory;
+use App\Services\Members\DemoMemberDirectory;
 use App\Support\AuthActivitySubscriber;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
@@ -35,6 +38,11 @@ class AppServiceProvider extends ServiceProvider
 
             return new DemoMembershipRevenueSource($plans ?: (array) config('membership.demo_plans'));
         });
+
+        // Member lookups for the partner verifier: sample members until the mobile app API is live.
+        $this->app->bind(MemberDirectory::class, fn () => config('membership.member_source') === 'api'
+            ? new ApiMemberDirectory((array) config('membership.api'))
+            : new DemoMemberDirectory(app(MembershipRevenueSource::class)));
     }
 
     /**

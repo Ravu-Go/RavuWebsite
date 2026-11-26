@@ -13,6 +13,9 @@ use App\Services\Membership\MembershipRevenueService;
 use App\Services\MembershipPlanService;
 use App\Services\MobileAppConfigService;
 use App\Services\PartnerInsightsService;
+use App\Services\PartnerPayoutService;
+use App\Services\PartnerPerformanceService;
+use App\Support\ReportPeriod;
 use App\Services\SiteContentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -57,10 +60,28 @@ class SuperAdminController extends Controller
                 ? app(MembershipRevenueService::class)->build((string) $request->query('range', MembershipRevenueService::DEFAULT_RANGE))
                 : null,
             'plans' => fn () => $section === 'plans' ? app(MembershipPlanService::class)->admin() : null,
+            'partnerPerformance' => fn () => $section === 'partner-performance'
+                ? app(PartnerPerformanceService::class)->leaderboard(ReportPeriod::parse($request->query('period')))
+                : null,
+            'payouts' => fn () => $section === 'payouts'
+                ? app(PartnerPayoutService::class)->adminMonth($this->payoutMonth($request->query('period')))
+                : null,
             'mobile' => fn () => $section === 'mobile' ? app(MobileAppConfigService::class)->admin() : null,
             'activityLog' => fn () => $section === 'activity' ? app(ActivityLogService::class)->page($request) : null,
             'mediaMaxKb' => (int) config('site_content.media_max_kb', 5120),
         ]);
+    }
+
+    /** Payouts are monthly; default to last month, the one most likely waiting for approval. */
+    private function payoutMonth(?string $value): ReportPeriod
+    {
+        $period = $value ? ReportPeriod::parse($value) : null;
+        if ($period && $period->type === 'month') {
+            return $period;
+        }
+        $last = now()->subMonthNoOverflow();
+
+        return ReportPeriod::month($last->year, $last->month);
     }
 
     private function pageSummaries(): array

@@ -15,6 +15,12 @@ return [
 
     'revenue_source' => env('MEMBERSHIP_REVENUE_SOURCE', 'demo'),
 
+    /*
+    | Member lookups for the partner verifier: "demo" builds sample members from the
+    | revenue source above; "api" asks the mobile app backend (GET {api.url}/members/lookup).
+    */
+    'member_source' => env('MEMBERSHIP_MEMBER_SOURCE', env('MEMBERSHIP_REVENUE_SOURCE', 'demo')),
+
     'currency' => env('MEMBERSHIP_CURRENCY', 'TZS'),
 
     'api' => [

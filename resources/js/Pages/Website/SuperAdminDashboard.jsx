@@ -7,6 +7,8 @@ import {
     CalendarDays,
     CheckCircle2,
     CircleDollarSign,
+    HandCoins,
+    Trophy,
     ChevronRight,
     Clock,
     CornerDownLeft,
@@ -50,6 +52,8 @@ import MembershipPlans from "../../Components/admin/MembershipPlans";
 import MembershipRevenue from "../../Components/admin/MembershipRevenue";
 import MobileApp from "../../Components/admin/MobileApp";
 import PartnerInsights from "../../Components/admin/PartnerInsights";
+import PartnerPayouts from "../../Components/admin/PartnerPayouts";
+import PartnerPerformance from "../../Components/admin/PartnerPerformance";
 import { BUNDLED_MEDIA, CONTENT_DEFAULTS, thumbFor } from "../../content";
 import logoImg from "../../../imgs/Logo.png";
 
@@ -200,6 +204,8 @@ export default function SuperAdminDashboard({
     partnerSummary,
     insights = null,
     revenue = null,
+    partnerPerformance = null,
+    payouts = null,
     plans = null,
     mobile = null,
     activityLog = null,
@@ -219,6 +225,8 @@ export default function SuperAdminDashboard({
     const [insightsLoading, setInsightsLoading] = useState(false);
     const [activityLoading, setActivityLoading] = useState(false);
     const [revenueLoading, setRevenueLoading] = useState(false);
+    const [performanceLoading, setPerformanceLoading] = useState(false);
+    const [payoutsLoading, setPayoutsLoading] = useState(false);
     const [mobileNav, setMobileNav] = useState(false);
     const [paletteOpen, setPaletteOpen] = useState(false);
     const [dirty, setDirty] = useState(false);
@@ -303,6 +311,17 @@ export default function SuperAdminDashboard({
                 return;
             }
 
+            if (nextSection === "partner-performance" || nextSection === "payouts") {
+                const prop = nextSection === "payouts" ? "payouts" : "partnerPerformance";
+                const loaded = nextSection === "payouts" ? payouts : partnerPerformance;
+                if (loaded) {
+                    window.history.replaceState(window.history.state, "", `/super-admin?section=${nextSection}&period=${loaded.period.key}`);
+                } else {
+                    router.get("/super-admin", { section: nextSection }, { only: [prop], preserveState: true, preserveScroll: true, replace: true });
+                }
+                return;
+            }
+
             if (nextSection === "activity") {
                 if (activityLog) {
                     window.history.replaceState(window.history.state, "", `/super-admin?section=activity`);
@@ -337,8 +356,32 @@ export default function SuperAdminDashboard({
                 },
             );
         },
-        [dirty, selectedKey, editor?.key, insights, revenue, plans, mobile, activityLog],
+        [dirty, selectedKey, editor?.key, insights, revenue, partnerPerformance, payouts, plans, mobile, activityLog],
     );
+
+    const changePerformancePeriod = (period) => {
+        setPerformanceLoading(true);
+        router.get(
+            "/super-admin",
+            { section: "partner-performance", period },
+            { only: ["partnerPerformance"], preserveState: true, preserveScroll: true, replace: true, onFinish: () => setPerformanceLoading(false) },
+        );
+    };
+
+    const changePayoutMonth = (period) => {
+        setPayoutsLoading(true);
+        router.get(
+            "/super-admin",
+            { section: "payouts", period },
+            { only: ["payouts"], preserveState: true, preserveScroll: true, replace: true, onFinish: () => setPayoutsLoading(false) },
+        );
+    };
+
+    const openPayoutsFor = (period) => {
+        setSection("payouts");
+        window.scrollTo({ top: 0 });
+        changePayoutMonth(period);
+    };
 
     const changeRevenueRange = (range) => {
         setRevenueLoading(true);
@@ -385,8 +428,15 @@ export default function SuperAdminDashboard({
             items: [
                 { id: "overview", label: "Overview", icon: LayoutDashboard },
                 { id: "insights", label: "Insights", icon: BarChart3 },
-                { id: "partners", label: "Partner applications", icon: Building2, badge: awaitingReview || null },
                 { id: "activity", label: "Activity log", icon: ScrollText },
+            ],
+        },
+        {
+            label: "Partners",
+            items: [
+                { id: "partners", label: "Partner applications", icon: Building2, badge: awaitingReview || null },
+                { id: "partner-performance", label: "Partner performance", icon: Trophy },
+                { id: "payouts", label: "Payouts", icon: HandCoins },
             ],
         },
         {
@@ -592,6 +642,10 @@ export default function SuperAdminDashboard({
                         ))}
                     {section === "insights" && <PartnerInsights insights={insights} loading={insightsLoading} onRangeChange={changeRange} />}
                     {section === "revenue" && <MembershipRevenue revenue={revenue} loading={revenueLoading} onRangeChange={changeRevenueRange} />}
+                    {section === "partner-performance" && (
+                        <PartnerPerformance data={partnerPerformance} loading={performanceLoading} onPeriodChange={changePerformancePeriod} onOpenPayouts={() => openPayoutsFor(partnerPerformance.period.key)} />
+                    )}
+                    {section === "payouts" && <PartnerPayouts data={payouts} loading={payoutsLoading} onMonthChange={changePayoutMonth} />}
                     {section === "plans" && <MembershipPlans data={plans} onViewRevenue={() => go("revenue")} />}
                     {section === "mobile" && <MobileApp mobile={mobile} />}
                     {section === "partners" && <PartnersPanel summary={partnerSummary} />}

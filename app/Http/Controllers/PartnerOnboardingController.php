@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\MemberDirectory;
+use App\Services\Members\DemoMemberDirectory;
 use App\Models\DocumentRequirement;
 use App\Models\Partner;
 use App\Models\PartnerApplication;
@@ -12,7 +14,10 @@ use App\Models\PartnerCategory;
 use App\Models\ProposedPartnerBenefit;
 use App\Models\User;
 use App\Notifications\PartnerPortalNotification;
+use App\Services\PartnerPayoutService;
+use App\Services\PartnerPerformanceService;
 use App\Services\PartnerWorkflowService;
+use App\Support\ReportPeriod;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -140,7 +145,43 @@ class PartnerOnboardingController extends Controller
                 'terms_version' => config('partner.terms_version', 'v1'),
                 'privacy_version' => config('partner.privacy_version', 'v1'),
             ],
+            ...$this->servingProps($request, $partner),
         ]);
+    }
+
+    /** Verifier, performance and payouts — only once RAVU has approved the partner. */
+    private function servingProps(Request $request, Partner $partner): array
+    {
+        $enabled = $partner->canServeMembers();
+        $benefit = $enabled ? $partner->activeBenefit() : null;
+        $period = ReportPeriod::parse($request->query('period'));
+        $performance = app(PartnerPerformanceService::class);
+        $directory = app(MemberDirectory::class);
+
+        return [
+            'serving' => [
+                'enabled' => $enabled,
+                'offer' => $benefit ? ['name' => $benefit->name, 'label' => $performance->benefitLabel($benefit), 'type' => $benefit->benefit_type] : null,
+                'locations' => $enabled ? $partner->locations()->orderByDesc('is_primary')->get(['id', 'name', 'district'])->all() : [],
+                'demo_members' => $directory->isDemo(),
+                'sample_members' => $enabled && $directory instanceof DemoMemberDirectory ? $this->sampleMembers($directory) : [],
+                'void_window_hours' => (int) config('partner.void_window_hours', 24),
+                'pool_percent' => app(PartnerPayoutService::class)->poolPercent(),
+            ],
+            // Closures: a partial reload (changing the period) only rebuilds what it asks for.
+            'performance' => fn () => $enabled ? $performance->forPartner($partner, $period) : null,
+            'redemptions' => fn () => $enabled ? $performance->redemptions($partner, $period) : null,
+            'payouts' => fn () => $enabled ? app(PartnerPayoutService::class)->forPartner($partner, ReportPeriod::year($period->start->year)) : null,
+        ];
+    }
+
+    /** A few member IDs to try while the verifier runs on sample members. */
+    private function sampleMembers(DemoMemberDirectory $directory): array
+    {
+        $members = collect($directory->all());
+        $pick = fn (string $status, int $n) => $members->where('status', $status)->take($n)->map(fn ($m) => ['member_ref' => $m['member_ref'], 'status' => $status])->values()->all();
+
+        return [...$pick('active', 3), ...$pick('expired', 1), ...$pick('suspended', 1)];
     }
 
     public function saveBusiness(Request $request): RedirectResponse

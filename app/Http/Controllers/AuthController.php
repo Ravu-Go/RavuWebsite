@@ -70,7 +70,7 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'business_name' => ['nullable', 'string', 'max:255'],
-            'category_id' => ['nullable'],
+            'category_id' => ['nullable', 'string', 'max:120'],
             'name' => ['required', 'string', 'max:255'],
             'position' => ['nullable', 'string', 'max:120'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
@@ -102,11 +102,28 @@ class AuthController extends Controller
                 : trim($validated['name']);
 
             $categoryId = null;
-            if (! empty($validated['category_id']) && is_numeric($validated['category_id'])) {
-                $exists = PartnerCategory::whereKey($validated['category_id'])->exists();
-                if ($exists) {
-                    $categoryId = (int) $validated['category_id'];
+            $categoryName = trim((string) ($validated['category_id'] ?? ''));
+            if ($categoryName !== '') {
+                $category = ctype_digit($categoryName)
+                    ? PartnerCategory::find((int) $categoryName)
+                    : null;
+
+                if (! $category) {
+                    $category = PartnerCategory::whereRaw('LOWER(name) = ?', [Str::lower($categoryName)])->first();
                 }
+
+                if (! $category) {
+                    $baseSlug = Str::slug($categoryName) ?: 'business';
+                    $slug = $baseSlug;
+                    $suffix = 2;
+                    while (PartnerCategory::where('slug', $slug)->exists()) {
+                        $slug = $baseSlug.'-'.$suffix++;
+                    }
+
+                    $category = PartnerCategory::create(['name' => $categoryName, 'slug' => $slug]);
+                }
+
+                $categoryId = $category->id;
             }
 
             $partner = Partner::create([

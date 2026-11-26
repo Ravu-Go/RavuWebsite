@@ -137,3 +137,24 @@ npm run workers:deploy
 npm run pages:dev
 npm run pages:deploy
 ```
+
+
+## Partner portal: members served, redemptions & payouts
+
+Approved partners verify RAVU members at the counter (**Serve members**), record each
+visit with the member discount (a *redemption*), and follow their performance, receipts
+and monthly payouts. Super admins see the **Partner performance** leaderboard and run
+**Payouts** (approve a finished month → record each payment).
+
+- **Payout rule:** each month RAVU shares `PARTNER_PAYOUT_POOL_PERCENT` (default 30) of
+  that month's subscription income between partners, in proportion to the distinct
+  members each partner served. Approving a month freezes its figures
+  (`App\Services\PartnerPayoutService`).
+- **Member lookups** come from `App\Contracts\MemberDirectory`. Until the mobile app API
+  is live they use sample members (`MEMBERSHIP_MEMBER_SOURCE=demo`); set it to `api` to
+  call `GET {MEMBERSHIP_API_URL}/members/lookup?q=…` (shape documented on the contract).
+- **Dummy data:** `php artisan partners:demo` creates 8 sample partners and 18 months of
+  sample redemptions (flagged `is_demo`) for every approved partner with an approved
+  offer; `php artisan partners:demo --purge` removes all of it. Refuses to run in
+  production without `--force`.
+- `PARTNER_VOID_WINDOW_HOURS` (default 24): how long a partner can void a mistaken receipt.

@@ -6,6 +6,8 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\MembershipPlanController;
 use App\Http\Controllers\MobileAppController;
 use App\Http\Controllers\PartnerAdminController;
+use App\Http\Controllers\PartnerMemberController;
+use App\Http\Controllers\PartnerPayoutController;
 use App\Http\Controllers\PartnerOnboardingController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Middleware\EnsurePartnerPortalUser;
@@ -94,6 +96,12 @@ Route::middleware(['auth', EnsurePartnerPortalUser::class])->group(function () {
     Route::get('/partner/documents/{document}', [PartnerOnboardingController::class, 'downloadDocument'])->name('partner.documents.download');
     Route::post('/partner/onboarding/submit', [PartnerOnboardingController::class, 'submit'])->name('partner.onboarding.submit');
     Route::post('/partner/notifications/{notification}/read', [PartnerOnboardingController::class, 'markNotificationRead'])->name('partner.notifications.read');
+
+    // Serving members (approved partners only — enforced in the controller).
+    Route::post('/partner/members/verify', [PartnerMemberController::class, 'verify'])->middleware('throttle:60,1')->name('partner.members.verify');
+    Route::post('/partner/redemptions', [PartnerMemberController::class, 'store'])->middleware('throttle:30,1')->name('partner.redemptions.store');
+    Route::post('/partner/redemptions/{redemption}/void', [PartnerMemberController::class, 'void'])->middleware('throttle:20,1')->name('partner.redemptions.void');
+    Route::get('/partner/redemptions/export', [PartnerMemberController::class, 'export'])->name('partner.redemptions.export');
 });
 
 Route::middleware(['auth', 'verified', EnsurePartnerReviewer::class, EnsurePasswordChanged::class])->prefix('partner-management')->name('partner-management.')->group(function () {
@@ -134,6 +142,12 @@ Route::middleware(['auth', 'verified', EnsureSuperAdmin::class])->group(function
         Route::get('/preview-exit', [SuperAdminController::class, 'stopPreview'])->name('preview.stop');
         Route::post('/media', [SuperAdminController::class, 'uploadMedia'])->name('media.store');
         Route::get('/activity/export', [SuperAdminController::class, 'exportActivity'])->name('activity.export');
+
+        Route::prefix('payouts')->name('payouts.')->controller(PartnerPayoutController::class)->group(function () {
+            Route::post('/{period}/approve', 'approve')->where('period', '\\d{4}-\\d{2}')->name('approve');
+            Route::post('/{payout}/paid', 'markPaid')->whereNumber('payout')->name('paid');
+            Route::get('/{period}/export', 'export')->where('period', '\\d{4}-\\d{2}')->name('export');
+        });
 
         Route::prefix('plans')->name('plans.')->controller(MembershipPlanController::class)->group(function () {
             Route::post('/', 'store')->name('store');

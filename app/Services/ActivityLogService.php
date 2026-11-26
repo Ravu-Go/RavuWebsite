@@ -231,6 +231,11 @@ class ActivityLogService
             'activity_exported' => 'Exported the activity log',
             'access_denied' => 'Blocked from '.($d['area'] ?? 'a restricted page').(isset($d['path']) ? " ({$d['path']})" : ''),
             'partner_contact_updated' => "{$partner} updated their contact details",
+            // Member redemptions & payouts
+            'redemption_recorded' => "{$partner} served member ".($d['member_ref'] ?? '').(isset($d['paid']) ? ' (TSh '.number_format((int) $d['paid']).')' : ''),
+            'redemption_voided' => "{$partner} voided receipt ".($d['receipt_no'] ?? '').(isset($d['reason']) ? ": {$d['reason']}" : ''),
+            'payouts_approved' => 'Approved partner payouts for '.($d['period'] ?? 'a month').(isset($d['pool']) ? ' (pool TSh '.number_format((int) $d['pool']).')' : ''),
+            'payout_paid' => 'Marked a partner payout for '.($d['period'] ?? 'a month').' as paid'.(isset($d['reference']) ? " (ref {$d['reference']})" : ''),
             // Membership plans
             'plan_created' => 'Created membership plan '.($d['name'] ?? '').' (draft)',
             'plan_updated' => 'Edited membership plan '.($d['name'] ?? ''),
