@@ -151,6 +151,42 @@ class PartnerOnboardingTest extends TestCase
         $this->assertTrue(config('session.secure'));
     }
 
+    public function test_visitors_behind_the_hosting_proxy_do_not_share_one_registration_limit(): void
+    {
+        $attempt = fn (string $visitorIp, string $email, string $peer = '10.0.1.4') => $this
+            ->withServerVariables(['REMOTE_ADDR' => $peer])
+            ->withHeaders(['CF-Connecting-IP' => $visitorIp])
+            ->post('/register', ['email' => $email]); // incomplete on purpose: validation fails, the attempt still counts
+        $limited = 'Too many registration attempts. Please wait a while and try again.';
+
+        // Twelve different visitors through the same proxy: nobody is blocked.
+        foreach (range(1, 12) as $i) {
+            $attempt("41.59.0.{$i}", "visitor{$i}@example.test")->assertSessionDoesntHaveErrors(['email' => $limited]);
+        }
+
+        // One visitor: ten attempts an hour, then blocked.
+        foreach (range(1, 10) as $i) {
+            $attempt('41.59.1.1', "same{$i}@example.test")->assertSessionDoesntHaveErrors(['email' => $limited]);
+        }
+        $attempt('41.59.1.1', 'same11@example.test')->assertSessionHasErrors(['email' => $limited]);
+
+        // One email: five attempts an hour, whatever the IP.
+        foreach (range(1, 5) as $i) {
+            $attempt("41.59.2.{$i}", 'repeat@example.test');
+        }
+        $attempt('41.59.2.9', 'repeat@example.test')->assertSessionHasErrors(['email' => $limited]);
+
+        // A request that does not come through the proxy cannot pick its IP with the header.
+        $request = \Illuminate\Http\Request::create('/register', 'POST', server: ['REMOTE_ADDR' => '197.250.1.1', 'HTTP_CF_CONNECTING_IP' => '1.2.3.4']);
+        (new \App\Http\Middleware\ResolveClientIp)->handle($request, fn () => response('ok'));
+        $this->assertSame('197.250.1.1', $request->ip());
+
+        // The Cloudflare worker's header wins over CF-Connecting-IP (the worker's own address).
+        $request = \Illuminate\Http\Request::create('/register', 'POST', server: ['REMOTE_ADDR' => '10.0.1.4', 'HTTP_CF_CONNECTING_IP' => '2a06:98c0:3600::103', 'HTTP_CF_ORIGINAL_IP' => '41.59.3.3']);
+        (new \App\Http\Middleware\ResolveClientIp)->handle($request, fn () => response('ok'));
+        $this->assertSame('41.59.3.3', $request->ip());
+    }
+
     public function test_partner_routes_require_authentication_verification_and_partner_membership(): void
     {
         $this->get('/partner-dashboard')->assertRedirect('/login');

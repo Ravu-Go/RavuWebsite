@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\LocalSessionCookies;
+use App\Http\Middleware\ResolveClientIp;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -17,6 +18,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Runs before the session starts, so localhost keeps its session cookie.
         $middleware->prepend(LocalSessionCookies::class);
+        // Before trusted-proxy handling: the visitor's IP from Cloudflare, not the Dokploy proxy's.
+        $middleware->prepend(ResolveClientIp::class);
 
         $middleware->web(append: [
             HandleInertiaRequests::class,

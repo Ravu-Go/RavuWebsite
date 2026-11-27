@@ -75,12 +75,16 @@ class AppServiceProvider extends ServiceProvider
                     return back()->withErrors(['email' => "Too many sign-in attempts. Please wait {$wait} seconds and try again."]);
                 }),
         ]);
-        RateLimiter::for('register', fn (Request $request) => [
-            Limit::perHour(5)->by($request->ip())->response(function (Request $request) {
-                ActivityLog::record('auth', 'registration_rate_limited', ['email' => strtolower(trim((string) $request->input('email')))]);
+        // Per visitor IP (shared mobile/office networks need some headroom) and per email.
+        // Every attempt counts, including ones rejected by validation.
+        $registrationLimited = function (Request $request) {
+            ActivityLog::record('auth', 'registration_rate_limited', ['email' => strtolower(trim((string) $request->input('email')))]);
 
-                return back()->withErrors(['email' => 'Too many registrations from this network. Please try again later.']);
-            }),
+            return back()->withErrors(['email' => 'Too many registration attempts. Please wait a while and try again.']);
+        };
+        RateLimiter::for('register', fn (Request $request) => [
+            Limit::perHour(10)->by('ip:'.$request->ip())->response($registrationLimited),
+            Limit::perHour(5)->by('email:'.strtolower(trim((string) $request->input('email'))))->response($registrationLimited),
         ]);
     }
 }
