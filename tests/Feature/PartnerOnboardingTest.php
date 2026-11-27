@@ -179,12 +179,42 @@ class PartnerOnboardingTest extends TestCase
         // A request that does not come through the proxy cannot pick its IP with the header.
         $request = \Illuminate\Http\Request::create('/register', 'POST', server: ['REMOTE_ADDR' => '197.250.1.1', 'HTTP_CF_CONNECTING_IP' => '1.2.3.4']);
         (new \App\Http\Middleware\ResolveClientIp)->handle($request, fn () => response('ok'));
-        $this->assertSame('197.250.1.1', $request->ip());
+        $this->assertNull($request->headers->get('X-Forwarded-For'));
 
         // The Cloudflare worker's header wins over CF-Connecting-IP (the worker's own address).
         $request = \Illuminate\Http\Request::create('/register', 'POST', server: ['REMOTE_ADDR' => '10.0.1.4', 'HTTP_CF_CONNECTING_IP' => '2a06:98c0:3600::103', 'HTTP_CF_ORIGINAL_IP' => '41.59.3.3']);
         (new \App\Http\Middleware\ResolveClientIp)->handle($request, fn () => response('ok'));
-        $this->assertSame('41.59.3.3', $request->ip());
+        $this->assertSame('41.59.3.3', $request->headers->get('X-Forwarded-For'));
+    }
+
+    public function test_redirects_stay_on_https_behind_the_hosting_proxy(): void
+    {
+        $viaProxy = fn () => $this->withServerVariables(['REMOTE_ADDR' => '10.0.1.4'])->withHeaders([
+            'X-Forwarded-Proto' => 'https', 'X-Forwarded-Port' => '443', 'X-Forwarded-Host' => 'website.ravultd.com',
+            'CF-Connecting-IP' => '102.202.74.139',
+        ]);
+
+        // A guest is sent to the https login page, never http://.
+        $viaProxy()->get('http://website.ravultd.com/partner-dashboard')->assertRedirect('https://website.ravultd.com/login');
+
+        // A partner who signs in is sent to the https dashboard, and the session keeps the visitor's IP.
+        Notification::fake();
+        $this->post('/register', [
+            'business_name' => 'Https Garage', 'category_id' => 'Spare Parts Dealers', 'address' => 'Dar es Salaam',
+            'name' => 'Https Owner', 'email' => 'https-owner@example.test', 'phone' => '0754 000 111',
+            'password' => 'SecurePassword123', 'password_confirmation' => 'SecurePassword123', 'terms' => '1', 'privacy' => '1',
+        ])->assertRedirect('/partner-dashboard');
+        auth()->logout();
+
+        $viaProxy()->post('http://website.ravultd.com/login', ['email' => 'https-owner@example.test', 'password' => 'SecurePassword123'])
+            ->assertRedirect('https://website.ravultd.com/partner-dashboard');
+        $this->assertAuthenticated();
+        $this->assertDatabaseHas('activity_logs', ['action' => 'signed_in', 'ip_address' => '102.202.74.139']);
+
+        // Without the proxy, a client cannot claim https or another IP with forwarded headers.
+        auth()->logout();
+        $this->withServerVariables(['REMOTE_ADDR' => '197.250.1.1'])->withHeaders(['X-Forwarded-Proto' => 'https', 'X-Forwarded-For' => '1.2.3.4'])
+            ->get('http://website.ravultd.com/partner-dashboard')->assertRedirect('http://website.ravultd.com/login');
     }
 
     public function test_partner_routes_require_authentication_verification_and_partner_membership(): void

@@ -16,20 +16,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Runs before the session starts, so localhost keeps its session cookie.
-        $middleware->prepend(LocalSessionCookies::class);
-        // Before trusted-proxy handling: the visitor's IP from Cloudflare, not the Dokploy proxy's.
+        // Trust the hosting proxy (Dokploy/Traefik, on a private network) for X-Forwarded-*
+        // headers, so Laravel sees https and builds https redirects. Without this every
+        // redirect pointed at http://, which Safari blocks from an https page: sign-in
+        // succeeded but the page stayed on the login form. TRUSTED_PROXIES=* trusts any peer.
+        $middleware->trustProxies(at: env('TRUSTED_PROXIES') ? '*' : ResolveClientIp::PROXY_NETWORKS);
+        // Before trusted-proxy handling: the visitor's IP from Cloudflare, not the proxy's.
         $middleware->prepend(ResolveClientIp::class);
+        // After trusted-proxy handling, before the session starts: localhost keeps its session cookie.
+        $middleware->append(LocalSessionCookies::class);
 
         $middleware->web(append: [
             HandleInertiaRequests::class,
         ]);
-
-        // Behind Cloudflare (Workers edge proxy / Pages), trust Cloudflare's
-        // connecting-IP header so request()->ip(), URLs and https detection work.
-        if (env('TRUSTED_PROXIES')) {
-            $middleware->trustProxies(at: '*');
-        }
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
