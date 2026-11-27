@@ -217,6 +217,22 @@ class PartnerOnboardingTest extends TestCase
             ->get('http://website.ravultd.com/partner-dashboard')->assertRedirect('http://website.ravultd.com/login');
     }
 
+    public function test_app_merchant_accounts_are_partners_only_when_they_own_a_website_partner(): void
+    {
+        config(['ravu_app.partner_role' => 'merchant']);
+        $merchant = User::create(['name' => 'Shop Owner', 'email' => 'merchant@example.test', 'password' => 'SecurePassword123', 'role' => 'merchant']);
+        $this->assertSame('partner', $merchant->portalRole());
+
+        // An app merchant with no website partner record cannot open the portal.
+        $this->post('/login', ['email' => 'merchant@example.test', 'password' => 'SecurePassword123'])->assertSessionHasErrors('email');
+        $this->assertGuest();
+
+        $partner = \App\Models\Partner::create(['registered_name' => 'Shop Ltd']);
+        $partner->users()->attach($merchant->id, ['role' => 'owner']);
+        $this->post('/login', ['email' => 'merchant@example.test', 'password' => 'SecurePassword123'])->assertRedirect('/partner-dashboard');
+        $this->assertAuthenticatedAs($merchant);
+    }
+
     public function test_partner_routes_require_authentication_verification_and_partner_membership(): void
     {
         $this->get('/partner-dashboard')->assertRedirect('/login');
