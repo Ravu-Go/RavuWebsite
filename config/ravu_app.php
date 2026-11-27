@@ -15,7 +15,9 @@
 */
 
 return [
-    'shared_accounts' => (bool) env('RAVU_APP_SHARED_ACCOUNTS', false),
+    // true / false, or unset to detect it: shared when "users" resolves to a table outside
+    // the website's own schema (the app's public.users). See App\Support\RavuAppAccounts.
+    'shared_accounts' => env('RAVU_APP_SHARED_ACCOUNTS'),
 
     // The app's partner directory (name, category, address, phone, location).
     // A registration adds a "draft" row here that RAVU staff verify in the app.

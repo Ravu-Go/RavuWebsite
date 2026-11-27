@@ -10,6 +10,7 @@ use App\Models\PartnerAuditLog;
 use App\Models\PartnerCategory;
 use App\Models\User;
 use App\Services\RavuApp\AppDatabase;
+use App\Support\RavuAppAccounts;
 use App\Support\LoginProfile;
 use Illuminate\Auth\Events\Failed;
 use Illuminate\Auth\Events\PasswordReset;
@@ -119,7 +120,7 @@ class AuthController extends Controller
 
         $user = DB::transaction(function () use ($validated, $request, $email, $phone, $businessPhone) {
             $now = now();
-            $shared = (bool) config('ravu_app.shared_accounts');
+            $shared = RavuAppAccounts::shared();
             $preferred = $validated['preferred_communication'] ?? 'whatsapp';
 
             $user = new User;
@@ -271,7 +272,7 @@ class AuthController extends Controller
     private function appPhone(string $value): ?string
     {
         $normalised = AppDatabase::phone($value);
-        if ($normalised || config('ravu_app.shared_accounts')) {
+        if ($normalised || RavuAppAccounts::shared()) {
             return $normalised;
         }
 

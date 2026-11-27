@@ -130,6 +130,27 @@ class PartnerOnboardingTest extends TestCase
         $this->assertNull($rider->fresh()->last_login_at);
     }
 
+    public function test_session_cookies_stay_on_localhost_when_the_live_cookie_domain_is_configured(): void
+    {
+        $middleware = new \App\Http\Middleware\LocalSessionCookies;
+        $pass = fn () => response('ok');
+
+        foreach (['http://127.0.0.1:8000/register', 'http://localhost:8000/register', 'http://ravu.test/register'] as $url) {
+            config(['session.domain' => '.ravultd.com', 'session.secure' => true]);
+            $middleware->handle(\Illuminate\Http\Request::create($url), $pass);
+
+            $cookie = app('cookie')->make('probe', 'value');
+            $this->assertNull(config('session.domain'), $url);
+            $this->assertNull($cookie->getDomain(), $url);
+            $this->assertFalse($cookie->isSecure(), $url);
+        }
+
+        config(['session.domain' => '.ravultd.com', 'session.secure' => true]);
+        $middleware->handle(\Illuminate\Http\Request::create('https://website.ravultd.com/register'), $pass);
+        $this->assertSame('.ravultd.com', config('session.domain'));
+        $this->assertTrue(config('session.secure'));
+    }
+
     public function test_partner_routes_require_authentication_verification_and_partner_membership(): void
     {
         $this->get('/partner-dashboard')->assertRedirect('/login');

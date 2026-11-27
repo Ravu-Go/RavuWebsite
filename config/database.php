@@ -95,9 +95,10 @@ return [
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
-            // "website,public" keeps the website's own tables in the "website" schema while
-            // sign-in uses the RAVU app's public.users table (see config/ravu_app.php).
-            'search_path' => env('DB_SEARCH_PATH', 'public'),
+            // The website's own tables live in the "website" schema; sign-in uses the RAVU
+            // app's public.users table (see config/ravu_app.php). PostgreSQL skips schemas
+            // that do not exist, so on a database without "website" this is just "public".
+            'search_path' => env('DB_SEARCH_PATH', 'website,public'),
             'sslmode' => env('DB_SSLMODE', 'prefer'),
         ],
 
