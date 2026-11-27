@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Partner extends Model
 {
-    protected $fillable = ['registered_name', 'trading_name', 'registration_number', 'tin_number', 'partner_category_id', 'business_description', 'year_established', 'website', 'social_links', 'status'];
+    protected $fillable = ['registered_name', 'trading_name', 'registration_number', 'tin_number', 'partner_category_id', 'business_description', 'year_established', 'website', 'social_links', 'status', 'app_partner_id', 'address', 'phone', 'latitude', 'longitude'];
 
     protected function casts(): array
     {

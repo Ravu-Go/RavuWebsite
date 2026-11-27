@@ -31,6 +31,7 @@ class PartnerOnboardingTest extends TestCase
     {
         Notification::fake();
         $response = $this->post('/register', [
+            'business_name' => 'Amina Garage', 'category_id' => 'Vehicle Workshops & Garages', 'address' => 'Morogoro Rd, Dar es Salaam',
             'name' => 'Amina Owner', 'position' => 'Director', 'email' => 'amina@example.test',
             'phone' => '+255700000001', 'preferred_communication' => 'whatsapp',
             'password' => 'SecurePassword123', 'password_confirmation' => 'SecurePassword123',
@@ -49,6 +50,7 @@ class PartnerOnboardingTest extends TestCase
         Notification::assertSentTo($user, \Illuminate\Auth\Notifications\VerifyEmail::class);
 
         $this->post('/register', [
+            'business_name' => 'Second Garage', 'category_id' => 'Vehicle Workshops & Garages', 'address' => 'Arusha',
             'name' => 'Second Owner', 'position' => 'Owner', 'email' => 'second@example.test',
             'phone' => '+255700000002', 'preferred_communication' => 'email',
             'password' => 'SecurePassword123', 'password_confirmation' => 'SecurePassword123',
@@ -65,6 +67,7 @@ class PartnerOnboardingTest extends TestCase
         $response = $this->post('/register', [
             'business_name' => 'Digital Payments Ltd',
             'category_id' => $categoryName,
+            'address' => 'Samora Ave, Dar es Salaam',
             'name' => 'Amina Owner',
             'position' => 'Director',
             'email' => 'digital@example.test',
@@ -80,6 +83,51 @@ class PartnerOnboardingTest extends TestCase
         $category = PartnerCategory::where('name', $categoryName)->firstOrFail();
         $partner = User::where('email', 'digital@example.test')->firstOrFail()->primaryPartner();
         $this->assertSame($category->id, $partner->partner_category_id);
+    }
+
+    public function test_registration_requires_the_app_partner_fields_and_a_unique_tanzanian_phone(): void
+    {
+        Notification::fake();
+        $payload = [
+            'business_name' => 'Kariakoo Spares', 'category_id' => 'Spare Parts Dealers', 'address' => 'Kariakoo, Dar es Salaam',
+            'name' => 'Juma Owner', 'email' => 'juma@example.test', 'phone' => '0712 345 678',
+            'password' => 'SecurePassword123', 'password_confirmation' => 'SecurePassword123', 'terms' => '1', 'privacy' => '1',
+        ];
+
+        $this->post('/register', array_merge($payload, ['business_name' => '', 'address' => '', 'category_id' => '']))
+            ->assertSessionHasErrors(['business_name', 'address', 'category_id']);
+
+        $this->post('/register', $payload)->assertRedirect('/partner-dashboard');
+        $user = User::where('email', 'juma@example.test')->firstOrFail();
+        $this->assertSame('+255712345678', $user->phone);
+        $this->assertSame('Partner Representative', $user->position);
+        $partner = $user->primaryPartner();
+        $this->assertSame('Kariakoo, Dar es Salaam', $partner->address);
+        $this->assertSame('+255712345678', $partner->phone);
+        $this->assertDatabaseHas('user_profiles', ['user_id' => $user->id, 'preferred_communication' => 'whatsapp']);
+
+        auth()->logout();
+        $this->post('/register', array_merge($payload, ['email' => 'other@example.test', 'phone' => '+255 712 345 678']))
+            ->assertSessionHasErrors('phone');
+        $this->post('/register', array_merge($payload, ['email' => 'JUMA@example.test', 'phone' => '0713 000 000']))
+            ->assertSessionHasErrors('email');
+    }
+
+    public function test_app_administrators_sign_in_as_super_admins_and_inactive_accounts_are_refused(): void
+    {
+        config(['ravu_app.super_admin_roles' => ['administrator']]);
+        $admin = User::create(['name' => 'App Admin', 'email' => 'admin@example.test', 'password' => 'SecurePassword123', 'role' => 'administrator']);
+        $admin->forceFill(['email_verified_at' => now()])->save();
+
+        $this->assertTrue($admin->isSuperAdmin());
+        $this->post('/login', ['email' => 'admin@example.test', 'password' => 'SecurePassword123'])->assertRedirect('/super-admin');
+        $this->assertDatabaseHas('user_profiles', ['user_id' => $admin->id, 'last_login_provider' => 'password']);
+
+        auth()->logout();
+        $rider = User::create(['name' => 'Rider', 'email' => 'rider@example.test', 'password' => 'SecurePassword123', 'role' => 'rider']);
+        $this->post('/login', ['email' => 'rider@example.test', 'password' => 'SecurePassword123'])->assertSessionHasErrors('email');
+        $this->assertGuest();
+        $this->assertNull($rider->fresh()->last_login_at);
     }
 
     public function test_partner_routes_require_authentication_verification_and_partner_membership(): void

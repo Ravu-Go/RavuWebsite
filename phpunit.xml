@@ -26,6 +26,10 @@
         <env name="DB_CONNECTION" value="sqlite"/>
         <env name="DB_DATABASE" value=":memory:"/>
         <env name="DB_URL" value=""/>
+        <env name="DB_SEARCH_PATH" value="public"/>
+        <env name="RAVU_APP_SHARED_ACCOUNTS" value="false"/>
+        <env name="MEMBERSHIP_REVENUE_SOURCE" value="demo"/>
+        <env name="MEMBERSHIP_MEMBER_SOURCE" value="demo"/>
         <env name="MAIL_MAILER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>

@@ -60,7 +60,7 @@ class PartnerWorkflowService
     public function notifyReviewers(PartnerApplication $application, string $subject, string $message): void
     {
         User::query()
-            ->whereIn('role', ['super_admin', 'partner_reviewer'])
+            ->withPortalRole(['super_admin', 'partner_reviewer'])
             ->each(fn (User $user) => $user->notify(new PartnerPortalNotification($subject, $message, '/partner-management')));
     }
 }

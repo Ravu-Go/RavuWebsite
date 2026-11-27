@@ -5,7 +5,6 @@ namespace App\Support;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Schema;
 use Throwable;
 
 /**
@@ -110,20 +109,13 @@ class LoginProfile
     private static function persist(Request $request, User $user, string $provider): void
     {
         try {
-            $updates = [];
-            if (Schema::hasColumn('users', 'last_login_at')) {
-                $updates['last_login_at'] = now();
-            }
-            if (Schema::hasColumn('users', 'last_login_provider')) {
-                $updates['last_login_provider'] = $provider;
-            }
-            if (Schema::hasColumn('users', 'last_login_ip')) {
-                $updates['last_login_ip'] = $request->ip();
-            }
-
-            if ($updates) {
-                $user->forceFill($updates)->saveQuietly();
-            }
+            // Stored in user_profiles, so a sign-in never rewrites the app's users row.
+            $user->profileRecord()->forceFill([
+                'user_id' => $user->getKey(),
+                'last_login_at' => now(),
+                'last_login_provider' => $provider,
+                'last_login_ip' => $request->ip(),
+            ])->save();
         } catch (Throwable $e) {
             // Profile capture must never block a login.
             report($e);

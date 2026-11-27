@@ -48,15 +48,18 @@ return new class extends Migration
             $table->index(['partner_category_id', 'status']);
         });
 
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('position')->nullable();
-            $table->string('phone', 50)->nullable();
-            $table->string('preferred_communication', 20)->nullable();
-            $table->timestamp('terms_accepted_at')->nullable();
-            $table->timestamp('privacy_accepted_at')->nullable();
-            $table->string('terms_version', 30)->nullable();
-            $table->string('privacy_version', 30)->nullable();
-        });
+        // Skipped when sign-in uses the RAVU app's users table; see user_profiles.
+        if (Schema::hasTable('users')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('position')->nullable();
+                $table->string('phone', 50)->nullable();
+                $table->string('preferred_communication', 20)->nullable();
+                $table->timestamp('terms_accepted_at')->nullable();
+                $table->timestamp('privacy_accepted_at')->nullable();
+                $table->string('terms_version', 30)->nullable();
+                $table->string('privacy_version', 30)->nullable();
+            });
+        }
 
         Schema::create('partner_user', function (Blueprint $table) {
             $table->id();
@@ -205,9 +208,11 @@ return new class extends Migration
         Schema::dropIfExists('partner_application_status_history');
         Schema::dropIfExists('partner_applications');
         Schema::dropIfExists('partner_user');
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['position', 'phone', 'preferred_communication', 'terms_accepted_at', 'privacy_accepted_at', 'terms_version', 'privacy_version']);
-        });
+        if (Schema::hasTable('users')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn(['position', 'phone', 'preferred_communication', 'terms_accepted_at', 'privacy_accepted_at', 'terms_version', 'privacy_version']);
+            });
+        }
         Schema::dropIfExists('partners');
         Schema::dropIfExists('document_requirements');
         Schema::dropIfExists('partner_categories');

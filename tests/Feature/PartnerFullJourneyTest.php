@@ -43,6 +43,7 @@ class PartnerFullJourneyTest extends TestCase
         $registrationData = [
             'business_name' => 'Kijitonyama Auto Garage & Spares Ltd',
             'category_id' => (string) $category->id, // the form always sends text (an id or a typed category name)
+            'address' => 'Kijitonyama, Dar es Salaam',
             'name' => 'Juma Rashidi',
             'position' => 'Managing Director',
             'email' => 'juma@kijitonyama-garage.tz',

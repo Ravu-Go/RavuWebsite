@@ -125,7 +125,7 @@ class GoogleAuthController extends Controller
             return $this->fail('Your Google account email is not verified.', $email);
         }
 
-        $user = User::where('google_id', $googleId)->first()
+        $user = User::whereHas('profile', fn ($profile) => $profile->where('google_id', $googleId))->first()
             ?? User::where('email', $email)->first();
 
         if (! $user) {
@@ -133,7 +133,8 @@ class GoogleAuthController extends Controller
         }
 
         $role = $user->portalRole();
-        if (! in_array($role, ['partner', 'partner_reviewer', 'super_admin'], true)
+        if (! $user->isActiveAccount()
+            || ! in_array($role, ['partner', 'partner_reviewer', 'super_admin'], true)
             || ($role === 'partner' && ! $user->partners()->exists())) {
             return $this->fail('This Google account is not linked to a RAVU Partner Portal account.', $email, $user, 'sign_in_denied');
         }
