@@ -7,6 +7,12 @@
 3. Once the build passes and the PR has no merge conflicts, **merge the PR into `staging`** yourself. Don't stop at an open PR.
 4. Never push directly to `staging` or `main`, and never merge into `main`. Promoting `staging` to `main` is done by the team.
 
+## Skills
+
+Project skills live in `.claude/skills/` (list and sources in its README). For UI work use
+`impeccable` and `design-taste-frontend` (tasteskill); for Laravel and data work use
+`laravel-patterns` and the `backend-design` discipline skills.
+
 ## Before opening a PR
 
 - Run `npm run build` and fix anything it reports.
