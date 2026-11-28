@@ -221,8 +221,37 @@ class SiteContentTest extends TestCase
                 ->where('pages.8.has_draft', true)
                 ->where('partnerSummary.counts.submitted', 1)
                 ->where('partnerSummary.queue.0.business', 'Mwenge Auto Spares')
-                ->has('documents.home.draft.hero'));
+                ->where('editor', null));
 
         $this->actingAs($admin)->get('/admin')->assertRedirect('/super-admin');
+    }
+
+    public function test_content_section_sends_only_the_draft_being_edited(): void
+    {
+        $admin = $this->superAdmin();
+
+        $this->actingAs($admin)->get('/super-admin?section=content&page=support')
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->where('editor.key', 'support')
+                ->has('editor.draft.hero')
+                ->missing('documents'));
+
+        // Missing or unknown page keys open the home page instead of failing.
+        $this->actingAs($admin)->get('/super-admin?section=content&page=nope')
+            ->assertInertia(fn (Assert $page) => $page->where('editor.key', 'home'));
+
+        // Switching pages is a partial reload that carries only the editor.
+        $this->actingAs($admin)
+            ->withHeaders([
+                'X-Inertia' => 'true',
+                'X-Inertia-Version' => (string) app(\App\Http\Middleware\HandleInertiaRequests::class)->version(request()),
+                'X-Inertia-Partial-Component' => 'Website/SuperAdminDashboard', 'X-Inertia-Partial-Data' => 'editor',
+            ])
+            ->get('/super-admin?section=content&page=home')
+            ->assertOk()
+            ->assertJsonPath('props.editor.key', 'home')
+            ->assertJsonMissingPath('props.revisions')
+            ->assertJsonMissingPath('props.partnerSummary');
     }
 }

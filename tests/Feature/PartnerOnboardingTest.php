@@ -31,6 +31,7 @@ class PartnerOnboardingTest extends TestCase
     {
         Notification::fake();
         $response = $this->post('/register', [
+            'business_name' => 'Amina Garage', 'category_id' => 'Vehicle Workshops & Garages', 'address' => 'Morogoro Rd, Dar es Salaam',
             'name' => 'Amina Owner', 'position' => 'Director', 'email' => 'amina@example.test',
             'phone' => '+255700000001', 'preferred_communication' => 'whatsapp',
             'password' => 'SecurePassword123', 'password_confirmation' => 'SecurePassword123',
@@ -49,12 +50,187 @@ class PartnerOnboardingTest extends TestCase
         Notification::assertSentTo($user, \Illuminate\Auth\Notifications\VerifyEmail::class);
 
         $this->post('/register', [
+            'business_name' => 'Second Garage', 'category_id' => 'Vehicle Workshops & Garages', 'address' => 'Arusha',
             'name' => 'Second Owner', 'position' => 'Owner', 'email' => 'second@example.test',
             'phone' => '+255700000002', 'preferred_communication' => 'email',
             'password' => 'SecurePassword123', 'password_confirmation' => 'SecurePassword123',
             'terms' => '1',
         ])->assertSessionHasErrors('privacy');
         $this->assertDatabaseMissing('users', ['email' => 'second@example.test']);
+    }
+
+    public function test_registration_saves_a_custom_business_category(): void
+    {
+        Notification::fake();
+        $categoryName = 'Mobile Money & Digital Payments';
+
+        $response = $this->post('/register', [
+            'business_name' => 'Digital Payments Ltd',
+            'category_id' => $categoryName,
+            'address' => 'Samora Ave, Dar es Salaam',
+            'name' => 'Amina Owner',
+            'position' => 'Director',
+            'email' => 'digital@example.test',
+            'phone' => '+255700000003',
+            'preferred_communication' => 'whatsapp',
+            'password' => 'SecurePassword123',
+            'password_confirmation' => 'SecurePassword123',
+            'terms' => '1',
+            'privacy' => '1',
+        ]);
+
+        $response->assertRedirect('/partner-dashboard');
+        $category = PartnerCategory::where('name', $categoryName)->firstOrFail();
+        $partner = User::where('email', 'digital@example.test')->firstOrFail()->primaryPartner();
+        $this->assertSame($category->id, $partner->partner_category_id);
+    }
+
+    public function test_registration_requires_the_app_partner_fields_and_a_unique_tanzanian_phone(): void
+    {
+        Notification::fake();
+        $payload = [
+            'business_name' => 'Kariakoo Spares', 'category_id' => 'Spare Parts Dealers', 'address' => 'Kariakoo, Dar es Salaam',
+            'name' => 'Juma Owner', 'email' => 'juma@example.test', 'phone' => '0712 345 678',
+            'password' => 'SecurePassword123', 'password_confirmation' => 'SecurePassword123', 'terms' => '1', 'privacy' => '1',
+        ];
+
+        $this->post('/register', array_merge($payload, ['business_name' => '', 'address' => '', 'category_id' => '']))
+            ->assertSessionHasErrors(['business_name', 'address', 'category_id']);
+
+        $this->post('/register', $payload)->assertRedirect('/partner-dashboard');
+        $user = User::where('email', 'juma@example.test')->firstOrFail();
+        $this->assertSame('+255712345678', $user->phone);
+        $this->assertSame('Partner Representative', $user->position);
+        $partner = $user->primaryPartner();
+        $this->assertSame('Kariakoo, Dar es Salaam', $partner->address);
+        $this->assertSame('+255712345678', $partner->phone);
+        $this->assertDatabaseHas('user_profiles', ['user_id' => $user->id, 'preferred_communication' => 'whatsapp']);
+
+        auth()->logout();
+        $this->post('/register', array_merge($payload, ['email' => 'other@example.test', 'phone' => '+255 712 345 678']))
+            ->assertSessionHasErrors('phone');
+        $this->post('/register', array_merge($payload, ['email' => 'JUMA@example.test', 'phone' => '0713 000 000']))
+            ->assertSessionHasErrors('email');
+    }
+
+    public function test_app_administrators_sign_in_as_super_admins_and_inactive_accounts_are_refused(): void
+    {
+        config(['ravu_app.super_admin_roles' => ['administrator']]);
+        $admin = User::create(['name' => 'App Admin', 'email' => 'admin@example.test', 'password' => 'SecurePassword123', 'role' => 'administrator']);
+        $admin->forceFill(['email_verified_at' => now()])->save();
+
+        $this->assertTrue($admin->isSuperAdmin());
+        $this->post('/login', ['email' => 'admin@example.test', 'password' => 'SecurePassword123'])->assertRedirect('/super-admin');
+        $this->assertDatabaseHas('user_profiles', ['user_id' => $admin->id, 'last_login_provider' => 'password']);
+
+        auth()->logout();
+        $rider = User::create(['name' => 'Rider', 'email' => 'rider@example.test', 'password' => 'SecurePassword123', 'role' => 'rider']);
+        $this->post('/login', ['email' => 'rider@example.test', 'password' => 'SecurePassword123'])->assertSessionHasErrors('email');
+        $this->assertGuest();
+        $this->assertNull($rider->fresh()->last_login_at);
+    }
+
+    public function test_session_cookies_stay_on_localhost_when_the_live_cookie_domain_is_configured(): void
+    {
+        $middleware = new \App\Http\Middleware\LocalSessionCookies;
+        $pass = fn () => response('ok');
+
+        foreach (['http://127.0.0.1:8000/register', 'http://localhost:8000/register', 'http://ravu.test/register'] as $url) {
+            config(['session.domain' => '.ravultd.com', 'session.secure' => true]);
+            $middleware->handle(\Illuminate\Http\Request::create($url), $pass);
+
+            $cookie = app('cookie')->make('probe', 'value');
+            $this->assertNull(config('session.domain'), $url);
+            $this->assertNull($cookie->getDomain(), $url);
+            $this->assertFalse($cookie->isSecure(), $url);
+        }
+
+        config(['session.domain' => '.ravultd.com', 'session.secure' => true]);
+        $middleware->handle(\Illuminate\Http\Request::create('https://website.ravultd.com/register'), $pass);
+        $this->assertSame('.ravultd.com', config('session.domain'));
+        $this->assertTrue(config('session.secure'));
+    }
+
+    public function test_visitors_behind_the_hosting_proxy_do_not_share_one_registration_limit(): void
+    {
+        $attempt = fn (string $visitorIp, string $email, string $peer = '10.0.1.4') => $this
+            ->withServerVariables(['REMOTE_ADDR' => $peer])
+            ->withHeaders(['CF-Connecting-IP' => $visitorIp])
+            ->post('/register', ['email' => $email]); // incomplete on purpose: validation fails, the attempt still counts
+        $limited = 'Too many registration attempts. Please wait a while and try again.';
+
+        // Twelve different visitors through the same proxy: nobody is blocked.
+        foreach (range(1, 12) as $i) {
+            $attempt("41.59.0.{$i}", "visitor{$i}@example.test")->assertSessionDoesntHaveErrors(['email' => $limited]);
+        }
+
+        // One visitor: ten attempts an hour, then blocked.
+        foreach (range(1, 10) as $i) {
+            $attempt('41.59.1.1', "same{$i}@example.test")->assertSessionDoesntHaveErrors(['email' => $limited]);
+        }
+        $attempt('41.59.1.1', 'same11@example.test')->assertSessionHasErrors(['email' => $limited]);
+
+        // One email: five attempts an hour, whatever the IP.
+        foreach (range(1, 5) as $i) {
+            $attempt("41.59.2.{$i}", 'repeat@example.test');
+        }
+        $attempt('41.59.2.9', 'repeat@example.test')->assertSessionHasErrors(['email' => $limited]);
+
+        // A request that does not come through the proxy cannot pick its IP with the header.
+        $request = \Illuminate\Http\Request::create('/register', 'POST', server: ['REMOTE_ADDR' => '197.250.1.1', 'HTTP_CF_CONNECTING_IP' => '1.2.3.4']);
+        (new \App\Http\Middleware\ResolveClientIp)->handle($request, fn () => response('ok'));
+        $this->assertNull($request->headers->get('X-Forwarded-For'));
+
+        // The Cloudflare worker's header wins over CF-Connecting-IP (the worker's own address).
+        $request = \Illuminate\Http\Request::create('/register', 'POST', server: ['REMOTE_ADDR' => '10.0.1.4', 'HTTP_CF_CONNECTING_IP' => '2a06:98c0:3600::103', 'HTTP_CF_ORIGINAL_IP' => '41.59.3.3']);
+        (new \App\Http\Middleware\ResolveClientIp)->handle($request, fn () => response('ok'));
+        $this->assertSame('41.59.3.3', $request->headers->get('X-Forwarded-For'));
+    }
+
+    public function test_redirects_stay_on_https_behind_the_hosting_proxy(): void
+    {
+        $viaProxy = fn () => $this->withServerVariables(['REMOTE_ADDR' => '10.0.1.4'])->withHeaders([
+            'X-Forwarded-Proto' => 'https', 'X-Forwarded-Port' => '443', 'X-Forwarded-Host' => 'website.ravultd.com',
+            'CF-Connecting-IP' => '102.202.74.139',
+        ]);
+
+        // A guest is sent to the https login page, never http://.
+        $viaProxy()->get('http://website.ravultd.com/partner-dashboard')->assertRedirect('https://website.ravultd.com/login');
+
+        // A partner who signs in is sent to the https dashboard, and the session keeps the visitor's IP.
+        Notification::fake();
+        $this->post('/register', [
+            'business_name' => 'Https Garage', 'category_id' => 'Spare Parts Dealers', 'address' => 'Dar es Salaam',
+            'name' => 'Https Owner', 'email' => 'https-owner@example.test', 'phone' => '0754 000 111',
+            'password' => 'SecurePassword123', 'password_confirmation' => 'SecurePassword123', 'terms' => '1', 'privacy' => '1',
+        ])->assertRedirect('/partner-dashboard');
+        auth()->logout();
+
+        $viaProxy()->post('http://website.ravultd.com/login', ['email' => 'https-owner@example.test', 'password' => 'SecurePassword123'])
+            ->assertRedirect('https://website.ravultd.com/partner-dashboard');
+        $this->assertAuthenticated();
+        $this->assertDatabaseHas('activity_logs', ['action' => 'signed_in', 'ip_address' => '102.202.74.139']);
+
+        // Without the proxy, a client cannot claim https or another IP with forwarded headers.
+        auth()->logout();
+        $this->withServerVariables(['REMOTE_ADDR' => '197.250.1.1'])->withHeaders(['X-Forwarded-Proto' => 'https', 'X-Forwarded-For' => '1.2.3.4'])
+            ->get('http://website.ravultd.com/partner-dashboard')->assertRedirect('http://website.ravultd.com/login');
+    }
+
+    public function test_app_merchant_accounts_are_partners_only_when_they_own_a_website_partner(): void
+    {
+        config(['ravu_app.partner_role' => 'merchant']);
+        $merchant = User::create(['name' => 'Shop Owner', 'email' => 'merchant@example.test', 'password' => 'SecurePassword123', 'role' => 'merchant']);
+        $this->assertSame('partner', $merchant->portalRole());
+
+        // An app merchant with no website partner record cannot open the portal.
+        $this->post('/login', ['email' => 'merchant@example.test', 'password' => 'SecurePassword123'])->assertSessionHasErrors('email');
+        $this->assertGuest();
+
+        $partner = \App\Models\Partner::create(['registered_name' => 'Shop Ltd']);
+        $partner->users()->attach($merchant->id, ['role' => 'owner']);
+        $this->post('/login', ['email' => 'merchant@example.test', 'password' => 'SecurePassword123'])->assertRedirect('/partner-dashboard');
+        $this->assertAuthenticatedAs($merchant);
     }
 
     public function test_partner_routes_require_authentication_verification_and_partner_membership(): void

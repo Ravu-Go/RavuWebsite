@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "laravel-live-db",
+      "runtimeExecutable": "env",
+      "runtimeArgs": [
+        "APP_URL=http://127.0.0.1:8010",
+        "SESSION_DOMAIN=null",
+        "SESSION_SECURE_COOKIE=false",
+        "APP_DEBUG=true",
+        "PHP_CLI_SERVER_WORKERS=4",
+        "php", "artisan", "serve", "--host=127.0.0.1", "--port=8010"
+      ],
+      "port": 8010
+    }
+  ]
+}

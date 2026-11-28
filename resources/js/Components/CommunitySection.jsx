@@ -14,14 +14,14 @@ export default function CommunitySection() {
         <section className="relative overflow-hidden bg-[#061023] py-20 text-white sm:py-24 lg:py-28">
             {/* Background image stage */}
             <div className="pointer-events-none absolute inset-0 select-none">
-                {/* Skyline & illuminated ribbons image */}
+                {/* Authentic Dar es Salaam coastal mobility & skyline photograph */}
                 <img
                     src={resolveMedia(community.image)}
-                    alt=""
+                    alt="Dar es Salaam mobility community"
                     aria-hidden="true"
                     loading="lazy"
                     decoding="async"
-                    className="h-full w-full object-cover object-bottom sm:object-[80%_bottom] lg:object-right-bottom"
+                    className="h-full w-full object-cover object-center sm:object-[75%_center] lg:object-right"
                 />
 
                 {/* Left scrim: darkens only the area behind the text, keeping the city lights and blue ribbons crystal clear */}

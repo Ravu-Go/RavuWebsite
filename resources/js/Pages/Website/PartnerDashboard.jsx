@@ -3,6 +3,10 @@ import { useEffect, useMemo, useState } from "react";
 import {
     AlertCircle,
     ArrowRight,
+    BarChart3,
+    Lock,
+    ReceiptText,
+    Wallet,
     BadgePercent,
     Bell,
     Building2,
@@ -16,7 +20,6 @@ import {
     LogOut,
     MapPin,
     QrCode,
-    Search,
     Sparkles,
     Tag,
     UploadCloud,
@@ -24,6 +27,10 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import logoImg from "../../../imgs/Logo.png";
+import MemberVerifier from "../../Components/partner/MemberVerifier";
+import { PartnerPayouts, PartnerPerformance, RedemptionHistory } from "../../Components/partner/PartnerReports";
+
+const SERVING_VIEWS = ["serve", "performance", "redemptions", "payouts"];
 
 const STEPS = [
     { id: "business", label: "Business Profile", icon: Building2, desc: "Type of business & registration" },
@@ -95,14 +102,33 @@ export default function PartnerDashboard({
     progress = {},
     canEdit = true,
     notifications = [],
+    serving = null,
+    performance = null,
+    redemptions = null,
+    payouts = null,
 }) {
     const { flash } = usePage().props;
     const [step, setStep] = useState(0);
-    const [view, setView] = useState("application"); // 'application' | 'verifier' | 'preview' | 'account'
-
-    // Mock verifier state for cashier / partner staff testing
-    const [verifierQuery, setVerifierQuery] = useState("");
-    const [verifiedMember, setVerifiedMember] = useState(null);
+    // 'application' | 'serve' | 'performance' | 'redemptions' | 'payouts' | 'preview' | 'account'
+    const [view, setViewState] = useState(() => {
+        const fromUrl = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("view") : null;
+        return fromUrl || (serving?.enabled ? "serve" : "application");
+    });
+    const [periodLoading, setPeriodLoading] = useState(false);
+    const setView = (next) => {
+        setViewState(next);
+        const url = new URL(window.location.href);
+        url.searchParams.set("view", next);
+        window.history.replaceState(window.history.state, "", url);
+    };
+    const changePeriod = (period) => {
+        setPeriodLoading(true);
+        router.get(
+            "/partner-dashboard",
+            { view, period },
+            { only: ["performance", "redemptions", "payouts"], preserveState: true, preserveScroll: true, replace: true, onFinish: () => setPeriodLoading(false) },
+        );
+    };
 
     // Dynamic categories & requirements fallback
     const allCategories = categories.length > 0 ? categories : DEFAULT_CATEGORIES;
@@ -380,32 +406,6 @@ export default function PartnerDashboard({
     const exampleSavings = Math.round(exampleAmount * (calcDiscount / 100));
     const exampleFinal = exampleAmount - exampleSavings;
 
-    // Mock verifier handler
-    const handleVerifyMember = (e) => {
-        e.preventDefault();
-        const q = verifierQuery.trim().toUpperCase();
-        if (!q) return;
-
-        if (q.includes("RAVU") || q.includes("TZ") || q.length >= 4) {
-            setVerifiedMember({
-                memberId: q.startsWith("RAVU-") ? q : `RAVU-TZ-2024-${q}`,
-                name: "Hamisi Bakari Mrema",
-                type: "Boda Boda Rider (Commercial)",
-                status: "Active & Verified",
-                discountEligible: true,
-                discountRate: benefitForm.data.discount_percentage ? `${benefitForm.data.discount_percentage}% OFF` : "Partner offer pending",
-                joinedDate: "March 2024",
-                verifiedAt: new Date().toLocaleTimeString(),
-            });
-        } else {
-            setVerifiedMember({
-                memberId: q,
-                status: "Invalid / Not Found",
-                discountEligible: false,
-            });
-        }
-    };
-
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900">
             {/* Top Navigation */}
@@ -502,12 +502,10 @@ export default function PartnerDashboard({
                             label="Setup"
                             badge={`${completionCount}/4`}
                         />
-                        <TabButton
-                            active={view === "verifier"}
-                            onClick={() => setView("verifier")}
-                            icon={QrCode}
-                            label="Member verifier"
-                        />
+                        <TabButton active={view === "serve"} onClick={() => setView("serve")} icon={QrCode} label="Serve members" />
+                        <TabButton active={view === "performance"} onClick={() => setView("performance")} icon={BarChart3} label="Performance" />
+                        <TabButton active={view === "redemptions"} onClick={() => setView("redemptions")} icon={ReceiptText} label="Redemptions" />
+                        <TabButton active={view === "payouts"} onClick={() => setView("payouts")} icon={Wallet} label="Payouts" />
                         <TabButton
                             active={view === "preview"}
                             onClick={() => setView("preview")}
@@ -1674,121 +1672,21 @@ export default function PartnerDashboard({
                     </div>
                 )}
 
-                {/* VIEW: MEMBER VERIFIER (CASHIER TOOL) */}
-                {view === "verifier" && (
-                    <div className="max-w-3xl mx-auto space-y-6">
-                        <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
-                            <div className="flex items-start gap-3">
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-[#00289a] text-white">
-                                    <QrCode size={20} />
-                                </div>
-                                <div>
-                                    <h2 className="text-xl font-black text-slate-950">
-                                        Member ID & QR Code Verifier
-                                    </h2>
-                                    <p className="mt-1 text-xs text-slate-600 sm:text-sm">
-                                        Use this cashier tool to check whether a visiting rider, driver, or fleet customer is an active RAVU member entitled to your {benefitForm.data.discount_percentage || "agreed"}% discount.
-                                    </p>
-                                </div>
-                            </div>
-
-                            <form onSubmit={handleVerifyMember} className="mt-6 flex gap-3">
-                                <div className="relative flex-1">
-                                    <Search className={iconClass} size={18} />
-                                    <input
-                                        type="text"
-                                        placeholder="Enter RAVU Member ID (e.g. RAVU-TZ-2024-8841 or phone number)"
-                                        value={verifierQuery}
-                                        onChange={(e) => setVerifierQuery(e.target.value)}
-                                        className={`${inputClass} pl-10`}
-                                    />
-                                </div>
-                                <button
-                                    type="submit"
-                                    className="rounded-xl bg-[#1864E8] px-5 py-2.5 text-xs font-black text-white hover:bg-[#00289a] transition-all"
-                                >
-                                    Verify Member
-                                </button>
-                            </form>
-
-                            {/* Verification Result Card */}
-                            {verifiedMember && (
-                                <div
-                                    className={`mt-6 rounded-2xl border p-5 transition-all ${
-                                        verifiedMember.discountEligible
-                                            ? "border-emerald-200 bg-emerald-50/50"
-                                            : "border-rose-200 bg-rose-50/50"
-                                    }`}
-                                >
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            {verifiedMember.discountEligible ? (
-                                                <CheckCircle2 size={20} className="text-emerald-600" />
-                                            ) : (
-                                                <AlertCircle size={20} className="text-rose-600" />
-                                            )}
-                                            <span className="font-black text-sm text-slate-950">
-                                                {verifiedMember.discountEligible
-                                                    ? "Active RAVU Member Verified"
-                                                    : "Member Record Not Found"}
-                                            </span>
-                                        </div>
-                                        <span
-                                            className={`rounded-full px-3 py-1 text-xs font-black ${
-                                                verifiedMember.discountEligible
-                                                    ? "bg-emerald-600 text-white"
-                                                    : "bg-rose-600 text-white"
-                                            }`}
-                                        >
-                                            {verifiedMember.status}
-                                        </span>
-                                    </div>
-
-                                    {verifiedMember.discountEligible && (
-                                        <div className="mt-4 grid gap-3 border-t border-emerald-200/60 pt-4 sm:grid-cols-3 text-xs">
-                                            <div>
-                                                <span className="text-slate-500 uppercase text-[10px] font-bold">
-                                                    Member Name
-                                                </span>
-                                                <p className="font-bold text-slate-900 mt-0.5">
-                                                    {verifiedMember.name}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <span className="text-slate-500 uppercase text-[10px] font-bold">
-                                                    ID / Category
-                                                </span>
-                                                <p className="font-bold text-slate-900 mt-0.5">
-                                                    {verifiedMember.memberId}
-                                                </p>
-                                                <p className="text-[11px] text-slate-600">
-                                                    {verifiedMember.type}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <span className="text-slate-500 uppercase text-[10px] font-bold">
-                                                    Apply Partner Discount
-                                                </span>
-                                                <p className="font-black text-[#00289a] mt-0.5 text-sm">
-                                                    {verifiedMember.discountRate}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-
-                            <div className="mt-6 border-t border-slate-100 pt-5 text-xs text-slate-500">
-                                <p className="font-bold text-slate-700">How verification works at your counter:</p>
-                                <ol className="mt-2 list-decimal space-y-1 pl-4">
-                                    <li>Customer tells cashier they are a RAVU member.</li>
-                                    <li>Cashier asks to see the digital RAVU ID card in their RAVU mobile app.</li>
-                                    <li>Cashier types or scans the Member ID above to confirm active status.</li>
-                                    <li>Apply the agreed {benefitForm.data.discount_percentage || "member"}% discount to their final receipt.</li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
+                {/* VIEWS: SERVING MEMBERS (approved partners) */}
+                {SERVING_VIEWS.includes(view) && !serving?.enabled && (
+                    <LockedPanel status={currentStatus} />
+                )}
+                {view === "serve" && serving?.enabled && (
+                    <MemberVerifier serving={serving} recent={performance?.period?.running ? redemptions?.rows || [] : []} />
+                )}
+                {view === "performance" && serving?.enabled && (
+                    <PartnerPerformance performance={performance} payouts={payouts} onPeriod={changePeriod} loading={periodLoading} />
+                )}
+                {view === "redemptions" && serving?.enabled && (
+                    <RedemptionHistory redemptions={redemptions} performance={performance} onPeriod={changePeriod} loading={periodLoading} />
+                )}
+                {view === "payouts" && serving?.enabled && (
+                    <PartnerPayouts payouts={payouts} performance={performance} onPeriod={changePeriod} loading={periodLoading} />
                 )}
 
                 {/* VIEW: RIDER APP PREVIEW */}
@@ -2037,6 +1935,22 @@ function SummaryRow({ title, complete, onEdit, children }) {
                 </div>
             </div>
             <div className="mt-2.5 space-y-1">{children}</div>
+        </div>
+    );
+}
+
+function LockedPanel({ status }) {
+    return (
+        <div className="mx-auto max-w-xl rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-xs">
+            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-500">
+                <Lock size={22} />
+            </span>
+            <h2 className="mt-4 text-lg font-black text-slate-950">Available once RAVU approves your partnership</h2>
+            <p className="mt-2 text-sm text-slate-600">
+                After approval you can verify RAVU members at your counter, record their visits, and follow the members you serve,
+                the revenue they bring and your monthly RAVU payout here.
+            </p>
+            <p className="mt-3 text-xs font-semibold uppercase tracking-wider text-slate-400">Current status: {String(status).replace(/_/g, " ")}</p>
         </div>
     );
 }

@@ -137,3 +137,74 @@ npm run workers:deploy
 npm run pages:dev
 npm run pages:deploy
 ```
+
+
+## Partner portal: members served, redemptions & payouts
+
+Approved partners verify RAVU members at the counter (**Serve members**), record each
+visit with the member discount (a *redemption*), and follow their performance, receipts
+and monthly payouts. Super admins see the **Partner performance** leaderboard and run
+**Payouts** (approve a finished month → record each payment).
+
+- **Payout rule:** each month RAVU shares `PARTNER_PAYOUT_POOL_PERCENT` (default 30) of
+  that month's subscription income between partners, in proportion to the distinct
+  members each partner served. Approving a month freezes its figures
+  (`App\Services\PartnerPayoutService`).
+- **Member lookups** come from `App\Contracts\MemberDirectory`. Until the mobile app API
+  is live they use sample members (`MEMBERSHIP_MEMBER_SOURCE=demo`); set it to `api` to
+  call `GET {MEMBERSHIP_API_URL}/members/lookup?q=…` (shape documented on the contract).
+- **Dummy data:** `php artisan partners:demo --login` creates 8 sample partners, a demo partner login (`jux@partner.com` / `password1234` locally) and 18 months of
+  sample redemptions (flagged `is_demo`) for every approved partner with an approved
+  offer; `php artisan partners:demo --purge` removes all of it. Refuses to run in
+  production without `--force`.
+- **Local logins:** `php artisan db:seed --class=DemoPartnerSeeder` creates (or resets) the
+  demo partner login `jux@partner.com` / `password1234`, generating the demo data first if
+  needed; `php artisan db:seed --class=SuperAdminSeeder` resets the four super admins to
+  `password1234`. Both only do this when `APP_ENV=local`.
+- `PARTNER_VOID_WINDOW_HOURS` (default 24): how long a partner can void a mistaken receipt.
+
+## Connecting the RAVU app (ravu-api)
+
+The website reads real members, plans and subscription payments straight from the
+RAVU app's PostgreSQL database ([Ravu-Go/ravu-api](https://github.com/Ravu-Go/ravu-api)),
+**read-only**. Partner redemptions and payouts stay in the website's own database.
+
+```env
+MEMBERSHIP_REVENUE_SOURCE=database
+MEMBERSHIP_MEMBER_SOURCE=database
+RAVU_API_DB_HOST=…            # the app's PostgreSQL host
+RAVU_API_DB_DATABASE=ravu
+RAVU_API_DB_USERNAME=ravu_website_ro
+RAVU_API_DB_PASSWORD=…
+RAVU_API_DB_SSLMODE=require
+```
+
+Ask the API's database administrator to create a role that can only read the six
+tables the website uses:
+
+```sql
+CREATE ROLE ravu_website_ro LOGIN PASSWORD '…';
+GRANT CONNECT ON DATABASE ravu TO ravu_website_ro;
+GRANT USAGE ON SCHEMA public TO ravu_website_ro;
+GRANT SELECT (id, name, phone, phone_verified_at, role, status) ON users TO ravu_website_ro;
+GRANT SELECT ON memberships, membership_plans, payments, member_passes, driver_profiles TO ravu_website_ro;
+```
+
+How the app's data is used (`App\Services\Membership\DatabaseMembershipRevenueSource`,
+`App\Services\Members\DatabaseMemberDirectory`):
+
+- **Members** are app accounts with role `driver`. Member number = `RAVU-` + the app
+  user id padded to 5 digits (user 42 → `RAVU-00042`).
+- **Partners find a member** by member number, phone (`0712 345 678`, `+255…`) or the
+  15-minute member pass the app issues (`RVU-…`, from `member_passes`). Expired passes
+  are rejected.
+- **Who may use a benefit** follows the app's own `OfferEligibility` rule: active account,
+  verified phone, membership `active` and today between `starts_at` and `ends_at`.
+- **Plans** are BASIC / PRO / ELITE, billed yearly. **Income** = `payments` with status
+  `settled` (dated by `settled_at`); `failed` and `refunded` are shown as such; queued or
+  pending attempts are not income yet. Payments the app marks `simulated` are counted
+  only when `MEMBERSHIP_DB_INCLUDE_SIMULATED` is on (default: on except in production).
+- Before switching, remove the sample data: `php artisan partners:demo --purge`.
+
+Note: staging-api.ravultd.com currently sits behind a Cloudflare bot challenge, so
+server-to-server HTTP calls to it are blocked. The database connection is not affected.

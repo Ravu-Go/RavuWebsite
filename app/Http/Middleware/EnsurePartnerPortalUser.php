@@ -13,6 +13,7 @@ class EnsurePartnerPortalUser
         $user = $request->user();
 
         if (! $user || ! $user->isPartnerUser()) {
+            \App\Models\ActivityLog::record('access', 'access_denied', ['path' => '/'.ltrim($request->path(), '/'), 'area' => 'Partner portal', 'method' => $request->method()]);
             abort(403, 'A verified RAVU partner account is required.');
         }
 

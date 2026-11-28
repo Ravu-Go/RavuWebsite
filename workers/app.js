@@ -89,6 +89,16 @@ export default {
             }
         }
 
+        // API clients (the mobile app) must get JSON, never the website's HTML fallback.
+        if (url.pathname.startsWith("/api/")) {
+            return withSecurityHeaders(
+                new Response(JSON.stringify({ error: "service_unavailable", message: "RAVU is temporarily unavailable. Please try again shortly." }), {
+                    status: 503,
+                    headers: { "content-type": "application/json", "retry-after": "60", "cache-control": "no-store" },
+                }),
+            );
+        }
+
         // 3. Built-in Cloudflare Edge Inertia + Auth + D1/Cookie handler (zero-origin ready)
         const edgeResponse = await handleEdgeRequest(request, env, ctx);
         return withSecurityHeaders(edgeResponse);

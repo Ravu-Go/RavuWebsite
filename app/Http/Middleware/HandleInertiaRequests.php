@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
                 'email' => $authUser->email,
                 'avatar' => $authUser->avatar ?? null,
                 'role' => $authUser->portalRole(),
+                'password_change_required' => (bool) $authUser->password_change_required,
             ];
         }
 

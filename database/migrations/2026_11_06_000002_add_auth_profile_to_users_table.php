@@ -11,6 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Skipped when sign-in uses the RAVU app's users table (it is not in this schema).
+        if (! Schema::hasTable('users')) {
+            return;
+        }
+
         Schema::table('users', function (Blueprint $table) {
             if (! Schema::hasColumn('users', 'google_id')) {
                 $table->string('google_id')->nullable()->unique()->after('email');
@@ -35,6 +40,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! Schema::hasTable('users')) {
+            return;
+        }
+
         Schema::table('users', function (Blueprint $table) {
             foreach (['google_id', 'avatar', 'last_login_at', 'last_login_provider', 'last_login_ip'] as $column) {
                 if (Schema::hasColumn('users', $column)) {

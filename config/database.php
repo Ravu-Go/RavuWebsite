@@ -95,8 +95,28 @@ return [
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' => 'public',
+            // The website's own tables live in the "website" schema; sign-in uses the RAVU
+            // app's public.users table (see config/ravu_app.php). PostgreSQL skips schemas
+            // that do not exist, so on a database without "website" this is just "public".
+            'search_path' => env('DB_SEARCH_PATH', 'website,public'),
             'sslmode' => env('DB_SSLMODE', 'prefer'),
+        ],
+
+        // The RAVU app's own database (ravu-api), read-only. See README "Connecting the RAVU app".
+        'ravu_api' => [
+            'driver' => env('RAVU_API_DB_DRIVER', 'pgsql'),
+            'url' => env('RAVU_API_DB_URL'),
+            'host' => env('RAVU_API_DB_HOST', '127.0.0.1'),
+            'port' => env('RAVU_API_DB_PORT', '5432'),
+            'database' => env('RAVU_API_DB_DATABASE', 'ravu'),
+            'username' => env('RAVU_API_DB_USERNAME', 'ravu_website_ro'),
+            'password' => env('RAVU_API_DB_PASSWORD', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+            'sslmode' => env('RAVU_API_DB_SSLMODE', 'prefer'),
+            'foreign_key_constraints' => true,
         ],
 
         'sqlsrv' => [
