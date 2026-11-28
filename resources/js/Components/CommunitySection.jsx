@@ -59,7 +59,7 @@ export default function CommunitySection() {
                 {/* Pilot facts. A solid panel (no backdrop blur: blurring over the
                     photo recomposites on every scroll frame) keeps the figures legible
                     over the bright half of the image. */}
-                <dl className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-white/10 ring-1 ring-white/10 sm:mt-14 lg:grid-cols-4">
+                <dl className="mt-12 grid grid-cols-1 gap-px min-[480px]:grid-cols-2 overflow-hidden rounded-2xl bg-white/10 ring-1 ring-white/10 sm:mt-14 lg:grid-cols-4">
                     {stats.map((stat, index) => (
                         <div
                             key={keyFor(stat, index)}
