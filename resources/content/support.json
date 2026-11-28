@@ -1,13 +1,13 @@
 {
     "seo": {
         "title": "Help & Support — RAVU",
-        "description": "Find answers to common questions about RAVU membership, the mobile app, and partnering with our ecosystem."
+        "description": "Answers to common questions about RAVU membership, the mobile app and partnering with RAVU."
     },
     "hero": {
         "eyebrow": "HELP & SUPPORT",
-        "title": "Straightforward answers.\nDedicated support.\nHere to help you",
-        "highlight": "move forward.",
-        "text": "Find clear guidance about RAVU membership, the mobile app, verified member benefits and business partnerships across Tanzania.",
+        "title": "Help with membership,",
+        "highlight": "the app and partnerships.",
+        "text": "Answers about RAVU membership, the app, member discounts and becoming a partner.",
         "primaryCta": { "label": "Register Interest", "href": "/register" },
         "secondaryCta": { "label": "Partner Portal Sign In", "href": "/login" }
     },
@@ -18,13 +18,13 @@
     ],
     "faq": {
         "eyebrow": "FREQUENTLY ASKED QUESTIONS",
-        "title": "Helpful",
-        "highlight": "starting points.",
-        "text": "Everything you need to know about how RAVU connects riders, members and partner businesses.",
+        "title": "Common",
+        "highlight": "questions.",
+        "text": "Quick answers about membership, discounts and partnering.",
         "items": [
             {
                 "question": "What is RAVU Ltd?",
-                "answer": "RAVU Ltd (based in Dar es Salaam, Tanzania) is building a comprehensive membership-based mobility ecosystem that aggregates motorcycle (boda boda) riders, Bajaj operators, private vehicle owners, commercial drivers, truck & bus operators and fleet owners into one structured network — unlocking exclusive insurance protection, spare parts discounts and priority garage services."
+                "answer": "RAVU Ltd is a Dar es Salaam company building a membership for motorcycle (boda boda) riders, Bajaj operators, private vehicle owners, commercial drivers, truck and bus operators and fleet owners. Members get discounted insurance, spare parts and garage services from RAVU partners."
             },
             {
                 "question": "Who can become a RAVU member?",
@@ -32,14 +32,14 @@
             },
             {
                 "question": "What discounts do members receive on insurance?",
-                "answer": "Through RAVU's Strategic Insurance Partnership Program, verified members access a targeted 20%–30% preferred discount on standard premiums across 8 product lines (Motorcycle, Bajaj, Private Motor Vehicle, Commercial Fleet, Personal Accident, Health & Medical, Life & Family Protection, and SME Business Protection), along with value-added perks such as reduced deductibles, priority claims processing, flexible payment plans, and roadside assistance."
+                "answer": "Verified members get a target 20%–30% discount on standard premiums across 8 types of cover (Motorcycle, Bajaj, Private Motor Vehicle, Commercial Fleet, Personal Accident, Health & Medical, Life & Family Protection, and SME Business Protection), plus reduced deductibles, priority claims, flexible payment plans and roadside assistance where the insurer offers them."
             },
             {
                 "question": "What discounts do members receive on spare parts and garage services?",
                 "answer": "Verified RAVU members receive 10%–25% OFF genuine spare parts, tires, batteries, lubricants, filters and accessories, plus 5%–20% OFF routine maintenance, engine servicing, suspension, brakes, electrical diagnostics and wheel alignment at participating garages. Commercial fleets also qualify for the RAVU Fleet Discount Program with volume-based bulk pricing and priority service bay booking."
             },
             {
-                "question": "How does the Dar es Salaam Strategic Pilot Program work?",
+                "question": "How does the Dar es Salaam pilot work?",
                 "answer": "New insurance and service partnerships launch through a 4–6 month pilot in Dar es Salaam with an initial cohort of 200–500 active verified riders, drivers and vehicle owners. The pilot measures member utilization, discount effectiveness and service turnaround before scaling nationwide."
             },
             {

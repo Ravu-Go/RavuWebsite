@@ -13,6 +13,7 @@ import {
     useSiteContent,
 } from "../../content";
 import { iconFor } from "../../content/icons";
+import { MapPin } from "lucide-react";
 
 export default function Home() {
     const { seo, hero, features, slideshow, appShowcase } =
@@ -47,29 +48,17 @@ export default function Home() {
                         <StoreButtons />
                     </div>
 
-                    {/* Centered Social Proof */}
-                    <div className="mt-6 flex items-center justify-center gap-3">
-                        <div className="flex -space-x-2 overflow-hidden">
-                            <img
-                                className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&h=120&q=80"
-                                alt="Ravu community member"
+                    {/* Where RAVU is live (no stock avatars: they were placeholder faces) */}
+                    {hero.socialProof && (
+                        <p className="mx-auto mt-6 flex max-w-xs items-center justify-center gap-1.5 text-balance text-xs font-medium text-slate-600 sm:max-w-none">
+                            <MapPin
+                                size={14}
+                                className="shrink-0 text-[#1864E8]"
+                                aria-hidden="true"
                             />
-                            <img
-                                className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&h=120&q=80"
-                                alt="Ravu driver"
-                            />
-                            <img
-                                className="inline-block h-8 w-8 rounded-full ring-2 ring-white object-cover"
-                                src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=120&h=120&q=80"
-                                alt="Ravu rider"
-                            />
-                        </div>
-                        <p className="text-xs font-medium leading-tight text-slate-600">
                             {hero.socialProof}
                         </p>
-                    </div>
+                    )}
                 </div>
 
                 {/* Edge-to-Edge Full-Width Header Video */}
@@ -167,7 +156,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ----------------------- A GROWING COMMUNITY & STATS (CITY SKYLINE) */}
+            {/* ----------------------- PILOT STATUS & STATS (CITY SKYLINE) */}
             <CommunitySection />
         </WebsiteLayout>
     );

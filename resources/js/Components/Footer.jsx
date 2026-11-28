@@ -3,6 +3,15 @@ import { Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
 import { keyFor, useSiteContent } from "../content";
 import logoImg from "../../imgs/Logo.png";
 
+/** Only real profile links: a bare "https://instagram.com" is a placeholder, not a page. */
+function isProfileUrl(social) {
+    try {
+        return new URL(social.url).pathname.replace(/\/+$/, "") !== "";
+    } catch {
+        return false;
+    }
+}
+
 function SocialIcon({ platform }) {
     switch (String(platform).toLowerCase()) {
         case "instagram":
@@ -75,7 +84,7 @@ export default function Footer() {
 
                         {/* Social icons */}
                         <div className="mt-6 flex items-center gap-4 text-slate-400">
-                            {footer.socials.map((social, index) => (
+                            {footer.socials.filter(isProfileUrl).map((social, index) => (
                                 <a
                                     key={keyFor(social.platform, index)}
                                     href={social.url}

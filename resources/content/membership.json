@@ -1,12 +1,12 @@
 {
     "seo": {
-        "title": "RAVU Membership — Join. Save. Earn.",
-        "description": "A RAVU membership connects you to a growing ecosystem of support, benefits and community built around your mobility journey."
+        "title": "RAVU Membership — Insurance, parts and garage discounts",
+        "description": "What RAVU membership includes, who can join, and how the Dar es Salaam pilot works."
     },
     "hero": {
         "eyebrow": "RAVU MEMBERSHIP",
-        "title": "One identity.\nLower operating costs.\nMembership that",
-        "highlight": "protects & pays.",
+        "title": "One Member ID.\nLower prices on",
+        "highlight": "cover, parts and repairs.",
         "text": "A RAVU membership connects motorcycle riders, Bajaj operators, private vehicle owners, families and commercial fleets to exclusive insurance discounts, genuine spare parts savings and priority garage servicing across Tanzania.",
         "primaryCta": { "label": "Register Interest", "href": "/register" },
         "secondaryCta": { "label": "See Member Discounts", "href": "/benefits" },
@@ -15,22 +15,22 @@
     },
     "features": [
         { "icon": "CreditCard", "title": "Verified Member ID", "text": "One recognised identity connecting riders, drivers, vehicle owners and fleets." },
-        { "icon": "BadgeCheck", "title": "Guaranteed partner discounts", "text": "20%–30% insurance target discounts, 10%–25% off spare parts & 5%–20% off garages." },
-        { "icon": "UsersRound", "title": "Multi-vehicle ecosystem", "text": "Serving motorcycles, Bajaj, private cars, taxis, trucks, buses and commercial fleets." }
+        { "icon": "BadgeCheck", "title": "Partner discounts", "text": "Target 20–30% off insurance, 10–25% off spare parts and 5–20% off garage work." },
+        { "icon": "UsersRound", "title": "Any vehicle", "text": "Serving motorcycles, Bajaj, private cars, taxis, trucks, buses and commercial fleets." }
     ],
     "slideshow": {
-        "eyebrow": "MEMBERSHIP IN ACTION",
+        "eyebrow": "WHAT'S INCLUDED",
         "title": "Built for riders, vehicle owners,",
         "highlight": "families and fleets.",
-        "description": "Explore how RAVU membership delivers real savings and protection across all six mobility categories.",
+        "description": "What a member gets, by category.",
         "slides": [
             {
                 "tabLabel": "6 Mobility Categories",
                 "badge": "Riders • Bajaj • Cars • Trucks • Buses • Fleets",
-                "caption": "Inclusive Ecosystem",
+                "caption": "All six categories",
                 "eyebrow": "WHO CAN BECOME A MEMBER",
                 "title": "One membership built for every vehicle owner and operator.",
-                "description": "RAVU aggregates motorcycle riders, Bajaj operators, private family vehicle owners, commercial drivers, logistics trucks, passenger buses and fleet operators into one powerful network.",
+                "description": "Six member categories, from boda boda riders to bus and truck fleets.",
                 "bullets": [
                     "Categories A & B: Boda boda, delivery riders, Bajaj & taxi drivers",
                     "Category C: Private sedans, SUVs, pickups & household vehicles",
@@ -43,9 +43,9 @@
             },
             {
                 "tabLabel": "Insurance Protection",
-                "badge": "20% – 30% Preferred Member Discount",
+                "badge": "20% – 30% Member Discount Target",
                 "caption": "Vehicle, Health & Family Cover",
-                "eyebrow": "PROTECTING LIVELIHOODS & FAMILIES",
+                "eyebrow": "INSURANCE",
                 "title": "Discounted insurance for your vehicle, health and loved ones.",
                 "description": "Use your RAVU membership to access preferred rates across comprehensive vehicle insurance, personal accident cover, family medical plans and education protection.",
                 "bullets": [
@@ -62,9 +62,9 @@
                 "tabLabel": "Parts & Garage Savings",
                 "badge": "10%–25% Off Parts • 5%–20% Off Garages",
                 "caption": "Reduced Operating Costs",
-                "eyebrow": "KEEP YOUR VEHICLE EARNING",
+                "eyebrow": "PARTS & GARAGES",
                 "title": "Save on every spare part, tire change, battery and service visit.",
-                "description": "Maintenance is one of the largest expenses for any vehicle owner. RAVU members enjoy guaranteed discounts and priority service bays at accredited garages.",
+                "description": "Maintenance is one of the biggest costs of running a vehicle. Members get discounts and priority bays at partner garages.",
                 "bullets": [
                     "10%–25% OFF genuine parts, tires, batteries, lubricants & filters",
                     "5%–20% OFF routine servicing, engine, brake & electrical repairs",
@@ -79,15 +79,15 @@
                 "tabLabel": "Dar es Salaam Pilot",
                 "badge": "200 – 500 Initial Members • 4 – 6 Months",
                 "caption": "Priority Onboarding",
-                "eyebrow": "JOIN THE FOUNDATIONAL COHORT",
+                "eyebrow": "THE PILOT",
                 "title": "Your journey starts here in Dar es Salaam.",
-                "description": "Join the initial 200–500 verified members in our Dar es Salaam strategic pilot cohort and be first to access new partner discounts as RAVU expands across Tanzania.",
+                "description": "Join the first 200–500 members in Dar es Salaam and get new partner discounts first as RAVU expands.",
                 "bullets": [
                     "Verified digital & physical RAVU Member ID recognition",
                     "Direct access to pilot insurance and workshop partners",
-                    "Community support, safety training & financial inclusion programs"
+                    "Safety training and rider community events"
                 ],
-                "ctaLabel": "Join Priority Cohort",
+                "ctaLabel": "Join the pilot",
                 "ctaHref": "/register",
                 "image": "RAVU Mobility Hub in Tanzania.jpg",
                 "imageAlt": "RAVU Mobility Hub in Dar es Salaam, Tanzania"
@@ -96,9 +96,9 @@
     },
     "categories": {
         "eyebrow": "WHO RAVU SERVES",
-        "title": "Built for every vehicle owner and",
-        "highlight": "mobility operator.",
-        "text": "RAVU begins with boda boda riders and Bajaj operators and expands across six connected vehicle and fleet categories so every member household and transport business benefits from collective scale.",
+        "title": "Six",
+        "highlight": "member categories.",
+        "text": "RAVU starts with boda boda riders and Bajaj operators, then covers four more vehicle and fleet categories.",
         "items": [
             { "icon": "Users", "title": "Motorcycle & Boda Boda Riders", "text": "Boda boda operators, delivery riders, commercial motorcycle operators and private motorcycle owners." },
             { "icon": "Car", "title": "Bajaj & Commercial Vehicle Drivers", "text": "Commercial & private Bajaj (three-wheeler) operators, taxi drivers, ride-hailing drivers and service vehicles." },
@@ -109,12 +109,12 @@
         ]
     },
     "meaning": {
-        "eyebrow": "WHAT IT MEANS",
-        "title": "Your financial advantage",
-        "highlight": "on the road.",
-        "text": "Rather than negotiating alone, RAVU members access structured corporate-grade discounts on insurance, spare parts, tires, batteries, lubricants and mechanical repairs.",
+        "eyebrow": "WHY JOIN",
+        "title": "Group prices,",
+        "highlight": "not walk-in prices.",
+        "text": "On your own you pay the walk-in price. As a RAVU member you get the group rate on insurance, spare parts, tyres, batteries, lubricants and repairs.",
         "items": [
-            "Exclusive member pricing on motorcycle, Bajaj, private car, fleet, health and family insurance.",
+            "Member pricing on motorcycle, Bajaj, private car, fleet, health and family insurance.",
             "10%–25% OFF genuine spare parts, tires, batteries, lubricants and filters at partner suppliers.",
             "5%–20% OFF routine maintenance, engine servicing, brakes and diagnostics at official garages.",
             "Volume-based Fleet Discount Program for commercial transport, delivery and logistics operators."
@@ -126,22 +126,22 @@
     },
     "journey": {
         "eyebrow": "MEMBER JOURNEY",
-        "title": "A clear route",
-        "highlight": "into RAVU.",
-        "text": "Six simple steps from registration to everyday savings and protection.",
+        "title": "From sign-up",
+        "highlight": "to savings.",
+        "text": "Six steps from sign-up to your first discount.",
         "steps": [
             { "title": "Register", "text": "Share your interest online or sign up directly in the RAVU mobile app." },
             { "title": "Apply", "text": "Select your mobility category — rider, driver, private vehicle owner or fleet operator." },
             { "title": "Verification", "text": "Receive your verified RAVU Member ID for instant recognition at partner branches." },
             { "title": "Protect & Insure", "text": "Access preferred member insurance rates (20%+ target discount) and flexible payment plans." },
             { "title": "Save on Maintenance", "text": "Redeem 10%–25% spare parts discounts and 5%–20% garage servicing discounts." },
-            { "title": "Grow with RAVU", "text": "Lower operating costs, reduce vehicle downtime and build long-term financial security." }
+            { "title": "Keep saving", "text": "Spend less on running your vehicle and lose fewer days to repairs." }
         ]
     },
     "pilot": {
-        "title": "Dar es Salaam Strategic Pilot Cohort",
+        "title": "Dar es Salaam pilot",
         "badge": "200 – 500 Initial Members • 4 – 6 Months",
-        "text": "RAVU is launching its initial pilot cohort of 200–500 verified riders, drivers and vehicle owners in Dar es Salaam before expanding nationwide. Register today to join the priority onboarding wave.",
-        "cta": { "label": "Join Priority Cohort", "href": "/register" }
+        "text": "RAVU starts with 200–500 verified riders, drivers and vehicle owners in Dar es Salaam before expanding nationwide. Register your interest to join the first group.",
+        "cta": { "label": "Join the pilot", "href": "/register" }
     }
 }

@@ -1,42 +1,42 @@
 {
     "seo": {
-        "title": "About RAVU — Connected Mobility Ecosystem",
-        "description": "RAVU is building a membership-based mobility ecosystem around the riders, drivers, owners, partners and communities."
+        "title": "About RAVU — Membership for Tanzania's riders and vehicle owners",
+        "description": "RAVU Ltd is a Dar es Salaam company building a membership that cuts insurance, parts and repair costs for riders, drivers and vehicle owners."
     },
     "hero": {
         "eyebrow": "ABOUT RAVU LTD",
-        "title": "Mobility, opportunity,\nprotection and",
-        "highlight": "prosperity.",
-        "text": "Based in Dar es Salaam, Tanzania, RAVU Ltd is building a comprehensive membership ecosystem that connects motorcycle (boda boda) riders, Bajaj operators, private vehicle owners, commercial fleets, trucks and buses with exclusive insurance protection, genuine spare parts and trusted mechanical garages.",
-        "primaryCta": { "label": "Explore Strategic Partnerships", "href": "/partners" },
+        "title": "We help riders and drivers\nspend less on",
+        "highlight": "insurance and repairs.",
+        "text": "RAVU Ltd is based in Dar es Salaam. We group boda boda riders, Bajaj operators, car owners and fleets into one membership, then agree lower prices with insurers, parts suppliers and garages on their behalf.",
+        "primaryCta": { "label": "For partners", "href": "/partners" },
         "secondaryCta": { "label": "Explore Membership", "href": "/membership" },
         "image": "RAVU Riders at the Service Hub.jpg",
         "imageAlt": "RAVU riders at a local motorcycle workshop and service hub"
     },
     "values": [
-        { "icon": "ShieldCheck", "title": "Trust & Protection", "text": "Structured relationships that deliver real insurance, safety and financial security." },
-        { "icon": "UsersRound", "title": "Aggregated Community Power", "text": "Transforming a fragmented market into a single organized network with collective bargaining power." },
-        { "icon": "Share2", "title": "Financial Inclusion", "text": "Lowering daily operating costs so riders, drivers, families and fleets can prosper." }
+        { "icon": "ShieldCheck", "title": "Protection", "text": "Insurance riders can afford, with simpler sign-up and claims." },
+        { "icon": "UsersRound", "title": "Buying power", "text": "Many small customers get a better price as one group than on their own." },
+        { "icon": "Share2", "title": "Lower running costs", "text": "Every shilling saved on parts and cover stays in the rider's pocket." }
     ],
     "purpose": {
         "eyebrow": "OUR PURPOSE",
-        "title": "Opportunity and support,",
-        "highlight": "closer to the road.",
-        "text": "Rather than serving operators individually, RAVU aggregates a fragmented market into a structured network — creating measurable financial advantages for members and scalable distribution for partner organizations.",
+        "title": "Why RAVU",
+        "highlight": "exists.",
+        "text": "Most riders buy insurance and parts on their own at full price, or go without. RAVU puts them in one verified group, so partners can offer lower prices and still win more business.",
         "cards": [
-            { "icon": "Globe2", "title": "Our Vision", "text": "To build Tanzania's most trusted mobility support ecosystem serving riders, drivers, private vehicle owners, transport operators and fleet owners." },
-            { "icon": "Target", "title": "Our Mission", "text": "Improve the lives of mobility professionals and vehicle owners through income opportunities, professional development, financial inclusion, safety solutions and essential services." },
-            { "icon": "Lightbulb", "title": "Our Strategic Approach", "text": "Aggregate a fragmented mobility sector into a verified, structured network — lowering customer acquisition costs for partners while delivering 20%–30% insurance and 10%–25% spare parts savings to members." }
+            { "icon": "Globe2", "title": "Our Vision", "text": "A membership every rider, driver and vehicle owner in Tanzania can rely on for cover, parts and repairs." },
+            { "icon": "Target", "title": "Our Mission", "text": "Cut the cost of running a vehicle through group discounts, simpler insurance and trusted garages." },
+            { "icon": "Lightbulb", "title": "How we do it", "text": "Verify members, then bring them to partners as one group. Partners win customers cheaply; members get a target 20%–30% off insurance and 10%–25% off parts." }
         ]
     },
     "vision": {
-        "eyebrow": "LONG-TERM STRATEGIC VISION",
-        "title": "Building Tanzania's most impactful",
-        "highlight": "mobility protection & service network.",
-        "text": "Starting with our 4–6 month Dar es Salaam pilot program (200–500 initial members), RAVU is expanding into a nationwide ecosystem of accredited service centers, embedded protection and financial inclusion.",
+        "eyebrow": "AFTER THE PILOT",
+        "title": "From one city",
+        "highlight": "to the whole country.",
+        "text": "We start with a 4–6 month pilot in Dar es Salaam with 200–500 members. If the discounts hold up, this is what comes next:",
         "pillars": [
             "Embedded insurance solutions & digital policy management inside the RAVU platform",
-            "Official RAVU Service Centers & Official RAVU Spare Parts Suppliers nationwide",
+            "RAVU-approved service centres and spare parts suppliers nationwide",
             "Commercial Fleet Maintenance Programs & volume-based bulk spare-parts pricing",
             "National Roadside Assistance, Vehicle Inspection & Tire and Battery Programs",
             "Predictable Maintenance Subscription Packages & tier-based rider/driver rewards",
@@ -44,7 +44,7 @@
         ]
     },
     "leadership": {
-        "badge": "Leadership & Founder Vision",
+        "badge": "From the founder",
         "quotes": [
             "Building a trusted ecosystem that delivers mobility, opportunity, protection, and prosperity for every rider.",
             "We believe that affordable insurance and reliable vehicle maintenance are not only a commercial opportunity, but a social and economic necessity for the communities we serve. Together with our strategic partners, we are lowering operating costs, protecting families, and driving mobility forward across Tanzania."
@@ -53,6 +53,6 @@
         "role": "Founder & CEO, RAVU Ltd",
         "location": "Dar es Salaam, Tanzania",
         "email": "nyindo@posteo.de",
-        "cta": { "label": "View Partnership Proposals", "href": "/partners" }
+        "cta": { "label": "Partnership proposals", "href": "/partners" }
     }
 }

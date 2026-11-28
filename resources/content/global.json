@@ -218,38 +218,38 @@
         ]
     },
     "community": {
-        "eyebrow": "A GROWING COMMUNITY",
-        "title": "More people.\nStronger communities.",
-        "text": "RAVU connects riders, drivers, businesses and communities to create more value and opportunities across Tanzania.",
+        "eyebrow": "WHERE WE ARE NOW",
+        "title": "Starting in\nDar es Salaam.",
+        "text": "A 4–6 month pilot with 200–500 riders, drivers and vehicle owners and our first insurance, parts and garage partners. We expand across Tanzania once the pilot shows the discounts work.",
         "image": "Footer.jpg",
         "stats": [
             {
-                "value": "100K+",
-                "label": "Active Riders"
+                "value": "200–500",
+                "label": "Pilot members"
             },
             {
-                "value": "10K+",
-                "label": "Drivers & Operators"
+                "value": "4–6 mo",
+                "label": "Pilot length"
             },
             {
-                "value": "50+",
-                "label": "Cities & Towns"
+                "value": "6",
+                "label": "Vehicle categories"
             },
             {
-                "value": "100+",
-                "label": "Business Partners"
+                "value": "20–30%",
+                "label": "Insurance discount target"
             }
         ]
     },
     "ecosystem": {
-        "eyebrow": "THE RAVU ECOSYSTEM",
-        "title": "Connecting everyone",
-        "highlight": "around mobility.",
-        "text": "The ecosystem works because each part strengthens the others — people, businesses, services and opportunity, connected in one network.",
+        "eyebrow": "WHO'S INVOLVED",
+        "title": "Who RAVU",
+        "highlight": "brings together.",
+        "text": "Members get lower prices. Partners get a steady flow of verified customers. That trade is the whole model.",
         "items": [
             {
                 "title": "Members",
-                "text": "People who join RAVU and participate in the connected mobility community."
+                "text": "Riders, drivers and vehicle owners who join and get a verified Member ID."
             },
             {
                 "title": "Riders & Drivers",
@@ -269,14 +269,14 @@
             },
             {
                 "title": "Community",
-                "text": "A connected network across Tanzania that grows stronger with every participant."
+                "text": "Safety training, local hubs and rider groups, starting in Dar es Salaam."
             }
         ]
     },
     "appPromo": {
         "eyebrow": "THE RAVU MOBILE APP",
-        "title": "Built for your\n",
-        "highlight": "everyday journey.",
+        "title": "Join and use RAVU\n",
+        "highlight": "from your phone.",
         "text": "Riders and drivers join and use RAVU directly through the mobile app — registration, digital member ID, partner discounts, and daily tools in one place.",
         "image": "welcom.png",
         "imageAlt": "RAVU mobile app interface"

@@ -1,13 +1,13 @@
 {
     "seo": {
-        "title": "Member Benefits — RAVU Ecosystem",
-        "description": "Discover savings, financial access, protection, maintenance and community support through RAVU membership."
+        "title": "Member Benefits — RAVU",
+        "description": "Insurance, spare parts, garage and fleet discounts for RAVU members, with the target discount for each."
     },
     "hero": {
-        "eyebrow": "EXCLUSIVE MEMBER BENEFITS",
-        "title": "Measurable savings around",
-        "highlight": "every mobility journey.",
-        "text": "RAVU aggregates the purchasing power of riders, drivers, private vehicle owners and commercial fleets to unlock exclusive 20%–30% insurance discounts, 10%–25% spare parts savings and 5%–20% garage service discounts.",
+        "eyebrow": "MEMBER BENEFITS",
+        "title": "What members",
+        "highlight": "save.",
+        "text": "RAVU negotiates as one group for riders, drivers, car owners and fleets. Our targets: 20–30% off insurance, 10–25% off spare parts and 5–20% off garage work.",
         "primaryCta": { "label": "Explore Membership", "href": "/membership" },
         "secondaryCta": { "label": "Partner With RAVU", "href": "/partners" },
         "image": "fundRepairShop.jpg",
@@ -19,17 +19,17 @@
         { "icon": "BadgeCheck", "title": "5% – 20% Off Garage Services", "text": "Priority servicing, repairs, diagnostics and inspections at official partner garages." }
     ],
     "slideshow": {
-        "eyebrow": "VISUAL BENEFITS TOUR",
-        "title": "See how RAVU membership",
-        "highlight": "lowers your everyday costs.",
-        "description": "Browse our flagship member benefit programs across insurance protection, genuine spare parts, mechanical servicing and fleet operations.",
+        "eyebrow": "BENEFITS IN DETAIL",
+        "title": "Where the",
+        "highlight": "savings come from.",
+        "description": "Insurance, spare parts, servicing and fleet programs.",
         "slides": [
             {
                 "tabLabel": "20%–30% Off Insurance",
-                "badge": "20% – 30% Preferred Member Discount",
+                "badge": "20% – 30% Member Discount Target",
                 "caption": "8 Protection Lines",
                 "eyebrow": "INSURANCE & PROTECTION BENEFITS",
-                "title": "Comprehensive protection for your ride, family and fleet.",
+                "title": "Cover for your vehicle, family and fleet.",
                 "description": "Verified RAVU members access preferred insurance pricing and simplified enrollment across motorcycles, Bajaj, private family cars, commercial fleets, health and personal accident cover.",
                 "bullets": [
                     "Minimum 20% target discount on standard insurance premiums",
@@ -47,7 +47,7 @@
                 "caption": "Official Parts & Garage Network",
                 "eyebrow": "MAINTENANCE & GARAGE BENEFITS",
                 "title": "Genuine spare parts, tires, batteries and priority workshop bays.",
-                "description": "Reduce your daily operating costs and minimize vehicle downtime with guaranteed member discounts on parts and mechanical labor across Tanzania.",
+                "description": "Pay less for parts and labour, and spend fewer days off the road.",
                 "bullets": [
                     "10%–25% OFF motorcycle, car, truck & bus spare parts",
                     "10%–25% OFF tires, batteries, engine lubricants & filters",
@@ -78,8 +78,8 @@
             {
                 "tabLabel": "Instant ID Redemption",
                 "badge": "Verified RAVU Member ID",
-                "caption": "Seamless Point-of-Sale Recognition",
-                "eyebrow": "EFFORTLESS REDEMPTION",
+                "caption": "Checked at the counter",
+                "eyebrow": "USING YOUR DISCOUNT",
                 "title": "Show your RAVU Member ID and save immediately at partner locations.",
                 "description": "No complicated paperwork — partner staff verify your RAVU Member ID in seconds through the Partner Portal and apply your member discount on the spot.",
                 "bullets": [
@@ -95,15 +95,15 @@
         ]
     },
     "areas": {
-        "eyebrow": "MEASURABLE FINANCIAL ADVANTAGE",
-        "title": "Benefits that lower costs and",
-        "highlight": "protect livelihoods.",
-        "text": "Every RAVU partnership is structured around clear discount benchmarks and priority service standards — serving boda boda riders, Bajaj operators, private car owners, families, trucks, buses and commercial fleets.",
+        "eyebrow": "BENEFIT PROGRAMS",
+        "title": "Four",
+        "highlight": "benefit programs.",
+        "text": "Each partner agrees a discount target and a service standard before members can use it.",
         "items": [
             {
                 "icon": "ShieldCheck",
                 "badge": "20% – 30% Member Discount Target",
-                "title": "Exclusive Insurance & Protection Program",
+                "title": "Insurance & Protection",
                 "text": "Access discounted comprehensive and third-party coverage for motorcycles (boda boda), Bajaj three-wheelers, private family vehicles and commercial fleets — plus personal accident, health/medical, family life protection and SME business insurance.",
                 "bullets": [
                     "Reduced deductibles/excess & priority claims processing",
@@ -116,7 +116,7 @@
                 "icon": "Wrench",
                 "badge": "10% – 25% Off Parts • 5% – 20% Off Labor",
                 "title": "Spare Parts, Tires, Batteries & Garage Program",
-                "text": "Lower your biggest operational expense with guaranteed member discounts at official spare parts suppliers, tire centers and mechanical garages across Tanzania.",
+                "text": "Member discounts at partner spare parts suppliers, tyre centres and garages.",
                 "bullets": [
                     "10%–25% OFF motorcycle, car, truck & bus spare parts",
                     "10%–25% OFF tires, batteries, engine lubricants & filters",
@@ -138,8 +138,8 @@
             },
             {
                 "icon": "Banknote",
-                "badge": "Financial Inclusion & Wellness",
-                "title": "Financial Access, Fuel & Family Prosperity",
+                "badge": "Fuel & Finance",
+                "title": "Fuel, Finance & Family",
                 "text": "Connect with fuel cashback offers, financial wellness initiatives, asset financing partners and savings-linked protection built around daily mobility earnings.",
                 "bullets": [
                     "Fuel & lubricant cashback at participating stations",
