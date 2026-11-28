@@ -13,82 +13,89 @@ function isLive(url) {
     return Boolean(url) && !url.startsWith("#");
 }
 
-/** Store badge: a link when the app is published, a plain "coming soon" badge until then. */
-function StoreBadge({ url, children }) {
+function AppleLogo() {
+    return (
+        <svg viewBox="0 0 384 512" className="h-[22px] w-[22px] shrink-0 fill-current" aria-hidden="true">
+            <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 62.3 26 139.7c15.6 44.5 44 95.3 84.7 95.7 32 .3 42.4-21.7 82.2-21.7 39.4 0 50.8 21.7 84 21.7 41.5-.4 68.9-46.7 84.2-91.2 17.6-51.1 24.8-100.8 25.1-103.3-1.2-.6-70.3-26.9-71.5-45.7zm-61.9-158.4c17.5-21.6 29.5-51.5 26.2-81.9-25.3 1.1-56.5 17.2-74.6 38.6-16 18.8-30.2 49-26.4 78.4 28.3 2.2 57.3-13.5 74.8-35.1z" />
+        </svg>
+    );
+}
+
+/** Google Play mark: four wedges meeting at one point, in the store's colours. */
+function GooglePlayLogo() {
+    return (
+        <svg viewBox="0 0 28 30" className="h-[22px] w-[21px] shrink-0" aria-hidden="true">
+            <path fill="#00A0FF" d="M2.4 1.1 16 15 2.4 28.9c-.5-.3-.8-.9-.8-1.6V2.7c0-.7.3-1.3.8-1.6Z" />
+            <path fill="#00D27A" d="M2.4 1.1c.5-.3 1.2-.3 1.8 0L20.6 10.4 16 15Z" />
+            <path fill="#FF3A44" d="M2.4 28.9 16 15l4.6 4.6L4.2 28.9c-.6.3-1.3.3-1.8 0Z" />
+            <path fill="#FFC400" d="m20.6 10.4 4.9 2.8c1.4.8 1.4 2.8 0 3.6l-4.9 2.8L16 15Z" />
+        </svg>
+    );
+}
+
+/**
+ * Store badge in the stores' own badge layout (black, thin grey border, mark
+ * on the left, two lines of text). A link once the app is published; until
+ * then a plain badge that says "Coming soon".
+ */
+function StoreBadge({ url, logo, smallLine, comingSoonLine, storeName }) {
+    const live = isLive(url);
+    const body = (
+        <>
+            {logo}
+            <span className="flex flex-col text-left leading-none">
+                <span className="text-[10px] font-medium tracking-[0.01em] text-white/85">
+                    {live ? smallLine : comingSoonLine}
+                </span>
+                <span className="mt-[3px] text-[17px] font-semibold tracking-[-0.01em] text-white">
+                    {storeName}
+                </span>
+            </span>
+        </>
+    );
     const base =
-        "inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm";
-    if (!isLive(url)) {
-        return <span className={`${base} cursor-default opacity-80`}>{children}</span>;
+        "inline-flex h-[46px] min-w-[150px] items-center gap-2.5 rounded-[10px] border border-[#A6A6A6] bg-black px-3.5 text-white";
+    if (!live) {
+        return (
+            <span className={base} aria-label={`${storeName}: coming soon`}>
+                {body}
+            </span>
+        );
     }
     return (
         <a
             href={url}
-            className={`${base} transition-transform hover:scale-[1.02] active:scale-[0.98]`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${smallLine} ${storeName}`}
+            className={`${base} transition-colors hover:bg-[#1a1a1a] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1864E8]`}
         >
-            {children}
+            {body}
         </a>
     );
 }
 
 /**
- * Reusable official store buttons for App Store & Google Play (matching Home.jsx)
+ * App Store and Google Play badges. Store URLs come from the CMS (global.appLinks).
  */
 export function StoreButtons({ className = "" }) {
     const { appLinks } = useSiteContent("global");
     return (
         <div className={`flex flex-wrap items-center gap-3 ${className}`}>
-            {/* Apple App Store */}
-            <StoreBadge url={appLinks.appStoreUrl}>
-                <svg
-                    viewBox="0 0 384 512"
-                    className="h-5 w-5 shrink-0 fill-current"
-                    aria-hidden="true"
-                >
-                    <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 62.3 26 139.7c15.6 44.5 44 95.3 84.7 95.7 32 .3 42.4-21.7 82.2-21.7 39.4 0 50.8 21.7 84 21.7 41.5-.4 68.9-46.7 84.2-91.2 17.6-51.1 24.8-100.8 25.1-103.3-1.2-.6-70.3-26.9-71.5-45.7zm-61.9-158.4c17.5-21.6 29.5-51.5 26.2-81.9-25.3 1.1-56.5 17.2-74.6 38.6-16 18.8-30.2 49-26.4 78.4 28.3 2.2 57.3-13.5 74.8-35.1z" />
-                </svg>
-                <div className="text-left leading-none">
-                    <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
-                        {isLive(appLinks.appStoreUrl) ? "Download on the" : "Coming soon to the"}
-                    </p>
-                    <p className="mt-0.5 text-xs font-semibold tracking-tight text-white">
-                        App Store
-                    </p>
-                </div>
-            </StoreBadge>
-
-            {/* Google Play Store */}
-            <StoreBadge url={appLinks.googlePlayUrl}>
-                <svg
-                    viewBox="0 0 512 512"
-                    className="h-5 w-5 shrink-0"
-                    aria-hidden="true"
-                >
-                    <path
-                        fill="#00E676"
-                        d="M32.8 19.3L275.6 262.1 213.9 323.8 16.5 37.8c-1.3 2.1-2 4.6-2 7.2v422c0 2.6.7 5.1 2 7.2L32.8 19.3z"
-                    />
-                    <path
-                        fill="#FFD54F"
-                        d="M352.3 338.8l-76.7-76.7L32.8 19.3C35.9 14.7 41.2 12 47 12c3.4 0 6.7.9 9.6 2.6l328.6 189.7-32.9 134.5z"
-                    />
-                    <path
-                        fill="#FF3D00"
-                        d="M56.6 497.4C53.7 499.1 50.4 500 47 500c-5.8 0-11.1-2.7-14.2-7.3l242.8-242.8 76.7 76.7L56.6 497.4z"
-                    />
-                    <path
-                        fill="#00B0FF"
-                        d="M495.6 238.2L385.2 174.5l-32.9 32.9 32.9 134.5 32.9-19 77.5-44.7c10.3-6 16.6-17.1 16.6-29 0-11.9-6.3-23-16.6-29z"
-                    />
-                </svg>
-                <div className="text-left leading-none">
-                    <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
-                        {isLive(appLinks.googlePlayUrl) ? "GET IT ON" : "Coming soon on"}
-                    </p>
-                    <p className="mt-0.5 text-xs font-semibold tracking-tight text-white">
-                        Google Play
-                    </p>
-                </div>
-            </StoreBadge>
+            <StoreBadge
+                url={appLinks.appStoreUrl}
+                logo={<AppleLogo />}
+                smallLine="Download on the"
+                comingSoonLine="Coming soon to the"
+                storeName="App Store"
+            />
+            <StoreBadge
+                url={appLinks.googlePlayUrl}
+                logo={<GooglePlayLogo />}
+                smallLine="GET IT ON"
+                comingSoonLine="Coming soon to"
+                storeName="Google Play"
+            />
         </div>
     );
 }

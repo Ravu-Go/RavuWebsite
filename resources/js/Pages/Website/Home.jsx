@@ -1,6 +1,6 @@
 import WebsiteLayout from "../../Components/WebsiteLayout";
 import CommunitySection from "../../Components/CommunitySection";
-import EcosystemSlideshow from "../../Components/EcosystemSlideshow";
+import StickyShowcase from "../../Components/StickyShowcase";
 import ViewportVideo from "../../Components/ViewportVideo";
 import headerVideo from "../../../imgs/Header.mp4";
 import headerPoster from "../../../imgs/Header.jpg";
@@ -22,38 +22,36 @@ export default function Home() {
     return (
         <WebsiteLayout seo={seo}>
             {/* ---------------------------------------------------------- HERO */}
-            <section className="relative overflow-hidden bg-white pt-12 pb-10 sm:pt-16 sm:pb-14 lg:pt-20 lg:pb-16">
+            <section className="relative overflow-hidden bg-white pt-14 pb-10 sm:pt-20 sm:pb-14 lg:pt-24 lg:pb-16">
                 <div className="mx-auto max-w-7xl px-5 text-center sm:px-8">
                     {/* Eyebrow */}
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                        {hero.eyebrow}
-                    </p>
+                    {hero.eyebrow && (
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                            {hero.eyebrow}
+                        </p>
+                    )}
 
                     {/* Centered Headline */}
-                    <h1 className="mx-auto mt-4 max-w-3xl text-4xl font-black leading-[1.08] tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
-                        <Headline
-                            title={hero.title}
-                            highlight={hero.highlight}
-                            highlightClassName="text-[#1864E8]"
-                        />
+                    <h1 className="mx-auto mt-5 max-w-4xl text-[2.6rem] font-bold leading-[1.04] tracking-[-0.035em] text-slate-950 text-balance sm:text-6xl lg:text-[4.5rem]">
+                        <Headline title={hero.title} highlight={hero.highlight} />
                     </h1>
 
                     {/* Centered Subhead */}
-                    <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
+                    <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 text-pretty sm:text-xl">
                         {hero.text}
                     </p>
 
                     {/* Centered App Store Buttons */}
-                    <div className="mt-8 flex justify-center">
+                    <div className="mt-10 flex justify-center">
                         <StoreButtons />
                     </div>
 
                     {/* Where RAVU is live (no stock avatars: they were placeholder faces) */}
                     {hero.socialProof && (
-                        <p className="mx-auto mt-6 flex max-w-xs items-center justify-center gap-1.5 text-balance text-xs font-medium text-slate-600 sm:max-w-none">
+                        <p className="mx-auto mt-6 max-w-xs text-balance text-xs font-medium text-slate-600 sm:max-w-none">
                             <MapPin
                                 size={14}
-                                className="shrink-0 text-[#1864E8]"
+                                className="-mt-0.5 mr-1 inline text-[#1864E8]"
                                 aria-hidden="true"
                             />
                             {hero.socialProof}
@@ -108,10 +106,9 @@ export default function Home() {
             </section>
 
             {/* ----------------------- INTERACTIVE ECOSYSTEM SLIDESHOW */}
-            <EcosystemSlideshow
+            <StickyShowcase
                 eyebrow={slideshow.eyebrow}
-                title={slideshow.title}
-                highlight={slideshow.highlight}
+                title={[slideshow.title, slideshow.highlight].filter(Boolean).join(" ")}
                 description={slideshow.description}
                 slides={toSlides(slideshow.slides, "home-slide")}
             />
@@ -138,11 +135,10 @@ export default function Home() {
                             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                                 {appShowcase.eyebrow}
                             </p>
-                            <h2 className="mt-4 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl lg:text-5xl lg:leading-[1.1]">
+                            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl lg:leading-[1.06]">
                                 <Headline
                                     title={appShowcase.title}
                                     highlight={appShowcase.highlight}
-                                    highlightClassName="text-[#1864E8]"
                                 />
                             </h2>
                             <p className="mt-5 max-w-md text-sm leading-relaxed text-slate-600 sm:text-base">
