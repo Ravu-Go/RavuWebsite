@@ -26,7 +26,7 @@
         "slides": [
             {
                 "tabLabel": "1. Insurance Partner Track",
-                "badge": "20% – 30% Member Discount Target",
+                "badge": "Up to 30% Member Discount Target",
                 "caption": "8 Insurance Product Lines (A–H)",
                 "eyebrow": "INSURERS",
                 "title": "Become RAVU's preferred insurance partner.",
@@ -43,14 +43,14 @@
             },
             {
                 "tabLabel": "2. Spare Parts & Garages",
-                "badge": "10%–25% Off Parts • 5%–20% Off Garage",
+                "badge": "Up to 25% Off Parts • Up to 20% Off Garage",
                 "caption": "Official Service & Parts Network",
                 "eyebrow": "SPARE PARTS, MAINTENANCE & GARAGE PROPOSAL",
                 "title": "Drive high-volume recurring workshop & spare parts sales.",
                 "description": "Prepared for Spare Parts Suppliers, Vehicle Service Centers, Mechanical Garages, Tire Centers and Auto Retailers seeking steady customer volume across all vehicle categories.",
                 "bullets": [
-                    "10%–25% member discount on parts, tires, batteries, lubricants & filters",
-                    "5%–20% member discount on routine servicing, engine, brakes & alignment",
+                    "Up to 25% member discount on parts, tires, batteries, lubricants & filters",
+                    "Up to 20% member discount on routine servicing, engine, brakes & alignment",
                     "Fleet Discount Program with bulk parts pricing & priority service bays"
                 ],
                 "ctaLabel": "Register Garage or Parts Shop",
@@ -120,7 +120,7 @@
             "title": "Insurance Benefits Program",
             "text": "Despite the essential role riders and drivers play in Tanzania's economy, insurance penetration remains low due to high perceived costs, complicated enrollment and a lack of tailored products. RAVU bridges this gap by giving underwriters a single organized distribution platform.",
             "discountLabel": "Preferred Member Discount Target",
-            "discountValue": "20% – 30% OFF",
+            "discountValue": "Up to 30% off",
             "discountText": "Minimum 20% discount on standard insurance premiums for all verified RAVU members.",
             "valueAddedIntro": "Where constrained by underwriting rules, equivalent value-added benefits include:",
             "valueAddedText": "Reduced deductibles/excess • Complimentary personal accident cover • Emergency roadside assistance • Flexible payment plans • Priority claims processing • Passenger & family extensions • Claim-free loyalty rewards.",
@@ -143,19 +143,19 @@
             "title": "Spare Parts, Maintenance & Garage Program",
             "text": "Prepared for Spare Parts Suppliers, Vehicle Service Centers, Mechanical Garages, Tire Centers, Auto Service Networks and Automotive Retailers. RAVU directs verified members and high-volume fleets to your branches while lowering their daily operating costs.",
             "partsLabel": "Spare Parts & Tires",
-            "partsValue": "10% – 25% OFF",
+            "partsValue": "Up to 25% off",
             "partsText": "Minimum member discount on genuine motorcycle, car, truck & bus parts, tires, batteries, lubricants and filters.",
             "garageLabel": "Garage & Mechanical",
-            "garageValue": "5% – 20% OFF",
+            "garageValue": "Up to 20% off",
             "garageText": "Minimum member discount on routine servicing, engine, suspension, brake, electrical, body and alignment work.",
             "partsList": {
-                "badge": "10% – 25% OFF",
+                "badge": "Up to 25% off",
                 "title": "Spare Parts, Tires & Lubricants",
                 "text": "Eligible product categories for verified RAVU members:",
                 "items": ["Motorcycle spare parts", "Private vehicle spare parts", "Truck & heavy-duty parts", "Bus & commercial transit parts", "Tires & tubes", "Batteries & electricals", "Engine lubricants & fluids", "Filters & genuine accessories"]
             },
             "garageList": {
-                "badge": "5% – 20% OFF",
+                "badge": "Up to 20% off",
                 "title": "Garage & Mechanical Services",
                 "text": "Priority workshop & repair services reducing vehicle downtime:",
                 "items": ["Routine preventive maintenance", "Engine servicing & tuning", "Suspension & shock repairs", "Brake servicing & replacement", "Electrical diagnostics & wiring", "Bodywork & structural repairs", "Tire mounting & balancing", "Wheel alignment & vehicle inspections"]
@@ -191,7 +191,7 @@
         "partnerTitle": "Partner Commitments",
         "partnerSubtitle": "What official RAVU partners deliver to members",
         "partnerItems": [
-            "Provide preferred member discounts (20%+ insurance / 10–25% spare parts / 5–20% garage)",
+            "Provide preferred member discounts (20%+ insurance / up to 25% spare parts / up to 20% garage)",
             "Supply genuine, high-quality spare parts and professional service standards",
             "Recognize verified RAVU Member IDs across all participating branches",
             "Maintain transparent pricing and consistent product/service availability",

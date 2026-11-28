@@ -14,8 +14,8 @@
         "imageAlt": "RAVU riders in branded vests having a lively street conversation"
     },
     "features": [
-        { "icon": "ShieldCheck", "title": "20%–30% Insurance Savings", "text": "Member rates on motorcycle, Bajaj, car, personal accident & family cover." },
-        { "icon": "Wrench", "title": "10%–25% Off Parts & Garages", "text": "Save on genuine spare parts, tires, batteries, lubricants and priority mechanical repairs." },
+        { "icon": "ShieldCheck", "title": "Up to 30% Insurance Savings", "text": "Member rates on motorcycle, Bajaj, car, personal accident & family cover." },
+        { "icon": "Wrench", "title": "Up to 25% Off Parts & Garages", "text": "Save on genuine spare parts, tires, batteries, lubricants and priority mechanical repairs." },
         { "icon": "Handshake", "title": "All Vehicle Categories", "text": "Serving boda boda riders, Bajaj operators, taxi drivers, trucks, buses and fleets." }
     ],
     "slideshow": {
@@ -42,12 +42,12 @@
                 "imageAlt": "RAVU riders sharing a moment in Dar es Salaam"
             },
             {
-                "tabLabel": "20%–30% Off Insurance",
-                "badge": "20% – 30% Member Discount Target",
+                "tabLabel": "Up to 30% Off Insurance",
+                "badge": "Up to 30% Member Discount Target",
                 "caption": "Rider, Passenger & Family Protection",
                 "eyebrow": "INSURANCE",
                 "title": "Protect yourself, your motorcycle or Bajaj, and your family.",
-                "description": "Member rates (target 20–30% off) on comprehensive and third-party cover, personal accident, passenger liability and family medical plans.",
+                "description": "Member rates of up to 30% off comprehensive and third-party cover, personal accident, passenger liability and family medical plans.",
                 "bullets": [
                     "Simplified policy enrollment and flexible payment plans",
                     "Reduced deductibles/excess & priority claims processing",
@@ -59,15 +59,15 @@
                 "imageAlt": "RAVU rider reviewing discounted insurance policy"
             },
             {
-                "tabLabel": "10%–25% Off Parts & Garages",
-                "badge": "10%–25% Off Parts • 5%–20% Off Labor",
+                "tabLabel": "Up to 25% Off Parts & Garages",
+                "badge": "Up to 25% Off Parts • Up to 20% Off Labor",
                 "caption": "Less Downtime, Higher Earnings",
                 "eyebrow": "PARTS & GARAGES",
                 "title": "Genuine spare parts, tires, batteries and trusted mechanics.",
                 "description": "Every shilling saved on maintenance is take-home pay. Show your Member ID at partner garages and parts shops to get the member price.",
                 "bullets": [
-                    "10%–25% OFF genuine spare parts, tires, batteries & lubricants",
-                    "5%–20% OFF routine servicing, engine, brake & suspension work",
+                    "Up to 25% off genuine spare parts, tires, batteries & lubricants",
+                    "Up to 20% off routine servicing, engine, brake & suspension work",
                     "Priority service access so you get back on the road faster"
                 ],
                 "ctaLabel": "View Partner Network",
@@ -104,8 +104,8 @@
         "listTitle": "What to expect inside the app",
         "items": [
             "Verified digital RAVU Member ID inside the app for instant partner recognition.",
-            "20%–30% preferred member discount target on motorcycle, Bajaj, car & personal accident insurance.",
-            "10%–25% OFF genuine spare parts, tires, batteries & lubricants + 5%–20% OFF garage servicing.",
+            "Up to 30% preferred member discount target on motorcycle, Bajaj, car & personal accident insurance.",
+            "Up to 25% off genuine spare parts, tires, batteries & lubricants + up to 20% off garage servicing.",
             "Priority claims processing, emergency roadside assistance & claim-free loyalty rewards."
         ]
     },

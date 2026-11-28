@@ -26,7 +26,7 @@
         "cards": [
             { "icon": "Globe2", "title": "Our Vision", "text": "A membership every rider, driver and vehicle owner in Tanzania can rely on for cover, parts and repairs." },
             { "icon": "Target", "title": "Our Mission", "text": "Cut the cost of running a vehicle through group discounts, simpler insurance and trusted garages." },
-            { "icon": "Lightbulb", "title": "How we do it", "text": "Verify members, then bring them to partners as one group. Partners win customers cheaply; members get a target 20%–30% off insurance and 10%–25% off parts." }
+            { "icon": "Lightbulb", "title": "How we do it", "text": "Verify members, then bring them to partners as one group. Partners win customers cheaply; members get up to 30% off insurance and up to 25% off parts." }
         ]
     },
     "vision": {
