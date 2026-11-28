@@ -15,7 +15,7 @@
     },
     "features": [
         { "icon": "CreditCard", "title": "Verified Member ID", "text": "One recognised identity connecting riders, drivers, vehicle owners and fleets." },
-        { "icon": "BadgeCheck", "title": "Partner discounts", "text": "Target 20–30% off insurance, 10–25% off spare parts and 5–20% off garage work." },
+        { "icon": "BadgeCheck", "title": "Partner discounts", "text": "Up to 30% off insurance, up to 25% off spare parts and up to 20% off garage work." },
         { "icon": "UsersRound", "title": "Any vehicle", "text": "Serving motorcycles, Bajaj, private cars, taxis, trucks, buses and commercial fleets." }
     ],
     "slideshow": {
@@ -43,7 +43,7 @@
             },
             {
                 "tabLabel": "Insurance Protection",
-                "badge": "20% – 30% Member Discount Target",
+                "badge": "Up to 30% Member Discount Target",
                 "caption": "Vehicle, Health & Family Cover",
                 "eyebrow": "INSURANCE",
                 "title": "Discounted insurance for your vehicle, health and loved ones.",
@@ -60,14 +60,14 @@
             },
             {
                 "tabLabel": "Parts & Garage Savings",
-                "badge": "10%–25% Off Parts • 5%–20% Off Garages",
+                "badge": "Up to 25% Off Parts • Up to 20% Off Garages",
                 "caption": "Reduced Operating Costs",
                 "eyebrow": "PARTS & GARAGES",
                 "title": "Save on every spare part, tire change, battery and service visit.",
                 "description": "Maintenance is one of the biggest costs of running a vehicle. Members get discounts and priority bays at partner garages.",
                 "bullets": [
-                    "10%–25% OFF genuine parts, tires, batteries, lubricants & filters",
-                    "5%–20% OFF routine servicing, engine, brake & electrical repairs",
+                    "Up to 25% off genuine parts, tires, batteries, lubricants & filters",
+                    "Up to 20% off routine servicing, engine, brake & electrical repairs",
                     "Reduced vehicle downtime and higher daily net earnings"
                 ],
                 "ctaLabel": "Explore Partner Garages",
@@ -115,8 +115,8 @@
         "text": "On your own you pay the walk-in price. As a RAVU member you get the group rate on insurance, spare parts, tyres, batteries, lubricants and repairs.",
         "items": [
             "Member pricing on motorcycle, Bajaj, private car, fleet, health and family insurance.",
-            "10%–25% OFF genuine spare parts, tires, batteries, lubricants and filters at partner suppliers.",
-            "5%–20% OFF routine maintenance, engine servicing, brakes and diagnostics at official garages.",
+            "Up to 25% off genuine spare parts, tires, batteries, lubricants and filters at partner suppliers.",
+            "Up to 20% off routine maintenance, engine servicing, brakes and diagnostics at official garages.",
             "Volume-based Fleet Discount Program for commercial transport, delivery and logistics operators."
         ],
         "cards": [
@@ -134,7 +134,7 @@
             { "title": "Apply", "text": "Select your mobility category — rider, driver, private vehicle owner or fleet operator." },
             { "title": "Verification", "text": "Receive your verified RAVU Member ID for instant recognition at partner branches." },
             { "title": "Protect & Insure", "text": "Access preferred member insurance rates (20%+ target discount) and flexible payment plans." },
-            { "title": "Save on Maintenance", "text": "Redeem 10%–25% spare parts discounts and 5%–20% garage servicing discounts." },
+            { "title": "Save on Maintenance", "text": "Redeem up to 25% spare parts discounts and up to 20% garage servicing discounts." },
             { "title": "Keep saving", "text": "Spend less on running your vehicle and lose fewer days to repairs." }
         ]
     },

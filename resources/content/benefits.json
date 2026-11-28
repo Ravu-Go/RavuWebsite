@@ -7,16 +7,16 @@
         "eyebrow": "MEMBER BENEFITS",
         "title": "What members",
         "highlight": "save.",
-        "text": "RAVU negotiates as one group for riders, drivers, car owners and fleets. Our targets: 20–30% off insurance, 10–25% off spare parts and 5–20% off garage work.",
+        "text": "RAVU negotiates as one group for riders, drivers, car owners and fleets. Our targets: up to 30% off insurance, up to 25% off spare parts and up to 20% off garage work.",
         "primaryCta": { "label": "Explore Membership", "href": "/membership" },
         "secondaryCta": { "label": "Partner With RAVU", "href": "/partners" },
         "image": "fundRepairShop.jpg",
         "imageAlt": "RAVU member accessing workshop maintenance benefits"
     },
     "features": [
-        { "icon": "ShieldCheck", "title": "20% – 30% Insurance Savings", "text": "Preferred member discounts across motorcycle, Bajaj, car, fleet, health and family insurance." },
-        { "icon": "Wrench", "title": "10% – 25% Off Spare Parts", "text": "Exclusive savings on genuine parts, tires, batteries, lubricants and filters." },
-        { "icon": "BadgeCheck", "title": "5% – 20% Off Garage Services", "text": "Priority servicing, repairs, diagnostics and inspections at official partner garages." }
+        { "icon": "ShieldCheck", "title": "Up to 30% Insurance Savings", "text": "Preferred member discounts across motorcycle, Bajaj, car, fleet, health and family insurance." },
+        { "icon": "Wrench", "title": "Up to 25% Off Spare Parts", "text": "Exclusive savings on genuine parts, tires, batteries, lubricants and filters." },
+        { "icon": "BadgeCheck", "title": "Up to 20% Off Garage Services", "text": "Priority servicing, repairs, diagnostics and inspections at official partner garages." }
     ],
     "slideshow": {
         "eyebrow": "BENEFITS IN DETAIL",
@@ -25,8 +25,8 @@
         "description": "Insurance, spare parts, servicing and fleet programs.",
         "slides": [
             {
-                "tabLabel": "20%–30% Off Insurance",
-                "badge": "20% – 30% Member Discount Target",
+                "tabLabel": "Up to 30% Off Insurance",
+                "badge": "Up to 30% Member Discount Target",
                 "caption": "8 Protection Lines",
                 "eyebrow": "INSURANCE & PROTECTION BENEFITS",
                 "title": "Cover for your vehicle, family and fleet.",
@@ -42,16 +42,16 @@
                 "imageAlt": "RAVU member reviewing discounted insurance policy in Dar es Salaam"
             },
             {
-                "tabLabel": "10%–25% Off Spare Parts",
-                "badge": "10% – 25% OFF Genuine Parts & Tires",
+                "tabLabel": "Up to 25% Off Spare Parts",
+                "badge": "Up to 25% Off Genuine Parts & Tires",
                 "caption": "Official Parts & Garage Network",
                 "eyebrow": "MAINTENANCE & GARAGE BENEFITS",
                 "title": "Genuine spare parts, tires, batteries and priority workshop bays.",
                 "description": "Pay less for parts and labour, and spend fewer days off the road.",
                 "bullets": [
-                    "10%–25% OFF motorcycle, car, truck & bus spare parts",
-                    "10%–25% OFF tires, batteries, engine lubricants & filters",
-                    "5%–20% OFF engine servicing, brakes, suspension & diagnostics"
+                    "Up to 25% off motorcycle, car, truck & bus spare parts",
+                    "Up to 25% off tires, batteries, engine lubricants & filters",
+                    "Up to 20% off engine servicing, brakes, suspension & diagnostics"
                 ],
                 "ctaLabel": "Explore Membership",
                 "ctaHref": "/membership",
@@ -102,7 +102,7 @@
         "items": [
             {
                 "icon": "ShieldCheck",
-                "badge": "20% – 30% Member Discount Target",
+                "badge": "Up to 30% Member Discount Target",
                 "title": "Insurance & Protection",
                 "text": "Access discounted comprehensive and third-party coverage for motorcycles (boda boda), Bajaj three-wheelers, private family vehicles and commercial fleets — plus personal accident, health/medical, family life protection and SME business insurance.",
                 "bullets": [
@@ -114,13 +114,13 @@
             },
             {
                 "icon": "Wrench",
-                "badge": "10% – 25% Off Parts • 5% – 20% Off Labor",
+                "badge": "Up to 25% Off Parts • Up to 20% Off Labor",
                 "title": "Spare Parts, Tires, Batteries & Garage Program",
                 "text": "Member discounts at partner spare parts suppliers, tyre centres and garages.",
                 "bullets": [
-                    "10%–25% OFF motorcycle, car, truck & bus spare parts",
-                    "10%–25% OFF tires, batteries, engine lubricants & filters",
-                    "5%–20% OFF routine servicing, engine, brake & suspension repairs",
+                    "Up to 25% off motorcycle, car, truck & bus spare parts",
+                    "Up to 25% off tires, batteries, engine lubricants & filters",
+                    "Up to 20% off routine servicing, engine, brake & suspension repairs",
                     "Priority service bays to minimize vehicle downtime"
                 ]
             },

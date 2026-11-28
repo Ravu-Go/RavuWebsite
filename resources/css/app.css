@@ -444,3 +444,11 @@
     }
 }
 
+
+/* Home "What members get": on desktop, scrolling settles on one card at a time.
+   Only pages that contain the section get snapping; proximity never traps the user. */
+@media (min-width: 1024px) {
+    html:has([data-snap-section]) {
+        scroll-snap-type: y proximity;
+    }
+}
