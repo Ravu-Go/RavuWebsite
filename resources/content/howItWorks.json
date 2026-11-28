@@ -1,13 +1,13 @@
 {
     "seo": {
         "title": "How RAVU Works — Step-by-Step Guide",
-        "description": "A clear route into a connected mobility ecosystem for members and organisations."
+        "description": "How riders join RAVU, get verified and use member discounts, and how partners take part."
     },
     "hero": {
         "eyebrow": "HOW IT WORKS",
-        "title": "A simple path into a",
-        "highlight": "connected ecosystem.",
-        "text": "RAVU brings members, riders, partners and community together through one clear journey — discover, join, connect and grow.",
+        "title": "How RAVU",
+        "highlight": "works.",
+        "text": "Riders and drivers join in the app and get verified. Partners agree member discounts. Members show their ID and pay less.",
         "primaryCta": { "label": "Explore Membership", "href": "/membership" },
         "secondaryCta": { "label": "Partner With RAVU", "href": "/partners" }
     },
@@ -18,25 +18,25 @@
     ],
     "steps": {
         "eyebrow": "STEP BY STEP",
-        "title": "Discover. Join.",
-        "highlight": "Connect. Grow.",
+        "title": "Six steps,",
+        "highlight": "start to finish.",
         "text": "Six clear steps, each building on the last.",
         "items": [
-            { "title": "Discover RAVU", "text": "Understand the membership ecosystem and how riders, drivers and partners connect." },
+            { "title": "Discover RAVU", "text": "Learn what membership covers and who the partners are." },
             { "title": "Register", "text": "Sign up in the mobile app or share your interest online to join the network." },
             { "title": "Become a member", "text": "Complete verification and activate your digital RAVU Member ID." },
-            { "title": "Access the ecosystem", "text": "Explore partner fuel stations, repair workshops and financial services." },
-            { "title": "Participate", "text": "Build connections through local mobility hubs and community initiatives." },
-            { "title": "Grow with RAVU", "text": "Move forward with lower operating costs and a stronger support network." }
+            { "title": "Use partner services", "text": "Find partner garages, parts shops, fuel stations and insurers in the app." },
+            { "title": "Join the community", "text": "Take part in safety training and local rider meet-ups." },
+            { "title": "Keep saving", "text": "Lower running costs every month you stay a member." }
         ]
     },
     "sides": {
-        "eyebrow": "TWO SIDES OF ONE NETWORK",
+        "eyebrow": "MEMBERS AND PARTNERS",
         "title": "Members at the centre.",
         "highlight": "Partners all around.",
         "cards": [
-            { "icon": "UsersRound", "title": "Members at the Centre", "text": "RAVU starts with people and connects the services around them. Every part of the ecosystem exists to serve the rider, driver and commuter at the centre of it." },
-            { "icon": "Building2", "title": "Partners in the Ecosystem", "text": "Partners contribute relevant support, maintenance discounts, fuel offers and financial opportunities — making membership genuinely valuable every single day." }
+            { "icon": "UsersRound", "title": "Members at the Centre", "text": "Members are riders, drivers and vehicle owners. Everything RAVU builds is judged by whether it saves them money or time." },
+            { "icon": "Building2", "title": "Partners around them", "text": "Partners offer discounts on maintenance, fuel, insurance and finance in return for a steady flow of verified customers." }
         ]
     }
 }

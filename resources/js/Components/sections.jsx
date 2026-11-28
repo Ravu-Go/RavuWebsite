@@ -8,6 +8,28 @@ import { iconFor } from "../content/icons";
    RAVU SHARED PAGE SECTIONS (Aligned with Home.jsx design language)
    ========================================================================== */
 
+/** A store link is live once it is a real URL, not a "#app-store" placeholder. */
+function isLive(url) {
+    return Boolean(url) && !url.startsWith("#");
+}
+
+/** Store badge: a link when the app is published, a plain "coming soon" badge until then. */
+function StoreBadge({ url, children }) {
+    const base =
+        "inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm";
+    if (!isLive(url)) {
+        return <span className={`${base} cursor-default opacity-80`}>{children}</span>;
+    }
+    return (
+        <a
+            href={url}
+            className={`${base} transition-transform hover:scale-[1.02] active:scale-[0.98]`}
+        >
+            {children}
+        </a>
+    );
+}
+
 /**
  * Reusable official store buttons for App Store & Google Play (matching Home.jsx)
  */
@@ -16,10 +38,7 @@ export function StoreButtons({ className = "" }) {
     return (
         <div className={`flex flex-wrap items-center gap-3 ${className}`}>
             {/* Apple App Store */}
-            <a
-                href={appLinks.appStoreUrl}
-                className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
-            >
+            <StoreBadge url={appLinks.appStoreUrl}>
                 <svg
                     viewBox="0 0 384 512"
                     className="h-5 w-5 shrink-0 fill-current"
@@ -29,19 +48,16 @@ export function StoreButtons({ className = "" }) {
                 </svg>
                 <div className="text-left leading-none">
                     <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
-                        Download on the
+                        {isLive(appLinks.appStoreUrl) ? "Download on the" : "Coming soon to the"}
                     </p>
                     <p className="mt-0.5 text-xs font-semibold tracking-tight text-white">
                         App Store
                     </p>
                 </div>
-            </a>
+            </StoreBadge>
 
             {/* Google Play Store */}
-            <a
-                href={appLinks.googlePlayUrl}
-                className="inline-flex items-center gap-2.5 rounded-lg bg-black px-3.5 py-2 text-white shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98]"
-            >
+            <StoreBadge url={appLinks.googlePlayUrl}>
                 <svg
                     viewBox="0 0 512 512"
                     className="h-5 w-5 shrink-0"
@@ -66,13 +82,13 @@ export function StoreButtons({ className = "" }) {
                 </svg>
                 <div className="text-left leading-none">
                     <p className="text-[8px] font-medium uppercase tracking-wider text-slate-300">
-                        GET IT ON
+                        {isLive(appLinks.googlePlayUrl) ? "GET IT ON" : "Coming soon on"}
                     </p>
                     <p className="mt-0.5 text-xs font-semibold tracking-tight text-white">
                         Google Play
                     </p>
                 </div>
-            </a>
+            </StoreBadge>
         </div>
     );
 }

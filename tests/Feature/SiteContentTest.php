@@ -37,7 +37,7 @@ class SiteContentTest extends TestCase
             ->assertOk()
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Website/Home')
-                ->where('content.hero.eyebrow', 'MOBILITY, CONNECTED')
+                ->where('content.hero.eyebrow', 'PILOTING IN DAR ES SALAAM')
                 ->where('site.global.brand.siteName', 'Ravu')
                 ->where('site.preview', false));
 
@@ -57,7 +57,7 @@ class SiteContentTest extends TestCase
 
         // Visitors still see the live version.
         auth()->logout();
-        $this->get('/')->assertInertia(fn (Assert $page) => $page->where('content.hero.eyebrow', 'MOBILITY, CONNECTED'));
+        $this->get('/')->assertInertia(fn (Assert $page) => $page->where('content.hero.eyebrow', 'PILOTING IN DAR ES SALAAM'));
 
         // The admin can preview the draft across the site.
         $this->actingAs($admin)->get('/super-admin/preview/home')->assertRedirect('/');
@@ -65,7 +65,7 @@ class SiteContentTest extends TestCase
             ->where('content.hero.eyebrow', 'DRAFT EYEBROW')
             ->where('site.preview', true));
         $this->actingAs($admin)->get('/super-admin/preview-exit')->assertRedirect('/super-admin');
-        $this->actingAs($admin)->get('/')->assertInertia(fn (Assert $page) => $page->where('content.hero.eyebrow', 'MOBILITY, CONNECTED'));
+        $this->actingAs($admin)->get('/')->assertInertia(fn (Assert $page) => $page->where('content.hero.eyebrow', 'PILOTING IN DAR ES SALAAM'));
 
         // Publishing makes it live and records a revision.
         $this->actingAs($admin)->post('/super-admin/content/home/publish')->assertSessionHasNoErrors();
@@ -176,7 +176,7 @@ class SiteContentTest extends TestCase
         $this->actingAs($reviewer)
             ->withSession([SiteContentService::PREVIEW_SESSION_KEY => true])
             ->get('/')
-            ->assertInertia(fn (Assert $page) => $page->where('content.hero.eyebrow', 'MOBILITY, CONNECTED'));
+            ->assertInertia(fn (Assert $page) => $page->where('content.hero.eyebrow', 'PILOTING IN DAR ES SALAAM'));
     }
 
     public function test_media_upload_accepts_images_only(): void

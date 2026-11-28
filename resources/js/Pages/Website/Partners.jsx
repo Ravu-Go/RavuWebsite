@@ -80,7 +80,7 @@ export default function Partners() {
                     {/* Foreground Content Container */}
                     <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-16 lg:px-10 lg:py-20">
                         <div className="max-w-xl lg:max-w-[560px]">
-                            <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
+                            <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                                 {hero.eyebrow}
                             </span>
 
@@ -553,7 +553,7 @@ export default function Partners() {
 
                     <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-14 sm:px-8 sm:py-18 lg:px-10 lg:py-20">
                         <div className="max-w-xl lg:max-w-[540px]">
-                            <span className="inline-flex items-center rounded-full bg-[#1246A8] px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-2xs">
+                            <span className="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                                 {operations.eyebrow}
                             </span>
 

@@ -45,10 +45,9 @@ export default function CommunitySection() {
             <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
                 {/* Headline & intro copy */}
                 <div className="max-w-xl">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-sky-400/25 bg-sky-400/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-sky-300 backdrop-blur-xs">
-                        <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
-                        <span>{eyebrow}</span>
-                    </span>
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300">
+                        {eyebrow}
+                    </p>
 
                     <h2 className="mt-5 text-3xl font-black leading-[1.08] tracking-tight text-white sm:text-4xl lg:text-5xl">
                         <Lines text={community.title} />

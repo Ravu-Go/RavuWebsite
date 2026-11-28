@@ -5,7 +5,6 @@ import {
     Check,
     ChevronLeft,
     ChevronRight,
-    Layers,
     Pause,
     Play,
     Sparkles,
@@ -152,10 +151,9 @@ export default function EcosystemSlideshow({
                    ========================================================= */}
                 <div className="mx-auto max-w-3xl text-center">
                     {eyebrow && (
-                        <span className="inline-flex items-center gap-2 rounded-full border border-blue-200/80 bg-blue-50/80 px-4 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-[#1864E8] shadow-2xs">
-                            <Layers size={13} />
-                            <span>{eyebrow}</span>
-                        </span>
+                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                            {eyebrow}
+                        </p>
                     )}
 
                     <h2 className="mt-2.5 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl lg:text-4xl lg:leading-[1.12]">
@@ -434,14 +432,6 @@ export default function EcosystemSlideshow({
                                     />
                                 </motion.div>
                             </AnimatePresence>
-
-                            {/* Floating Visual Badge (Top Right) */}
-                            <div className="absolute top-3.5 right-3.5 z-10">
-                                <span className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/40 px-3 py-1 text-[10px] font-bold text-white shadow-lg backdrop-blur-md">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                                    <span>Verified Ecosystem</span>
-                                </span>
-                            </div>
 
                             {/* Floating Caption Overlay (Bottom Left) */}
                             <div className="absolute bottom-3 inset-x-3 z-10 sm:bottom-4 sm:inset-x-4">

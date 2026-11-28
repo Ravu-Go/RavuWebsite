@@ -1,33 +1,33 @@
 {
     "seo": {
-        "title": "RAVU — Move further together | Mobility Ecosystem Tanzania",
-        "description": "RAVU is a membership-based mobility ecosystem connecting people, businesses, services and technology to make mobility work better."
+        "title": "RAVU — Cheaper insurance, parts and repairs for Tanzania's riders and drivers",
+        "description": "RAVU is a membership for boda boda riders, Bajaj operators and vehicle owners in Tanzania: discounted insurance, spare parts and garage servicing, and rides in the same app. Piloting in Dar es Salaam."
     },
     "hero": {
-        "eyebrow": "MOBILITY, CONNECTED",
-        "title": "Move further",
-        "highlight": "together.",
-        "text": "A smarter way to get around. Ride, share and access more value all in one app, across Tanzania.",
-        "socialProof": "People moving together across Tanzania"
+        "eyebrow": "PILOTING IN DAR ES SALAAM",
+        "title": "Pay less to keep",
+        "highlight": "your vehicle on the road.",
+        "text": "RAVU members get discounted insurance, spare parts and garage servicing from partner businesses, and book rides in the same app.",
+        "socialProof": "Pilot open to riders, drivers and vehicle owners in Dar es Salaam"
     },
     "features": [
-        { "icon": "Zap", "title": "Get moving", "text": "Reliable rides, whenever you need them." },
-        { "icon": "Users", "title": "More value", "text": "Exclusive member benefits and savings." },
-        { "icon": "ShieldCheck", "title": "Feel safe", "text": "Trusted drivers and a safer journey." }
+        { "icon": "Zap", "title": "Rides", "text": "Book and track trips in the RAVU app." },
+        { "icon": "Users", "title": "Member discounts", "text": "Target 20–30% off insurance and 10–25% off parts." },
+        { "icon": "ShieldCheck", "title": "Verified members", "text": "Every member is checked before they get a RAVU ID." }
     ],
     "slideshow": {
-        "eyebrow": "THE RAVU ECOSYSTEM IN MOTION",
-        "title": "Mobility, protection and savings",
-        "highlight": "connected in one network.",
-        "description": "Swipe or click through how RAVU connects riders, Bajaj operators, private car owners, commercial fleets, insurers and garages across Tanzania.",
+        "eyebrow": "WHAT MEMBERS GET",
+        "title": "Insurance, parts and garages",
+        "highlight": "at member prices.",
+        "description": "Insurers, parts shops and garages give RAVU members lower prices. Here's what's covered.",
         "slides": [
             {
-                "tabLabel": "Multi-Vehicle Ecosystem",
+                "tabLabel": "Who Can Join",
                 "badge": "6 Vehicle & Member Categories",
                 "caption": "Dar es Salaam & Nationwide",
-                "eyebrow": "AGGREGATING TANZANIA'S MOBILITY MARKET",
+                "eyebrow": "WHO CAN JOIN",
                 "title": "From boda boda & Bajaj to private cars, trucks, buses and fleets.",
-                "description": "RAVU connects motorcycle riders, Bajaj three-wheeler operators, private vehicle owners, commercial drivers, logistics trucks and passenger bus fleets into one structured ecosystem.",
+                "description": "Membership is open to motorcycle and Bajaj operators, private car owners, commercial drivers, and truck and bus fleets.",
                 "bullets": [
                     "Motorcycles (boda boda & delivery) and Bajaj three-wheelers",
                     "Private family sedans, SUVs, pickups & household vehicles",
@@ -42,9 +42,9 @@
                 "tabLabel": "Insurance (20%–30% OFF)",
                 "badge": "20% – 30% Member Discount Target",
                 "caption": "8 Protection Product Lines",
-                "eyebrow": "EXCLUSIVE INSURANCE BENEFITS PROGRAM",
-                "title": "Affordable insurance protection for your vehicle, family and business.",
-                "description": "Through strategic partnerships with leading insurers, verified RAVU members unlock exclusive discounted premiums and simplified enrollment across 8 protection lines.",
+                "eyebrow": "INSURANCE",
+                "title": "Cheaper cover for your vehicle, family and business.",
+                "description": "We're agreeing group rates with insurers. The target for verified members is 20–30% off premiums across 8 types of cover.",
                 "bullets": [
                     "Motorcycle, Bajaj, Private Motor Vehicle & Commercial Fleet cover",
                     "Personal Accident, Health & Medical, Family Life & SME protection",
@@ -59,9 +59,9 @@
                 "tabLabel": "Spare Parts & Garages",
                 "badge": "10%–25% Off Parts • 5%–20% Off Labor",
                 "caption": "Official Service Network",
-                "eyebrow": "SPARE PARTS, MAINTENANCE & GARAGE PROGRAM",
-                "title": "Lower your biggest operating expense at trusted garages & parts shops.",
-                "description": "Keep your vehicle earning on the road with guaranteed discounts on genuine spare parts, tires, batteries, lubricants and priority mechanical servicing.",
+                "eyebrow": "PARTS & GARAGES",
+                "title": "Spend less on parts and repairs.",
+                "description": "Partner shops and garages give members discounts on genuine parts, tyres, batteries, lubricants and repairs.",
                 "bullets": [
                     "10%–25% OFF motorcycle, car, truck & bus spare parts, tires & batteries",
                     "5%–20% OFF routine maintenance, engine, brake & suspension repairs",
@@ -76,9 +76,9 @@
                 "tabLabel": "Verified Member ID",
                 "badge": "Instant Partner Verification",
                 "caption": "Digital & Physical ID",
-                "eyebrow": "ONE RECOGNISED IDENTITY",
-                "title": "Present your RAVU Member ID to unlock instant savings.",
-                "description": "Every verified member receives an official RAVU Member ID recognized across participating insurance desks, spare parts retailers, tire centers, fuel stations and garages.",
+                "eyebrow": "MEMBER ID",
+                "title": "Show your Member ID, pay the member price.",
+                "description": "Every verified member gets a RAVU Member ID. Partner staff check it in the Partner Portal and apply the discount.",
                 "bullets": [
                     "Instant verification through the RAVU Partner Portal",
                     "Transparent member pricing across all participating branches",
@@ -93,15 +93,15 @@
                 "tabLabel": "Dar es Salaam Pilot",
                 "badge": "200 – 500 Initial Cohort • 4 – 6 Months",
                 "caption": "Dar es Salaam Launch",
-                "eyebrow": "STRUCTURED PHASED ROLLOUT",
+                "eyebrow": "THE PILOT",
                 "title": "Launching in Dar es Salaam and scaling across Tanzania.",
                 "description": "Our 4–6 month Dar es Salaam pilot program connects 200–500 initial riders, drivers and vehicle owners directly with foundational insurance, spare parts and workshop partners.",
                 "bullets": [
                     "Priority onboarding for Dar es Salaam riders, drivers & fleets",
                     "Direct referrals and marketing activations for foundational partners",
-                    "Building Tanzania's most trusted mobility support network"
+                    "Nationwide rollout once the pilot proves the discounts work"
                 ],
-                "ctaLabel": "Join Priority Cohort",
+                "ctaLabel": "Join the pilot",
                 "ctaHref": "/register",
                 "image": "RAVU Mobility Hub in Tanzania.jpg",
                 "imageAlt": "RAVU Mobility Hub in Dar es Salaam, Tanzania"
@@ -110,9 +110,9 @@
     },
     "appShowcase": {
         "eyebrow": "THE RAVU APP",
-        "title": "Your journey\n",
+        "title": "Rides and membership\n",
         "highlight": "in one app.",
-        "text": "Book rides, track your trip, access member benefits, find nearby services and more — all in one place.",
+        "text": "Book rides, track trips, show your Member ID and find partner garages near you.",
         "image": "welcom.png",
         "imageAlt": "Ravu mobile app interface showing map and destination search"
     }

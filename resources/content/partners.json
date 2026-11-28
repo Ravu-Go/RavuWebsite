@@ -1,35 +1,35 @@
 {
     "seo": {
-        "title": "Partner With RAVU — Commercial & Ecosystem Partnerships",
-        "description": "Connect your organisation with an active mobility community across hospitality, insurance, banking, workshops and technology."
+        "title": "Partner with RAVU — Reach verified riders, drivers and fleets",
+        "description": "Insurers, parts suppliers, garages, fuel stations and lenders: offer a member discount and get a steady flow of verified customers."
     },
     "hero": {
-        "eyebrow": "STRATEGIC ECOSYSTEM PARTNERSHIPS",
-        "title": "Your customer-acquisition\npartner across the\n",
-        "highlight": "mobility economy.",
-        "text": "Rather than serving operators individually, RAVU Ltd aggregates Tanzania's fragmented mobility market — connecting insurers, spare parts suppliers, garages, financial institutions and merchants with a verified network of riders, private car owners, families, trucks, buses and commercial fleets.",
-        "primaryCta": { "label": "Become an Official Partner", "href": "/register" },
+        "eyebrow": "FOR PARTNERS",
+        "title": "Reach riders, drivers\nand fleets as\n",
+        "highlight": "one customer group.",
+        "text": "Selling to riders one at a time is slow and expensive. RAVU brings you a verified group of boda boda riders, car owners, families, truck and bus operators and commercial fleets. You offer a member discount; we send you the customers.",
+        "primaryCta": { "label": "Become a partner", "href": "/register" },
         "secondaryCta": { "label": "Partner Portal Sign In", "href": "/login" },
         "image": "memberPlusPartners.jpg",
         "imageAlt": "RAVU riders, fuel partners, service partners and businesses connecting"
     },
     "features": [
-        { "icon": "Users", "title": "Structured customer network", "text": "RAVU aggregates a fragmented mobility market into one verified, pre-engaged network." },
-        { "icon": "Percent", "title": "Lower acquisition costs", "text": "Reach riders, private car owners, families, SMEs and fleets through a single platform." },
-        { "icon": "TrendingUp", "title": "High retention & volume", "text": "Continuous member engagement drives repeat workshop visits and timely policy renewals." }
+        { "icon": "Users", "title": "Verified customers", "text": "Every member is ID-checked before they can use your discount." },
+        { "icon": "Percent", "title": "Lower acquisition costs", "text": "One agreement reaches riders, car owners, families, SMEs and fleets." },
+        { "icon": "TrendingUp", "title": "Repeat business", "text": "Members come back for servicing and renew policies through RAVU." }
     ],
     "slideshow": {
-        "eyebrow": "STRATEGIC PARTNERSHIP GALLERY",
-        "title": "Visualizing our partnership programs",
-        "highlight": "across Dar es Salaam.",
-        "description": "Explore how insurers, spare parts distributors, mechanical garages and fleet service providers grow with the RAVU ecosystem.",
+        "eyebrow": "PARTNER PROGRAMS",
+        "title": "How partners",
+        "highlight": "work with RAVU.",
+        "description": "Programs for insurers, parts distributors, garages and fleet service providers.",
         "slides": [
             {
                 "tabLabel": "1. Insurance Partner Track",
-                "badge": "20% – 30% Preferred Member Discount",
+                "badge": "20% – 30% Member Discount Target",
                 "caption": "8 Insurance Product Lines (A–H)",
-                "eyebrow": "STRATEGIC INSURANCE PARTNERSHIP PROPOSAL",
-                "title": "Become the preferred insurance partner for the RAVU ecosystem.",
+                "eyebrow": "INSURERS",
+                "title": "Become RAVU's preferred insurance partner.",
                 "description": "Gain direct access to a structured, verified network of motorcycle riders, Bajaj operators, private car owners, families, SMEs and commercial fleets with lower customer acquisition costs and higher renewal retention.",
                 "bullets": [
                     "Cover Motorcycles, Bajaj, Private Cars, Commercial Fleets & SMEs",
@@ -62,7 +62,7 @@
                 "tabLabel": "3. Multi-Vehicle & Fleets",
                 "badge": "6 High-Demand Mobility Segments",
                 "caption": "Beyond Single Riders",
-                "eyebrow": "ECOSYSTEM CUSTOMER ACQUISITION",
+                "eyebrow": "NEW CUSTOMERS",
                 "title": "One partnership unlocks riders, households, trucks, buses and fleets.",
                 "description": "RAVU positions your organization at the center of Tanzania's transportation economy — serving two-wheelers, three-wheelers, private family vehicles, cargo trucks, buses and corporate fleets.",
                 "bullets": [
@@ -79,7 +79,7 @@
                 "tabLabel": "4. Dar es Salaam Pilot",
                 "badge": "200 – 500 Active Members • 4 – 6 Months",
                 "caption": "Phased Launch Program",
-                "eyebrow": "LOW-RISK STRATEGIC PILOT",
+                "eyebrow": "START WITH A PILOT",
                 "title": "Launch in Dar es Salaam, measure results and scale nationwide.",
                 "description": "Co-design a 4–6 month pilot with 200–500 active verified RAVU members in Dar es Salaam to evaluate uptake, discount conversion and operational workflows before national rollout.",
                 "bullets": [
@@ -95,10 +95,10 @@
         ]
     },
     "segments": {
-        "eyebrow": "ECOSYSTEM CUSTOMER BASE",
+        "eyebrow": "WHO YOU'LL REACH",
         "title": "One partnership.",
-        "highlight": "Six high-demand mobility segments.",
-        "text": "Partnering with RAVU unlocks far more than single motorcycle riders. Through one organized distribution channel, your organization gains direct access to verified operators, private households, SMEs, logistics carriers and multi-vehicle fleets across Tanzania.",
+        "highlight": "Six customer segments.",
+        "text": "RAVU isn't only boda boda riders. One partnership reaches verified operators, households, SMEs, logistics carriers and multi-vehicle fleets.",
         "items": [
             { "code": "A", "icon": "Users", "title": "Motorcycle & Boda Boda Riders", "subtitle": "Two-Wheeler Mobility Professionals", "items": ["Boda boda passenger riders", "Last-mile delivery riders", "Commercial motorcycle operators", "Private motorcycle owners"] },
             { "code": "B", "icon": "Car", "title": "Bajaj & Commercial Operators", "subtitle": "Three-Wheeler & Urban Passenger Operators", "items": ["Commercial & private Bajaj (three-wheeler) operators", "Taxi & ride-hailing drivers", "Corporate service vehicle operators", "Urban commuter transport operators"] },
@@ -109,15 +109,15 @@
         ]
     },
     "programs": {
-        "eyebrow": "STRATEGIC PARTNERSHIP PROPOSALS",
+        "eyebrow": "PARTNERSHIP PROGRAMS",
         "title": "Structured programs with",
         "highlight": "clear member discounts.",
-        "text": "Explore our two flagship partnership frameworks designed to deliver measurable savings to RAVU members and high-volume recurring revenue to preferred partners.",
+        "text": "Two programs, each with a set member discount and what partners get in return.",
         "insuranceTab": "1. Insurance Benefits Program",
         "maintenanceTab": "2. Spare Parts & Garage Program",
         "insurance": {
             "badge": "Preferred Insurance Partner Track",
-            "title": "Exclusive Insurance Benefits for the RAVU Ecosystem",
+            "title": "Insurance Benefits Program",
             "text": "Despite the essential role riders and drivers play in Tanzania's economy, insurance penetration remains low due to high perceived costs, complicated enrollment and a lack of tailored products. RAVU bridges this gap by giving underwriters a single organized distribution platform.",
             "discountLabel": "Preferred Member Discount Target",
             "discountValue": "20% – 30% OFF",
@@ -135,12 +135,12 @@
                 { "code": "E", "title": "Personal Accident Insurance", "target": "Riders, drivers & mobility professionals", "coverage": ["Medical expense benefits", "Temporary & permanent disability benefits", "Accidental death protection"] },
                 { "code": "F", "title": "Health & Medical Insurance", "target": "RAVU members and their dependents", "coverage": ["Outpatient, inpatient & emergency treatment", "Family medical protection plans", "Maternity benefits"] },
                 { "code": "G", "title": "Life Insurance & Family Protection", "target": "Members, spouses & children", "coverage": ["Individual life & family protection plans", "Education protection policies", "Funeral/last-expense & savings-linked insurance"] },
-                { "code": "H", "title": "Business Protection Products", "target": "Entrepreneurs & SMEs within the RAVU ecosystem", "coverage": ["Business interruption & property insurance", "Asset protection & public liability insurance", "Employee protection plans"] }
+                { "code": "H", "title": "Business Protection Products", "target": "Entrepreneurs & SMEs among RAVU members", "coverage": ["Business interruption & property insurance", "Asset protection & public liability insurance", "Employee protection plans"] }
             ]
         },
         "maintenance": {
             "badge": "Official Service & Spare Parts Track",
-            "title": "Exclusive Spare Parts, Maintenance & Garage Services Program",
+            "title": "Spare Parts, Maintenance & Garage Program",
             "text": "Prepared for Spare Parts Suppliers, Vehicle Service Centers, Mechanical Garages, Tire Centers, Auto Service Networks and Automotive Retailers. RAVU directs verified members and high-volume fleets to your branches while lowering their daily operating costs.",
             "partsLabel": "Spare Parts & Tires",
             "partsValue": "10% – 25% OFF",
@@ -173,7 +173,7 @@
         "eyebrow": "DESIGNED FOR REAL OPERATIONS",
         "title": "Practical tools for\nevery partner",
         "highlight": "location.",
-        "text": "Whether you operate an insurance underwriting desk, a spare parts warehouse or a nationwide network of garages and fuel stations, RAVU makes it effortless to verify members and apply discounts at the point of service.",
+        "text": "Whether you run an insurance desk, a spare parts warehouse or a network of garages and fuel stations, your staff check a Member ID in the Partner Portal and apply the discount at the counter.",
         "points": [
             "Instant digital Member ID verification in the RAVU Partner Portal.",
             "Clear discount tiers and eligibility rules for your front-line staff.",
@@ -186,8 +186,8 @@
     },
     "responsibility": {
         "eyebrow": "SHARED RESPONSIBILITY",
-        "title": "A true strategic partnership,",
-        "highlight": "not just a referral channel.",
+        "title": "What each side",
+        "highlight": "commits to.",
         "partnerTitle": "Partner Commitments",
         "partnerSubtitle": "What official RAVU partners deliver to members",
         "partnerItems": [
@@ -209,7 +209,7 @@
     },
     "pilot": {
         "badge": "Structured Phased Rollout",
-        "title": "Launch via the Dar es Salaam Strategic Pilot Program",
+        "title": "Start with the Dar es Salaam pilot",
         "text": "We recommend launching new insurance and service partnerships through a focused pilot phase in Dar es Salaam. At the conclusion of the pilot, both parties evaluate performance metrics to scale nationwide.",
         "stats": [
             { "label": "Pilot Location", "value": "Dar es Salaam" },
@@ -226,8 +226,8 @@
         ]
     },
     "roadmap": {
-        "eyebrow": "LONG-TERM STRATEGIC VISION",
-        "title": "Evolving into Tanzania's national mobility support network.",
+        "eyebrow": "AFTER THE PILOT",
+        "title": "Growing from Dar es Salaam to the rest of Tanzania.",
         "items": [
             { "title": "Embedded Digital Insurance", "text": "In-app policy enrollment, digital policy management and tier-based member protection." },
             { "title": "Official RAVU Service Centers", "text": "Accredited national service networks and Official RAVU Spare Parts Suppliers." },
@@ -237,12 +237,12 @@
     },
     "contact": {
         "badge": "Executive Partnership Desk",
-        "title": "Discuss a Strategic Partnership",
+        "title": "Talk to us about partnering",
         "quote": "Driving Mobility Forward Through Partnerships, Savings, and Opportunity.",
         "person": "Saleh Nyindo — Founder & CEO, RAVU Ltd",
         "location": "Dar es Salaam, Tanzania",
         "email": "nyindo@posteo.de",
-        "emailSubject": "RAVU Strategic Partnership Inquiry",
+        "emailSubject": "RAVU partnership enquiry",
         "emailLabel": "Email Founder & CEO",
         "primaryCta": { "label": "Register as a Partner", "href": "/register" }
     }

@@ -141,7 +141,7 @@ export function Lines({ text }) {
     ));
 }
 
-/** Headline with an optional highlighted tail, e.g. "Move further <span>together.</span>". */
+/** Headline with an optional highlighted tail, e.g. "Pay less to keep <span>your vehicle on the road.</span>". */
 export function Headline({ title, highlight, highlightClassName }) {
     return (
         <>
