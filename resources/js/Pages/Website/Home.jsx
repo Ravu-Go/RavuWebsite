@@ -113,35 +113,35 @@ export default function Home() {
                 slides={toSlides(slideshow.slides, "home-slide")}
             />
 
-            {/* --------------------------------- THE RAVU APP (MAP SCREEN) */}
+            {/* --------------------------------- THE RAVU APP (PHONE SCREENS) */}
             <section className="overflow-hidden bg-white py-16 sm:py-24 lg:py-28">
-                <div className="mx-auto max-w-6xl px-5 sm:px-8">
-                    <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
-                        {/* Map Phone Image on the Left */}
-                        <div className="flex justify-center lg:col-span-6">
-                            <div className="relative w-full max-w-xs sm:max-w-sm md:max-w-md">
-                                <img
-                                    src={resolveMedia(appShowcase.image)}
-                                    alt={appShowcase.imageAlt}
-                                    loading="lazy"
-                                    decoding="async"
-                                    className="h-auto w-full select-none drop-shadow-xl"
-                                />
-                            </div>
+                <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+                    <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+                        {/* Phone screens: the larger half, bleeding slightly past the column */}
+                        <div className="lg:col-span-7">
+                            <img
+                                src={resolveMedia(appShowcase.image)}
+                                alt={appShowcase.imageAlt}
+                                loading="lazy"
+                                decoding="async"
+                                className="mx-auto h-auto w-full max-w-2xl select-none drop-shadow-[0_30px_40px_rgba(15,23,42,0.18)] lg:max-w-none lg:w-[112%] lg:-ml-[6%]"
+                            />
                         </div>
 
-                        {/* Text & Store Badges on the Right */}
-                        <div className="lg:col-span-6">
-                            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                                {appShowcase.eyebrow}
-                            </p>
-                            <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl lg:text-5xl lg:leading-[1.06]">
+                        {/* Text & store badges */}
+                        <div className="lg:col-span-5">
+                            {appShowcase.eyebrow && (
+                                <p className="text-sm font-medium text-[#1864E8]">
+                                    {appShowcase.eyebrow}
+                                </p>
+                            )}
+                            <h2 className="mt-3 text-3xl font-bold tracking-[-0.03em] text-slate-950 text-balance sm:text-4xl lg:text-5xl lg:leading-[1.04]">
                                 <Headline
                                     title={appShowcase.title}
                                     highlight={appShowcase.highlight}
                                 />
                             </h2>
-                            <p className="mt-5 max-w-md text-sm leading-relaxed text-slate-600 sm:text-base">
+                            <p className="mt-5 max-w-md text-base leading-relaxed text-slate-600 text-pretty sm:text-lg">
                                 {appShowcase.text}
                             </p>
                             <div className="mt-8">

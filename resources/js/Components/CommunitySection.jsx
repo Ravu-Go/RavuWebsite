@@ -45,46 +45,33 @@ export default function CommunitySection() {
             <div className="relative mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
                 {/* Headline & intro copy */}
                 <div className="max-w-xl">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-300">
-                        {eyebrow}
-                    </p>
-
-                    <h2 className="mt-5 text-3xl font-black leading-[1.08] tracking-tight text-white sm:text-4xl lg:text-5xl">
+                    {eyebrow && (
+                        <p className="text-sm font-medium text-sky-300">{eyebrow}</p>
+                    )}
+                    <h2 className="mt-3 text-3xl font-bold leading-[1.06] tracking-[-0.03em] text-white text-balance sm:text-4xl lg:text-5xl">
                         <Lines text={community.title} />
                     </h2>
-
-                    <p className="mt-4 max-w-lg text-sm leading-relaxed text-slate-300 sm:text-base">
+                    <p className="mt-5 max-w-lg text-base leading-relaxed text-slate-300 text-pretty sm:text-lg">
                         {text}
                     </p>
                 </div>
 
-                {/* High-visibility Glassmorphic Stats Strip */}
-                {/* Opaque glass look without backdrop-filter: backdrop-blur()
-                    over the skyline image recomposites every scroll frame and
-                    was the main source of scroll jank on this section. */}
-                <div className="mt-14 sm:mt-16 rounded-2xl border border-white/10 bg-[#0B1220]/90 p-6 shadow-2xl shadow-black/40 sm:p-8">
-                    <div className="grid grid-cols-2 gap-8 divide-y divide-white/10 sm:grid-cols-4 sm:gap-6 sm:divide-y-0 sm:divide-x sm:divide-white/10">
-                        {stats.map((stat, index) => (
-                            <div
-                                key={keyFor(stat, index)}
-                                className={
-                                    index === 0
-                                        ? "sm:pr-6"
-                                        : index === stats.length - 1
-                                          ? "pt-6 sm:pt-0 sm:pl-6"
-                                          : "pt-6 sm:pt-0 sm:px-6"
-                                }
-                            >
-                                <p className="text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
-                                    {stat.value}
-                                </p>
-                                <p className="mt-1.5 text-xs font-semibold uppercase tracking-wider text-sky-300">
-                                    {stat.label}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                {/* Pilot facts. A solid panel (no backdrop blur: blurring over the
+                    photo recomposites on every scroll frame) keeps the figures legible
+                    over the bright half of the image. */}
+                <dl className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl bg-white/10 ring-1 ring-white/10 sm:mt-14 lg:grid-cols-4">
+                    {stats.map((stat, index) => (
+                        <div
+                            key={keyFor(stat, index)}
+                            className="flex flex-col-reverse justify-start gap-1.5 bg-[#08132A]/95 px-5 py-5 sm:px-8 sm:py-7"
+                        >
+                            <dt className="text-sm text-slate-300">{stat.label}</dt>
+                            <dd className="whitespace-nowrap text-[1.7rem] font-semibold tracking-[-0.02em] text-white tabular-nums sm:text-4xl">
+                                {stat.value}
+                            </dd>
+                        </div>
+                    ))}
+                </dl>
             </div>
         </section>
     );
