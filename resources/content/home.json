@@ -8,11 +8,11 @@
         "title": "Pay less to keep",
         "highlight": "your vehicle on the road.",
         "text": "RAVU members get discounted insurance, spare parts and garage servicing from partner businesses, and book rides in the same app.",
-        "socialProof": "Pilot open to riders, drivers and vehicle owners in Dar es Salaam"
+        "socialProof": "Riders, drivers and vehicle owners can register for the pilot."
     },
     "features": [
         { "icon": "Zap", "title": "Rides", "text": "Book and track trips in the RAVU app." },
-        { "icon": "Users", "title": "Member discounts", "text": "Target 20–30% off insurance and 10–25% off parts." },
+        { "icon": "Users", "title": "Preferred member pricing", "text": "Negotiated rates of 20–30% on insurance premiums and 10–25% on spare parts." },
         { "icon": "ShieldCheck", "title": "Verified members", "text": "Every member is checked before they get a RAVU ID." }
     ],
     "slideshow": {
@@ -39,7 +39,7 @@
                 "imageAlt": "RAVU multi-vehicle ecosystem in Dar es Salaam showing motorcycles, Bajaj, SUV, delivery truck and bus"
             },
             {
-                "tabLabel": "Insurance (20%–30% OFF)",
+                "tabLabel": "Insurance",
                 "badge": "20% – 30% Member Discount Target",
                 "caption": "8 Protection Product Lines",
                 "eyebrow": "INSURANCE",
